@@ -1,0 +1,2 @@
+# Transcript Chopper
+An application that assists the user in breaking down an audio file and its accompanying transcript into smaller pairs, especially for use in creating SRS cards for language learning.

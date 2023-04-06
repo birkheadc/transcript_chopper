@@ -1,0 +1,25 @@
+div.nav-panel {
+  padding: 2em;
+
+  width: 20em;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  box-sizing: border-box;
+
+  background-color: var(--clr-black);
+  color: var(--clr-white);
+
+  transition: transform 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+div.nav-panel.shown {
+  transform: translate(0em, 0em);
+}
+
+div.nav-panel.hidden {
+  transform: translate(-20em, 0);
+}
