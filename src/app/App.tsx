@@ -1,11 +1,11 @@
 import * as React from 'react';
-import './styles/reset.css';
-import './styles/vars.css';
+import '../styles/reset.css';
+import '../styles/vars.css';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import MainNav from './components/features/nav/mainNav/MainNav';
-import WelcomePage from './components/features/welcome/welcomePage/WelcomePage';
-import ChopPage from './components/features/chop/chopPage/ChopPage';
+import MainNav from '../components/features/nav/mainNav/MainNav';
+import WelcomePage from '../components/features/welcome/welcomePage/WelcomePage';
+import ChopPage from '../components/features/chop/chopPage/ChopPage';
 
 interface AppProps {
 
