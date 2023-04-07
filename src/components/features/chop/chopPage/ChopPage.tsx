@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './ChopPage.css';
+import Chopper from '../chopper/Chopper';
 
 interface ChopPageProps {
 
@@ -12,7 +13,9 @@ interface ChopPageProps {
 function ChopPage(props: ChopPageProps): JSX.Element | null {
   return (
     <main>
-      
+      <div className='chop-page-wrapper'>
+        <Chopper />
+      </div>
     </main>
   );
 }

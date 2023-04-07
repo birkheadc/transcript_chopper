@@ -26,7 +26,7 @@ function Navbar(props: NavbarProps): JSX.Element | null {
       </ul>
       <ul>
         <li>
-          <NavLink to="/">Get Started</NavLink>
+          <NavLink tabIndex={props.isOpen ? 0 : -1} to="/">Get Started</NavLink>
         </li>
       </ul>
     </div>

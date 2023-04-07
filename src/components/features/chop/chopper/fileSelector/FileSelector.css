@@ -1,0 +1,30 @@
+div.file-selector-wrapper {
+  padding: 1em;
+  width: min(40em, 90%);
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+}
+
+div.file-selector-audio-wrapper {
+  width: 100%;
+}
+
+div.file-selector-audio-wrapper>input {
+  width: 100%;
+}
+
+div.file-selector-transcript-wrapper {
+  width: 100%;
+  height: 10em;
+}
+
+div.file-selector-transcript-wrapper>textarea {
+  height: 100%;
+  width: 100%;
+}
+
+div.inline-label-input-wrapper:hover, div.inline-label-input-wrapper:focus-within {
+  box-shadow: 4px 4px 2px var(--clr-black);
+}

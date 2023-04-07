@@ -1,4 +1,7 @@
 :root {
-  --clr-black: #111111;
-  --clr-white: #eeeeee;
+  --clr-black: #14110F;
+  --clr-white: #F3F3F4;
+
+  --clr-accent-a: #D9C5B2;
+  --clr-accent-b: #998FC7;
 }

@@ -27,4 +27,5 @@ div.nav-panel.shown {
 
 div.nav-panel.hidden {
   transform: translate(-20em, 0em);
+  pointer-events: none;
 }

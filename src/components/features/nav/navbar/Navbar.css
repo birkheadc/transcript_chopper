@@ -26,11 +26,22 @@ div.nav-bar.shown {
 
 div.nav-bar.hidden {
   transform: translate(0em, -3em);
+  pointer-events: none;
 }
 
 button.nav-bar-button {
-  color: var(--clr-white);
+  border-style: none;
+  background-color: var(--clr-black);
+  color: var(--clr-accent-a);
   height: 2em;
+}
+
+button.nav-bar-button:hover, button.nav-bar-button:focus {
+  color: var(--clr-accent-b);
+}
+
+button.nav-bar-button:active {
+  border-style: solid;
 }
 
 button.nav-bar-button>* {

@@ -1,6 +1,73 @@
+body {
+  background-color: var(--clr-white);
+}
+
+a {
+  color: var(--clr-accent-a);
+}
+
+a:hover, a:focus {
+  color: var(--clr-accent-b);
+}
+
 main {
   min-height: 100%;
   max-width: 980px;
   margin: 0 auto;
   padding: 4em 1em 1em 1em;
+}
+
+input, textarea {
+  border-style: solid;
+  border-color: var(--clr-black);
+  border-width: 2px;
+  padding: 3px;
+}
+
+button {
+  border-style: outset;
+  border-color: var(--clr-black);
+  border-width: 3px;
+  padding: 5px;
+
+  background-color: var(--clr-accent-a);
+}
+
+button:disabled {
+  background-color: var(--clr-white);
+  color: var(--clr-accent-a);
+  border-style: solid;
+  border-color: var(--clr-accent-a);
+  pointer-events: none;
+}
+
+button:hover, button:focus {
+  background-color: var(--clr-accent-b);
+  color: var(--clr-white);
+  box-shadow: 4px 4px 2px var(--clr-black);
+}
+
+button:active {
+  border-style: inset;
+}
+
+div.inline-label-input-wrapper {
+  position: relative;
+  padding: 5px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--clr-black);
+}
+
+div.inline-label-input-wrapper>label {
+  position: absolute;
+  top: -10px;
+  left: 5px;
+  background-color: var(--clr-white);
+  padding: 0 5px;
+}
+
+div.inline-label-input-wrapper>input, div.inline-label-input-wrapper>textarea {
+  border-style: none;
+  padding: 5px;
 }
