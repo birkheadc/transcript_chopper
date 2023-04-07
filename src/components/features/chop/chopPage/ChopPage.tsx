@@ -12,7 +12,7 @@ interface ChopPageProps {
 function ChopPage(props: ChopPageProps): JSX.Element | null {
   return (
     <main>
-      Chop
+      
     </main>
   );
 }

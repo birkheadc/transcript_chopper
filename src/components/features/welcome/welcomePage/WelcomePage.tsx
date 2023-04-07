@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './WelcomePage.css';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 
 interface WelcomePageProps {
 
@@ -12,6 +13,8 @@ interface WelcomePageProps {
 function WelcomePage(props: WelcomePageProps): JSX.Element | null {
   return (
     <main>
+      <div className='welcome-wrapper'>
+      <h1>WELCOME</h1>
       <p>Welcome</p>
       <p>Welcome</p>
       <p>Welcome</p>
@@ -112,7 +115,7 @@ function WelcomePage(props: WelcomePageProps): JSX.Element | null {
       <p>Welcome</p>
       <p>Welcome</p>
       <p>Welcome</p>
-      
+      </div>
     </main>
   );
 }

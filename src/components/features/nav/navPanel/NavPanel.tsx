@@ -12,10 +12,10 @@ interface NavPanelProps {
  */
 function NavPanel(props: NavPanelProps): JSX.Element | null {
   return (
-    <div className={'nav-panel ' + (props.isOpen ? 'shown' : 'hidden')}>
+    <div className={'nav-panel-click-box nav-panel ' + (props.isOpen ? 'shown' : 'hidden')}>
       <ul>
         <li>
-          <NavLink to={ '/welcome '}>About</NavLink>
+          <NavLink className={'nav-panel-click-box'} to={ '/welcome '}>About</NavLink>
         </li>
       </ul>
     </div>

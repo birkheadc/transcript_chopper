@@ -14,4 +14,25 @@ div.nav-bar {
 
   background-color: var(--clr-black);
   color: var(--clr-white);
+
+  transition: transform 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  z-index: 3;
+}
+
+div.nav-bar.shown {
+  transform: translate(0em, 0em);
+}
+
+div.nav-bar.hidden {
+  transform: translate(0em, -3em);
+}
+
+button.nav-bar-button {
+  color: var(--clr-white);
+  height: 2em;
+}
+
+button.nav-bar-button>* {
+  height: 100%;
 }
