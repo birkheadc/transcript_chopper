@@ -1,8 +1,14 @@
 import * as React from 'react';
 import './Slicer.css'
+import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioWithTranscript';
+import SlicerImage from './slicerImage/SlicerImage';
+import SlicerSelector from './slicerSelector/SlicerSelector';
+import Range from '../../../../../types/range/range';
+import playAudio from '../../../../../shared/playAudio/playAudio';
+import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder';
 
 interface SlicerProps {
-
+  originalFile: AudioWithTranscript
 }
 
 /**
@@ -10,9 +16,60 @@ interface SlicerProps {
 * @returns {JSX.Element | null}
 */
 function Slicer(props: SlicerProps): JSX.Element | null {
+
+  const [sections, setSections] = React.useState<Range[]>([]);
+  const [currentSection, setCurrentSection] = React.useState<Range | undefined>(undefined);
+  const [isCurrentAdded, setCurrentAdded] = React.useState<boolean>(false);
+
+  const playCurrentSelection = () => {
+    playAudio(props.originalFile.audioFile, currentSection);
+  }
+
+  const addCurrentSelection = () => {  
+    if (currentSection == null) return;
+    const newSections = [...sections, {...currentSection}];
+    setSections(newSections);
+    setCurrentSection(undefined);
+  }
+
+  const removeCurrentSelection = () => {
+    if (currentSection == null) return;
+    const newSections = sections.filter(section => section.to !== currentSection.to || section.from !== currentSection.from);
+    setSections(newSections);
+    setCurrentAdded(false);
+  }
+
+  const handleUpdateCurrentSection = (section: Range) => {
+    setCurrentSection(section);
+    setCurrentAdded(false);
+  }
+
+  const selectSection = (index: number) => {
+    setCurrentSection({...sections[index]});
+    setCurrentAdded(true);
+  }
+
+  function calculateCanvasWidth(): number {
+    const canvas = document.querySelector('canvas#slicer-selector-canvas') as HTMLCanvasElement;
+    if (canvas == null) return 0;
+    return canvas.getBoundingClientRect().width;
+  }
+
   return (
     <div className='slicer-wrapper'>
-      Slicer
+      <div className='slicer-canvas-wrapper'>
+        <SlicerImage audioFile={props.originalFile.audioFile} />
+        <SlicerSelector currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
+        <SlicerSectionRecorder canvasWidth={calculateCanvasWidth()} sections={sections} select={selectSection} />
+      </div>
+      
+      <p>Highlight a section, then press `Play` to listen to it, or `Add` to create a section.</p>
+
+      <div className='slicer-controls-wrapper'>
+        <button onClick={playCurrentSelection}>Play</button>
+        <button onClick={addCurrentSelection}>Add</button>
+        <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove</button>
+      </div>
     </div>
   );
 }

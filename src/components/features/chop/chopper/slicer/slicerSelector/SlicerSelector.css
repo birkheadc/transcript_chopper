@@ -1,0 +1,9 @@
+canvas#slicer-selector-canvas {
+  z-index: 2;
+  opacity: 0.3;
+
+  width: 90%;
+  height: 200px;
+
+  cursor: text;
+}

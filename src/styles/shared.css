@@ -28,7 +28,7 @@ button {
   border-style: outset;
   border-color: var(--clr-black);
   border-width: 3px;
-  padding: 5px;
+  padding: 0.5em 1em;
 
   background-color: var(--clr-accent-a);
 }

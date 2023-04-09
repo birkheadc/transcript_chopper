@@ -1,0 +1,27 @@
+div.slicer-wrapper {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1em;
+}
+
+div.slicer-canvas-wrapper {
+  display: grid;
+  grid-template: 1fr / 1fr;
+  place-items: center;
+}
+
+div.slicer-canvas-wrapper>* {
+  grid-column: 1 / 1;
+  grid-row: 1 / 1;
+}
+
+div.slicer-controls-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  justify-content: center;
+  align-items: center;
+}

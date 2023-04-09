@@ -36,7 +36,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <FileSelector handleContinue={() => goToStep(1)} updateOriginalFile={(file: AudioWithTranscript) => setOriginalFile(file)} originalFile={originalFile} />
     
       case 1:
-        return <Slicer />
+        return <Slicer originalFile={originalFile} />
 
       case 2:
         return (

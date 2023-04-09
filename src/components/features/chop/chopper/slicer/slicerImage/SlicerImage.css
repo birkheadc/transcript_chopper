@@ -1,0 +1,13 @@
+canvas#slicer-image-canvas {
+  width: 90%;
+  height: 200px;
+
+  stroke: blue;
+  background-color: var(--clr-white);
+
+  border-style: dotted;
+  border-width: 1px;
+  border-color: var(--clr-black);
+
+  z-index: 1;
+}
