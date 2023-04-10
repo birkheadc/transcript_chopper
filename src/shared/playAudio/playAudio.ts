@@ -4,14 +4,16 @@ import Range from "../../types/range/range";
  * 
  * @param {File} file The audio file to play.
  * @param {Range} range When to start and stop playing, as a ration between 0.0 and 1.0.
+ * @param {AudioContext} props.audioContext The audio context to use.
  * @returns {Promise<void>}
  */
 export default async function playAudio(file: File | undefined, range: Range | undefined): Promise<void> {
   // Todo: Possible refactor
+  // Todo: A way to stop the playback
   if (file == null) return;
-  const audioContext = new AudioContext();
   const audioElement = document.createElement('audio');
   audioElement.src = URL.createObjectURL(file);
+  const audioContext: AudioContext = new AudioContext();
   audioContext.createMediaElementSource(audioElement);
   try {
     const audioBuffer = await audioContext.decodeAudioData(await fetch(audioElement.src).then(response => response.arrayBuffer()));

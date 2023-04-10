@@ -29,7 +29,7 @@ function SlicerSectionRecorder(props: SlicerSectionRecorderProps): JSX.Element |
     {props.sections.map(
       (section, index) =>
       <div className='slicer-section-recorder-section' key={index} style={{
-        left: props.canvasWidth * section.from + 'px', right: props.canvasWidth - (props.canvasWidth * section.to) + 'px'
+        left: props.canvasWidth * Math.min(section.from, section.to) + 'px', right: props.canvasWidth - (props.canvasWidth * Math.max(section.from, section.to)) + 'px'
       }}>
         <button className='slicer-section-button' data-index={index} onClick={handleSelect}></button>
       </div>

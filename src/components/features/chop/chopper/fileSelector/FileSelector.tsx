@@ -24,9 +24,8 @@ function FileSelector(props: FileSelectorProps): JSX.Element | null {
   }
 
   const handleUpdateAudioFile = (event: React.FormEvent<HTMLInputElement>) => {
-    if (event.currentTarget.files == null || event.currentTarget.files.length < 1) return;
     const newFile = {...props.originalFile};
-    newFile.audioFile = event.currentTarget.files[0];
+    newFile.audioFile = event.currentTarget.files ? event.currentTarget.files[0] : undefined
     props.updateOriginalFile(newFile);
 
   }

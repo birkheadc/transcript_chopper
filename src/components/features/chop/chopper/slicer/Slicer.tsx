@@ -8,12 +8,14 @@ import playAudio from '../../../../../shared/playAudio/playAudio';
 import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder';
 
 interface SlicerProps {
-  originalFile: AudioWithTranscript
+  originalFile: AudioWithTranscript,
+  handleContinue: () => void
 }
 
 /**
 * The component that the user interacts with to select where and how to break up the audio file.
 * @param {AudioWithTranscript} props.originalFile The audio file and transcript that is to be chopped.
+* @param {() => void} props.handleContinue The function to call when finished.
 * @returns {JSX.Element | null}
 */
 function Slicer(props: SlicerProps): JSX.Element | null {
@@ -41,7 +43,8 @@ function Slicer(props: SlicerProps): JSX.Element | null {
   }
 
   const finishSelecting = () => {
-
+    if (sections.length < 1) return;
+    props.handleContinue();
   }
 
   const handleUpdateCurrentSection = (section: Range | undefined) => {
@@ -73,7 +76,7 @@ function Slicer(props: SlicerProps): JSX.Element | null {
       <div className='slicer-controls-wrapper'>
         <div>
           <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button>
-          <button disabled={currentSection == null} onClick={addCurrentSelection}>Add</button>
+          <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add</button>
           <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove</button>
         </div>
         <div>
