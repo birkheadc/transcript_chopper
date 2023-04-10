@@ -9,12 +9,14 @@ import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder
 
 interface SlicerProps {
   originalFile: AudioWithTranscript,
+  handleUpdateSections: (sections: Range[]) => void,
   handleContinue: () => void
 }
 
 /**
 * The component that the user interacts with to select where and how to break up the audio file.
 * @param {AudioWithTranscript} props.originalFile The audio file and transcript that is to be chopped.
+* @param {(sections: Range[]) => void} props.handleUpdateSections The function to call when done selecting, just before continuing.
 * @param {() => void} props.handleContinue The function to call when finished.
 * @returns {JSX.Element | null}
 */
@@ -44,6 +46,7 @@ function Slicer(props: SlicerProps): JSX.Element | null {
 
   const finishSelecting = () => {
     if (sections.length < 1) return;
+    props.handleUpdateSections(sections);
     props.handleContinue();
   }
 

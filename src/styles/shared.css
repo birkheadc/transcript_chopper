@@ -31,6 +31,9 @@ button {
   padding: 0.5em 1em;
 
   background-color: var(--clr-accent-a);
+  user-select: none;
+
+  text-align: center;
 }
 
 button:disabled {
@@ -70,4 +73,8 @@ div.inline-label-input-wrapper>label {
 div.inline-label-input-wrapper>input, div.inline-label-input-wrapper>textarea {
   border-style: none;
   padding: 5px;
+}
+
+div.inline-label-input-wrapper:hover, div.inline-label-input-wrapper:focus-within {
+  box-shadow: 4px 4px 2px var(--clr-black);
 }
