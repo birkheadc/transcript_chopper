@@ -38,7 +38,7 @@ function FileSelector(props: FileSelectorProps): JSX.Element | null {
         <label htmlFor='transcript'>Transcript</label>
         <textarea id='transcript' onChange={handleUpdateTranscript} value={props.originalFile.transcript}></textarea>
       </div>
-      <button disabled={props.originalFile.audioFile === null || props.originalFile.transcript === ''} onClick={props.handleContinue} type='button'>Continue</button>
+      <button disabled={props.originalFile.audioFile == null || props.originalFile.transcript === ''} onClick={props.handleContinue} type='button'>Continue</button>
     </div>
   );
 }

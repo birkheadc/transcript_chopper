@@ -5,7 +5,7 @@ import { start } from 'repl';
 
 interface SlicerSelectorProps {
   currentSection: Range | undefined,
-  updateCurrentSection: (selection: Range) => void
+  updateCurrentSection: (selection: Range | undefined) => void
 }
 
 /**
@@ -31,7 +31,6 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
       isDragging = true;
       from = (event.clientX - canvas.getBoundingClientRect().left) / (canvas.getBoundingClientRect().width / canvas.width) / canvas.width;
       to = (event.clientX - canvas.getBoundingClientRect().left) / (canvas.getBoundingClientRect().width / canvas.width) / canvas.width;
-      props.updateCurrentSection({ from: from, to: to})
     }
 
     const handlePointerMove = (event: PointerEvent) => {
@@ -46,6 +45,10 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
 
       isDragging = false;
       to = (event.clientX - canvas.getBoundingClientRect().left) / (canvas.getBoundingClientRect().width / canvas.width) / canvas.width;
+      if (from === to) {
+        props.updateCurrentSection(undefined);
+        return;
+      }
       props.updateCurrentSection({ from: from, to: to });
     }
 

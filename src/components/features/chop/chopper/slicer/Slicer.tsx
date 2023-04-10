@@ -39,7 +39,11 @@ function Slicer(props: SlicerProps): JSX.Element | null {
     setCurrentAdded(false);
   }
 
-  const handleUpdateCurrentSection = (section: Range) => {
+  const finishSelecting = () => {
+
+  }
+
+  const handleUpdateCurrentSection = (section: Range | undefined) => {
     setCurrentSection(section);
     setCurrentAdded(false);
   }
@@ -66,9 +70,14 @@ function Slicer(props: SlicerProps): JSX.Element | null {
       <p>Highlight a section, then press `Play` to listen to it, or `Add` to create a section.</p>
 
       <div className='slicer-controls-wrapper'>
-        <button onClick={playCurrentSelection}>Play</button>
-        <button onClick={addCurrentSelection}>Add</button>
-        <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove</button>
+        <div>
+          <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button>
+          <button disabled={currentSection == null} onClick={addCurrentSelection}>Add</button>
+          <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove</button>
+        </div>
+        <div>
+          <button disabled={sections.length < 1} onClick={finishSelecting}>Finish</button>
+        </div>
       </div>
     </div>
   );

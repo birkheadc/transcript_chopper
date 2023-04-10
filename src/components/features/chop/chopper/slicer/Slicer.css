@@ -21,7 +21,14 @@ div.slicer-canvas-wrapper>* {
 div.slicer-controls-wrapper {
   display: flex;
   flex-direction: row;
-  gap: 1em;
-  justify-content: center;
+  gap: 5em;
+  justify-content: space-between;
   align-items: center;
+}
+
+div.slicer-controls-wrapper>div {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+
 }

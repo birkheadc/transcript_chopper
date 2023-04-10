@@ -16,11 +16,11 @@ interface ChopperProps {
 function Chopper(props: ChopperProps): JSX.Element | null {
 
   const [step, setStep] = React.useState<number>(0);
-  const [originalFile, setOriginalFile] = React.useState<AudioWithTranscript>({ audioFile: '', transcript: '' });
+  const [originalFile, setOriginalFile] = React.useState<AudioWithTranscript>({ audioFile: undefined, transcript: '' });
 
   const startOver = () => {
     setOriginalFile({
-      audioFile: '',
+      audioFile: undefined,
       transcript: ''
     });
     goToStep(0);

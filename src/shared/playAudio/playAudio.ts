@@ -6,7 +6,8 @@ import Range from "../../types/range/range";
  * @param {number} startPercent When to start playing, as a ratio between 0.0 and 1.0.
  * @param {number} endPercent When to end playing, as a ration between 0.0 and 1.0.
  */
-export default async function playAudio(file: File, range: Range | undefined) {
+export default async function playAudio(file: File | undefined, range: Range | undefined) {
+  if (file == null) return;
   const audioContext = new AudioContext();
   const audioElement = document.createElement('audio');
   audioElement.src = URL.createObjectURL(file);

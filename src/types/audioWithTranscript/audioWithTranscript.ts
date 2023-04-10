@@ -1,4 +1,4 @@
 export default interface AudioWithTranscript {
-  audioFile: File,
+  audioFile: File | undefined,
   transcript: string
 }

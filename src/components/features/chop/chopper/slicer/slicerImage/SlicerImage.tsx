@@ -2,7 +2,7 @@ import * as React from 'react';
 import './SlicerImage.css'
 
 interface SlicerImageProps {
-  audioFile: File
+  audioFile: File | undefined
 }
 
 /**
@@ -16,6 +16,7 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 
   React.useEffect(() => {
     // Todo: Understand and possibly refactor this, but it is working for the moment.
+    if (props.audioFile == null) return;
     const canvas = document.querySelector('canvas#slicer-image-canvas') as HTMLCanvasElement;
     if (canvas == null) return;
 
@@ -29,7 +30,7 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
     const scaleFactor = (height - MARGIN * 2) / 2;
 
     async function drawToCanvas() {
-      if (canvasContext == null) return;
+      if (canvasContext == null || props.audioFile == null) return;
 
       const buffer = await props.audioFile.arrayBuffer();
       const audioBuffer = await audioContext.decodeAudioData(buffer);
