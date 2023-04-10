@@ -10,6 +10,9 @@ interface FileSelectorProps {
 
 /**
 * Handles selection of the audio file and transcript for processing.
+* @param {(newFile: AudioWithTranscript) => void} props.updateOriginalFile The function to call when updating the audio file or transcript.
+* @param {AudioWithTranscript} props.originalFile The audio file and transcript that is to be chopped.
+* @param {() => void} props.handleContinue The function to call when the audio file and transcript are selected, and the user presses Continue.
 * @returns {JSX.Element | null}
 */
 function FileSelector(props: FileSelectorProps): JSX.Element | null {

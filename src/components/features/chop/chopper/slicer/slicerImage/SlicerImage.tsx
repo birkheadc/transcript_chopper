@@ -6,7 +6,8 @@ interface SlicerImageProps {
 }
 
 /**
-*
+* The component that displays the sound graph of the original audio file.
+* @param {File | undefined} props.audioFile The original audio file to create the image for.
 * @returns {JSX.Element | null}
 */
 function SlicerImage(props: SlicerImageProps): JSX.Element | null {
@@ -15,7 +16,7 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
   const CHUNK_SIZE = 50;
 
   React.useEffect(() => {
-    // Todo: Understand and possibly refactor this, but it is working for the moment.
+    // Todo: Possible refactor.
     if (props.audioFile == null) return;
     const canvas = document.querySelector('canvas#slicer-image-canvas') as HTMLCanvasElement;
     if (canvas == null) return;

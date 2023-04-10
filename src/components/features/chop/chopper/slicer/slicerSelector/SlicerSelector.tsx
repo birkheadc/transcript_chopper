@@ -9,7 +9,7 @@ interface SlicerSelectorProps {
 }
 
 /**
-* Allows the user to click and drag to select a portion of the audio file.
+* The component that allows the user to click and drag to select a portion of the audio file.
 * @param {Range | undefined} props.currentSection The currently selected section, expressed as a ratio from 0.0 to 1.0.
 * @param {(selection: Range) => void} props.updateCurrentSection The function this component calls when updating the selected section.
 * @returns {JSX.Element | null}

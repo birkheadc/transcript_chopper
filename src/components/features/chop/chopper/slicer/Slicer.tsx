@@ -12,7 +12,8 @@ interface SlicerProps {
 }
 
 /**
-*
+* The component that the user interacts with to select where and how to break up the audio file.
+* @param {AudioWithTranscript} props.originalFile The audio file and transcript that is to be chopped.
 * @returns {JSX.Element | null}
 */
 function Slicer(props: SlicerProps): JSX.Element | null {

@@ -3,10 +3,11 @@ import Range from "../../types/range/range";
 /**
  * 
  * @param {File} file The audio file to play.
- * @param {number} startPercent When to start playing, as a ratio between 0.0 and 1.0.
- * @param {number} endPercent When to end playing, as a ration between 0.0 and 1.0.
+ * @param {Range} range When to start and stop playing, as a ration between 0.0 and 1.0.
+ * @returns {Promise<void>}
  */
-export default async function playAudio(file: File | undefined, range: Range | undefined) {
+export default async function playAudio(file: File | undefined, range: Range | undefined): Promise<void> {
+  // Todo: Possible refactor
   if (file == null) return;
   const audioContext = new AudioContext();
   const audioElement = document.createElement('audio');
