@@ -42,7 +42,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <Slicer handleContinue={() => goToStep(2)} handleUpdateSections={(sections: Range[]) => setSections(sections)} originalFile={originalFile} />
 
       case 2:
-        return <Joiner originalFile={originalFile} sections={sections} />
+        return <Joiner handleContinue={() => goToStep(3)} originalFile={originalFile} sections={sections} />
       case 3:
         return (
           <>

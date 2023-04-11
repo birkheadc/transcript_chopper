@@ -18,7 +18,7 @@ function renderFileSelector(props) {
 }
 
 function getContinueButton() {
-  return screen.queryByText('Continue');
+  return screen.getByText('Continue');
 }
 
 describe('FileSelector', () => {
@@ -26,7 +26,6 @@ describe('FileSelector', () => {
     const props = getProps(false, false);
     renderFileSelector(props);
     const button = getContinueButton();
-    expect(button).not.toBe(null);
     expect(button).toBeDisabled();
   });
 
@@ -34,7 +33,6 @@ describe('FileSelector', () => {
     const props = getProps(false, true);
     renderFileSelector(props);
     const button = getContinueButton();
-    expect(button).not.toBe(null);
     expect(button).toBeDisabled();
   });
 
@@ -42,7 +40,6 @@ describe('FileSelector', () => {
     const props = getProps(true, false);
     renderFileSelector(props);
     const button = getContinueButton();
-    expect(button).not.toBe(null);
     expect(button).toBeDisabled();
   });
 
@@ -50,7 +47,6 @@ describe('FileSelector', () => {
     const props = getProps(true, true);
     renderFileSelector(props);
     const button = getContinueButton();
-    expect(button).not.toBe(null);
     expect(button).not.toBeDisabled();
   });
 });

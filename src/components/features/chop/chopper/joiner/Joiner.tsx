@@ -6,13 +6,15 @@ import playAudio from '../../../../../shared/playAudio/playAudio';
 
 interface JoinerProps {
   originalFile: AudioWithTranscript,
-  sections: Range[]
+  sections: Range[],
+  handleContinue: () => void
 }
 
 /**
 * The combiner that the user interacts with to join transcript stubs to their respective audio snippets.
 * @param {AudioWithTranscript} props.originalFile The original audio file and transcript.
 * @param {Range[]} props.sections The sections of the audio to split.
+* @param {() => void} props.handleContinue The function to call when the user is finished.
 * @returns {JSX.Element | null}
 */
 function Joiner(props: JoinerProps): JSX.Element | null {
@@ -20,13 +22,17 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   const [currentSection, setCurrentSection] = React.useState<number>(0);
   const [stubs, setStubs] = React.useState<string[]>([]);
 
-  React.useEffect(() => {
+  React.useEffect(function initializeStubs() {
     const newStubs = [];
-    for (let i = 0; i < props.sections.length; i++) {
-      newStubs.push(props.originalFile.transcript);
-    }
-    setStubs(newStubs);
-  }, [props.originalFile, props.sections])
+      for (let i = 0; i < props.sections.length; i++) {
+        newStubs.push(props.originalFile.transcript);
+      }
+      setStubs(newStubs);
+  }, [props.originalFile, props.sections]);
+
+  React.useEffect(function playAudioWhenSectionChanges() {
+    playAudio(props.originalFile.audioFile, props.sections[currentSection]);
+  }, [ currentSection ]);
 
   const handleBack = () => {
     if (currentSection <= 0) return;
@@ -42,7 +48,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   }
 
   function finish() {
-
+    props.handleContinue();
   }
 
   const handlePlayAudio = () => {
@@ -50,7 +56,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   }
 
   const handleTrim = () => {
-    const textarea = document.querySelector('textarea.stub-textarea') as HTMLTextAreaElement;
+    const textarea = document.querySelector('textarea#stub-textarea') as HTMLTextAreaElement;
     if (textarea == null) return;
 
     const start = textarea.selectionStart;
@@ -85,8 +91,8 @@ function Joiner(props: JoinerProps): JSX.Element | null {
           <button onClick={handleReset}>Reset</button>
         </div>
         <div className='inline-label-input-wrapper'>
-          <label>Text</label>
-          <textarea className='stub-textarea' onChange={handleUpdateStub} value={stubs[currentSection]}></textarea>
+          <label htmlFor='stub-textarea'>Text</label>
+          <textarea id='stub-textarea' onChange={handleUpdateStub} value={stubs[currentSection]}></textarea>
         </div>
       </div>
       <div className='joiner-controls'>

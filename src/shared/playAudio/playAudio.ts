@@ -11,11 +11,12 @@ export default async function playAudio(file: File | undefined, range: Range | u
   // Todo: Possible refactor
   // Todo: A way to stop the playback
   if (file == null) return;
-  const audioElement = document.createElement('audio');
-  audioElement.src = URL.createObjectURL(file);
-  const audioContext: AudioContext = new AudioContext();
-  audioContext.createMediaElementSource(audioElement);
   try {
+    const audioElement = document.createElement('audio');
+    audioElement.src = URL.createObjectURL(file);
+    const audioContext: AudioContext = new AudioContext();
+    audioContext.createMediaElementSource(audioElement);
+  
     const audioBuffer = await audioContext.decodeAudioData(await fetch(audioElement.src).then(response => response.arrayBuffer()));
     
     let startTime = range ? Math.min(range.from, range.to) : 0.0;
@@ -38,8 +39,6 @@ export default async function playAudio(file: File | undefined, range: Range | u
     audioBufferSource.start(0);
   }
   catch (error) {
-    console.log('Error attempting to play audio: ', error);
-  }
-
-  
+    console.log('Error attempting to play audio');
+  }  
 }

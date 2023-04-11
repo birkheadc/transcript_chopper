@@ -17,34 +17,34 @@ function renderSlicer(props) {
   return render(<Slicer originalFile={props.originalFile}/>);
 }
 
+function getButtonLabels() {
+  return ['Play', 'Add', 'Remove', 'Finish'];
+}
+
 function getButtons() {
-  const buttons = {
-    play: screen.queryByRole('button', { name: 'Play' }),
-    add: screen.queryByRole('button', { name: 'Add' }),
-    remove: screen.queryByRole('button', { name: 'Remove' }),
-    finish: screen.queryByRole('button', { name: 'Finish' })
-  };
-  expect(buttons.play).not.toBe(null);
-  expect(buttons.add).not.toBe(null);
-  expect(buttons.remove).not.toBe(null);
-  expect(buttons.finish).not.toBe(null);
+  const labels = getButtonLabels();
+  const buttons = {};
+  for (let i = 0; i < labels.length; i++) {
+    buttons[labels[i]] = screen.getByRole('button', { name: labels[i] });
+
+  }
   return buttons;
 }
 
 function getIsDisabledObject(isPlayDisabled, isAddDisabled, isRemoveDisabled, isFinishDisabled) {
   return {
-    play: isPlayDisabled,
-    add: isAddDisabled,
-    remove: isRemoveDisabled,
-    finish: isFinishDisabled
+    Play: isPlayDisabled,
+    Add: isAddDisabled,
+    Remove: isRemoveDisabled,
+    Finish: isFinishDisabled
   }
 }
 
 function expectButtonsToBeDisabled(buttons, isDisabled) {
-  isDisabled.play ? expect(buttons.play).toBeDisabled() : expect(buttons.play).not.toBeDisabled();
-  isDisabled.add ? expect(buttons.add).toBeDisabled() : expect(buttons.add).not.toBeDisabled();
-  isDisabled.remove ? expect(buttons.remove).toBeDisabled() : expect(buttons.remove).not.toBeDisabled();
-  isDisabled.finish ? expect(buttons.finish).toBeDisabled() : expect(buttons.finish).not.toBeDisabled();
+  const labels = getButtonLabels();
+  for (let i = 0; i < labels.length; i++) {
+    isDisabled[labels[i]] ? expect(buttons[labels[i]]).toBeDisabled : expect(buttons[labels[i]]).not.toBeDisabled();
+  }
 }
 
 function simulateSelectSection() {
@@ -82,7 +82,7 @@ describe('Slicer', () => {
     renderSlicer(getProps());
     const buttons = getButtons();
     simulateSelectSection();
-    fireEvent.click(buttons.add);
+    fireEvent.click(buttons.Add);
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(true, true, true, false));
   });
 
@@ -92,7 +92,7 @@ describe('Slicer', () => {
     simulateSelectSection();
 
     expect(findAllSectionButtons().length).toBeLessThan(1);
-    fireEvent.click(buttons.add);
+    fireEvent.click(buttons.Add);
     expect(findAllSectionButtons().length).toBe(1);
   });
 
@@ -100,7 +100,7 @@ describe('Slicer', () => {
     renderSlicer(getProps());
     const buttons = getButtons();
     simulateSelectSection();
-    fireEvent.click(buttons.add);
+    fireEvent.click(buttons.Add);
 
     const sectionButtons = findAllSectionButtons();
     fireEvent.click(sectionButtons[0]);
@@ -112,14 +112,15 @@ describe('Slicer', () => {
     renderSlicer(getProps());
     const buttons = getButtons();
     simulateSelectSection();
-    fireEvent.click(buttons.add);
+    fireEvent.click(buttons.Add);
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(true, true, true, false));
 
     fireEvent.click(findAllSectionButtons()[0]);
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(false, true, false, false));
 
-    fireEvent.click(buttons.remove);
+    fireEvent.click(buttons.Remove);
 
+    // expect(findAllSectionButtons().length).toBe(0);
     // Todo: Why doesn't this work?
   });
 });
