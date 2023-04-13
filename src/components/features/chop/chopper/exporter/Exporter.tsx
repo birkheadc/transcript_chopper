@@ -3,10 +3,12 @@ import './Exporter.css'
 import Range from '../../../../../types/range/range';
 import JSZip from 'jszip';
 import { render } from 'react-dom';
+import chopAudio from '../../../../../shared/chopAudio/chopAudio';
+import StubRangePair from '../../../../../types/stubRangePair/stubRangePair';
 
 interface ExporterProps {
-  originalAudioFile: File,
-  sections: Range[]
+  originalAudioFile: File | undefined,
+  pairs: StubRangePair[]
 }
 
 /**
@@ -20,14 +22,24 @@ function Exporter(props: ExporterProps): JSX.Element | null {
   const [downloadLink, setDownloadLink] = React.useState<JSX.Element | undefined>(undefined);
   const [working, setWorking] = React.useState<boolean>(false);
 
-  const handleZipFile = () => {
+  const handleZipFile = async () => {
     setWorking(true);
     const zip = new JSZip();
 
-    zip.file("A.txt", "A\n");
-    zip.file("B.txt", "B\n");
-    zip.file("Hello.txt", "Hello there.\n");
-    zip.file("General.txt", "General Kenobi...\n");
+    if (props.originalAudioFile != null) {
+      const sections: Range[] = props.pairs.map(pair => pair.range);
+      const audioFiles = await chopAudio(props.originalAudioFile, sections);
+      if (audioFiles != null) {
+        for (let i = 0; i < audioFiles.length; i++) {
+          zip.file(audioFiles[i].name, audioFiles[i]);
+        }
+      }
+    }
+
+    for (let i = 0; i < props.pairs.length; i++) {
+      const stub = props.pairs[i].stub;
+      zip.file("text_" + i.toString().padStart(props.pairs.length.toString().length, '0') + '.txt', stub);
+    }
 
     zip.generateAsync({ type: 'blob' }).then((blob) => {
       const url = URL.createObjectURL(blob);

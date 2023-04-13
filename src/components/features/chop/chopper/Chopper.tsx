@@ -6,6 +6,8 @@ import { start } from 'repl';
 import Slicer from './slicer/Slicer';
 import Joiner from './joiner/Joiner';
 import Range from '../../../../types/range/range';
+import Exporter from './exporter/Exporter';
+import StubRangePair from '../../../../types/stubRangePair/stubRangePair';
 
 interface ChopperProps {
 
@@ -20,6 +22,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   const [step, setStep] = React.useState<number>(0);
   const [originalFile, setOriginalFile] = React.useState<AudioWithTranscript>({ audioFile: undefined, transcript: '' });
   const [sections, setSections] = React.useState<Range[]>([]);
+  const [pairs, setPairs] = React.useState<StubRangePair[]>([]);
 
   const startOver = () => {
     setOriginalFile({
@@ -39,11 +42,15 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <FileSelector handleContinue={() => goToStep(1)} updateOriginalFile={(file: AudioWithTranscript) => setOriginalFile(file)} originalFile={originalFile} />
     
       case 1:
-        return <Slicer handleContinue={() => goToStep(2)} handleUpdateSections={(sections: Range[]) => setSections(sections)} originalFile={originalFile} />
+        return <Slicer handleContinue={() => goToStep(2)} handleUpdateSections={setSections} originalFile={originalFile} />
 
       case 2:
-        return <Joiner handleContinue={() => goToStep(3)} originalFile={originalFile} sections={sections} />
-      case 3:
+        return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />
+        
+      case 3: 
+        return <Exporter originalAudioFile={originalFile.audioFile} pairs={pairs} />
+
+      case 4:
         return (
           <>
             <div>TEST</div>

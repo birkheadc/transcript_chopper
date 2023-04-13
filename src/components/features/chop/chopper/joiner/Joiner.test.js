@@ -8,12 +8,14 @@ function getProps(transcript = '') {
       audioFile: new File(["mock_file"], "mock_file.txt", { type: "text/plain" }),
       transcript: transcript
     },
-    sections: [{ from: 0.1, to: 0.2 }, { from: 0.3, to: 0.4 }]
+    sections: [{ from: 0.1, to: 0.2 }, { from: 0.3, to: 0.4 }],
+    handleSetPairs: (pairs) => {},
+    handleContinue: () => {}
   }
 }
 
 function renderJoiner(props) {
-  render(<Joiner originalFile={props.originalFile} sections={props.sections} />);
+  render(<Joiner handleContinue={props.handleContinue} handleSetPairs={props.handleSetPairs} originalFile={props.originalFile} sections={props.sections} />);
 }
 
 function getTextarea() {

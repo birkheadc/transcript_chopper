@@ -3,10 +3,12 @@ import './Joiner.css'
 import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioWithTranscript';
 import Range from '../../../../../types/range/range';
 import playAudio from '../../../../../shared/playAudio/playAudio';
+import StubRangePair from '../../../../../types/stubRangePair/stubRangePair';
 
 interface JoinerProps {
   originalFile: AudioWithTranscript,
   sections: Range[],
+  handleSetPairs: (pairs: StubRangePair[]) => void,
   handleContinue: () => void
 }
 
@@ -20,14 +22,17 @@ interface JoinerProps {
 function Joiner(props: JoinerProps): JSX.Element | null {
 
   const [currentSection, setCurrentSection] = React.useState<number>(0);
-  const [stubs, setStubs] = React.useState<string[]>([]);
+  const [pairs, setPairs] = React.useState<StubRangePair[]>([]);
 
   React.useEffect(function initializeStubs() {
-    const newStubs = [];
+    const newPairs: StubRangePair[] = [];
       for (let i = 0; i < props.sections.length; i++) {
-        newStubs.push(props.originalFile.transcript);
+        newPairs.push({
+          stub: props.originalFile.transcript,
+          range: props.sections[i]
+        });
       }
-      setStubs(newStubs);
+      setPairs(newPairs);
   }, [props.originalFile, props.sections]);
 
   React.useEffect(function playAudioWhenSectionChanges() {
@@ -48,6 +53,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   }
 
   function finish() {
+    props.handleSetPairs(pairs);
     props.handleContinue();
   }
 
@@ -64,21 +70,21 @@ function Joiner(props: JoinerProps): JSX.Element | null {
 
     const selection = textarea.value.substring(start, end);
 
-    const newStubs = [...stubs];    
-    newStubs[currentSection] = selection.toString();
-    setStubs(newStubs);
+    const newPairs = [...pairs];    
+    newPairs[currentSection].stub = selection.toString();
+    setPairs(newPairs);
   }
 
   const handleReset = () => {
-    const newStubs = [...stubs];    
-    newStubs[currentSection] = props.originalFile.transcript;
-    setStubs(newStubs);
+    const newPairs = [...pairs];    
+    newPairs[currentSection].stub = props.originalFile.transcript;
+    setPairs(newPairs);
   }
 
   const handleUpdateStub = (event: React.FormEvent<HTMLTextAreaElement>) => {
-    const newStubs = [...stubs];
-    newStubs[currentSection] = event.currentTarget.value;
-    setStubs(newStubs);
+    const newStubs = [...pairs];
+    newStubs[currentSection].stub = event.currentTarget.value;
+    setPairs(newStubs);
   }
 
   return (
@@ -92,7 +98,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
         </div>
         <div className='inline-label-input-wrapper'>
           <label htmlFor='stub-textarea'>Text</label>
-          <textarea id='stub-textarea' onChange={handleUpdateStub} value={stubs[currentSection]}></textarea>
+          <textarea id='stub-textarea' onChange={handleUpdateStub} value={pairs[currentSection]?.stub}></textarea>
         </div>
       </div>
       <div className='joiner-controls'>
