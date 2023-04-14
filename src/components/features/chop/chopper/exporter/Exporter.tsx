@@ -14,7 +14,7 @@ interface ExporterProps {
 /**
 * The component that the user interacts with to choose what format to receive their new file(s) in.
 * @param {File} props.originalAudioFile The original audio file to chop.
-* @param {Range[]} props.sections The sections of the audio to split.
+* @param {Range[]} props.pairs The sections of the audio to split, and their respective strings.
 * @returns {JSX.Element | null}
 */
 function Exporter(props: ExporterProps): JSX.Element | null {
@@ -23,6 +23,9 @@ function Exporter(props: ExporterProps): JSX.Element | null {
   const [working, setWorking] = React.useState<boolean>(false);
 
   const handleZipFile = async () => {
+    if (props.originalAudioFile == null) {
+      return;
+    }
     setWorking(true);
     const zip = new JSZip();
 
@@ -34,11 +37,17 @@ function Exporter(props: ExporterProps): JSX.Element | null {
           zip.file(audioFiles[i].name, audioFiles[i]);
         }
       }
-    }
 
-    for (let i = 0; i < props.pairs.length; i++) {
-      const stub = props.pairs[i].stub;
-      zip.file("text_" + i.toString().padStart(props.pairs.length.toString().length, '0') + '.txt', stub);
+      let text = "";
+      if (audioFiles != null) {
+        for (let i = 0; i < props.pairs.length; i++) {
+          const mediaFileName = audioFiles[i].name;
+          const stub = props.pairs[i].stub;
+          text = text + stub + ';' + '[sound:' + mediaFileName + ']\n';
+        }
+      }
+      zip.file("deck.txt", text);
+      zip.file("README.txt", "Steps to import:\n1. Copy the files in `/media` directly into Anki's `collection.media` folder. ")
     }
 
     zip.generateAsync({ type: 'blob' }).then((blob) => {
@@ -48,8 +57,38 @@ function Exporter(props: ExporterProps): JSX.Element | null {
     }).then(() => setWorking(false));
   }
 
-  const handleAnkiDeckFile = () => {
-    alert('Sorry, Anki Deck exporting is not yet implemented!');
+  const handleAnkiDeckFile = async () => {
+    if (props.originalAudioFile == null) {
+      return;
+    }
+    alert('Sorry, anki deck export is not yet implemented!');
+    return;
+
+    setWorking(true);
+
+    const cards = [
+      { front: 'What is the capital of France?', back: 'Paris' },
+      { front: 'What is the tallest mountain in the world?', back: 'Mount Everest' },
+    ];
+
+    const cardText = cards.map((card) => `${card.front}\t${card.back}`).join('\n');
+
+    const deckMetadata = {
+      name: 'My First Deck',
+      description: 'A sample deck generated with TypeScript',
+    };
+
+    const zip = new JSZip();
+
+    zip.file('collection.anki2', '');
+    zip.file('deck.txt', cardText);
+    zip.file('deck.json', JSON.stringify(deckMetadata));
+
+    zip.generateAsync({ type: 'blob' }).then((blob) => {
+      const url = URL.createObjectURL(blob);
+      const link = <a download={'deck.apkg'} href={url}>Download</a>
+      setDownloadLink(link);
+    }).then(() => setWorking(false));
   }
 
   function renderContents(): JSX.Element {

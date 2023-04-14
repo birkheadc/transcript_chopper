@@ -17,7 +17,7 @@ main {
   padding: 4em 1em 1em 1em;
 }
 
-input, textarea {
+input, textarea, select {
   border-style: solid;
   border-color: var(--clr-black);
   border-width: 2px;
@@ -68,9 +68,10 @@ div.inline-label-input-wrapper>label {
   left: 5px;
   background-color: var(--clr-white);
   padding: 0 5px;
+  user-select: none;
 }
 
-div.inline-label-input-wrapper>input, div.inline-label-input-wrapper>textarea {
+div.inline-label-input-wrapper>input, div.inline-label-input-wrapper>textarea, div.inline-label-input-wrapper>select {
   border-style: none;
   padding: 5px;
 }
@@ -78,3 +79,5 @@ div.inline-label-input-wrapper>input, div.inline-label-input-wrapper>textarea {
 div.inline-label-input-wrapper:hover, div.inline-label-input-wrapper:focus-within {
   box-shadow: 4px 4px 2px var(--clr-black);
 }
+
+option {}

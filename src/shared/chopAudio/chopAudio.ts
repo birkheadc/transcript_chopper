@@ -65,7 +65,7 @@ export default async function chopAudio(originalAudioFile: File, sections: Range
     
     return files;
   } catch (error) {
-    console.log('Error chopping audio: ', error);
+    console.log('Error chopping audio.');
     return null;
   }
 }

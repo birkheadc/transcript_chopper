@@ -24,3 +24,7 @@ div.chopper-footer {
   justify-content: end;
   padding: 0.5em;
 }
+
+div.chopper-body h2 {
+  font-size: 1.5rem;
+}

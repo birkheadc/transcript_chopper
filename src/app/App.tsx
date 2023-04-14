@@ -8,6 +8,7 @@ import MainNav from '../components/features/nav/mainNav/MainNav';
 import WelcomePage from '../components/features/welcome/welcomePage/WelcomePage';
 import ChopPage from '../components/features/chop/chopPage/ChopPage';
 import Exporter from '../components/features/chop/chopper/exporter/Exporter';
+import Finalizer from '../components/features/chop/chopper/finalizer/Finalizer';
 
 interface AppProps {
 
@@ -25,7 +26,7 @@ function App(props: AppProps): JSX.Element | null {
         <Routes>
           <Route path={ '/welcome' } element={ <WelcomePage /> } ></Route>
           <Route path={ '/' } element={ <ChopPage /> } ></Route>
-          <Route path={ '/test' } element={ <div style={{ margin: '10em'}}><Exporter originalAudioFile={new File(["mock_file"], "mock_file.txt", { type: "text/plain" })} sections={[]}/></div> }></Route>
+          <Route path={ '/test' } element={<main><div className='chop-page-wrapper'><div className='chopper-wrapper'><div className='chopper-body'><Finalizer /></div></div></div></main>}></Route>
           <Route path={ '*' } element={ <WelcomePage /> } ></Route>
         </Routes>
       </div>

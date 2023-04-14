@@ -8,6 +8,7 @@ import Joiner from './joiner/Joiner';
 import Range from '../../../../types/range/range';
 import Exporter from './exporter/Exporter';
 import StubRangePair from '../../../../types/stubRangePair/stubRangePair';
+import Finalizer from './finalizer/Finalizer';
 
 interface ChopperProps {
 
@@ -47,8 +48,11 @@ function Chopper(props: ChopperProps): JSX.Element | null {
       case 2:
         return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />
         
-      case 3: 
-        return <Exporter originalAudioFile={originalFile.audioFile} pairs={pairs} />
+      // case 3: 
+      //   return <Exporter originalAudioFile={originalFile.audioFile} pairs={pairs} />
+
+      case 3:
+        return <Finalizer />
 
       case 4:
         return (

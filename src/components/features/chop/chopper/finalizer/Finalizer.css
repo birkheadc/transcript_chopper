@@ -1,0 +1,16 @@
+div.finalizer-wrapper {
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 5em;
+}
+
+div.finalize-selectors {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+div.finalize-selectors>h2 {
+  text-align: center;
+}

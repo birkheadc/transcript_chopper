@@ -49,7 +49,7 @@ function expectButtonsToBeDisabled(buttons, isDisabled) {
 
 function simulateSelectSection() {
   const canvas = document.querySelector('canvas#slicer-selector-canvas');
-  expect(canvas).not.toBe(null);
+  expect(canvas).not.toBeNull();
   
   fireEvent.pointerDown(canvas, { offsetX: 10, offsetY: 10 });
   fireEvent.pointerMove(canvas, { offsetX: 20, offsetY: 10 });
