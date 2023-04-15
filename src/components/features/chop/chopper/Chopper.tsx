@@ -25,6 +25,11 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   const [sections, setSections] = React.useState<Range[]>([]);
   const [pairs, setPairs] = React.useState<StubRangePair[]>([]);
 
+  const goBack = () => {
+    if (step < 1) return;
+    goToStep(step - 1);
+  }
+
   const startOver = () => {
     setOriginalFile({
       audioFile: undefined,
@@ -47,27 +52,10 @@ function Chopper(props: ChopperProps): JSX.Element | null {
 
       case 2:
         return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />
-        
-      // case 3: 
-      //   return <Exporter originalAudioFile={originalFile.audioFile} pairs={pairs} />
 
       case 3:
         return <Finalizer />
 
-      case 4:
-        return (
-          <>
-            <div>TEST</div>
-            <div>TEST</div>
-            <div>TEST</div>
-            <div>TEST</div>
-            <div>TEST</div>
-            <div>TEST</div>
-            <div>TEST</div>
-            <div>TEST</div>
-            <div>TEST</div>
-          </>
-        );
       default:
         return null;
     }
@@ -79,6 +67,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         {displayCurrentStep()}
       </div>
       <div className='chopper-footer'>
+        <button disabled={step < 1} onClick={goBack}>Go Back</button>
         <button onClick={startOver}>Start Over</button>
       </div>
     </div>

@@ -2,6 +2,18 @@ body {
   background-color: var(--clr-white);
 }
 
+h1 {
+  font-size: 2rem;
+  text-align: center;
+  padding: 1em;
+}
+
+h2 {
+  font-size: 1.5rem;
+  text-align: justify;
+  padding: 0.5em;
+}
+
 a {
   color: var(--clr-accent-a);
 }

@@ -22,6 +22,7 @@ interface SlicerProps {
 */
 function Slicer(props: SlicerProps): JSX.Element | null {
 
+  const [isWorking, setWorking] = React.useState<boolean>(false);
   const [sections, setSections] = React.useState<Range[]>([]);
   const [currentSection, setCurrentSection] = React.useState<Range | undefined>(undefined);
   const [isCurrentAdded, setCurrentAdded] = React.useState<boolean>(false);
@@ -68,10 +69,15 @@ function Slicer(props: SlicerProps): JSX.Element | null {
 
   return (
     <div className='slicer-wrapper'>
+      <h2>Choose which slices of the audio you would like to use.</h2>
       <div className='slicer-canvas-wrapper'>
-        <SlicerImage audioFile={props.originalFile.audioFile} />
-        <SlicerSelector currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
-        <SlicerSectionRecorder canvasWidth={calculateCanvasWidth()} sections={sections} select={selectSection} />
+        <SlicerImage audioFile={props.originalFile.audioFile} isWorking={isWorking} setWorking={setWorking}/>
+        { isWorking ? null : 
+          <>
+            <SlicerSelector currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
+            <SlicerSectionRecorder canvasWidth={calculateCanvasWidth()} sections={sections} select={selectSection} />
+          </>
+        }
       </div>
       
       <p>Highlight a section, then press `Play` to listen to it, or `Add` to create a section.</p>

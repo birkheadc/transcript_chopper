@@ -21,10 +21,6 @@ div.chopper-body {
 div.chopper-footer {
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: space-between;
   padding: 0.5em;
-}
-
-div.chopper-body h2 {
-  font-size: 1.5rem;
-}
+} 

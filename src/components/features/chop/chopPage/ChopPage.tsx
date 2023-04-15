@@ -14,6 +14,7 @@ function ChopPage(props: ChopPageProps): JSX.Element | null {
   return (
     <main>
       <div className='chop-page-wrapper'>
+        <h1>Transcript Chopper</h1>
         <Chopper />
       </div>
     </main>

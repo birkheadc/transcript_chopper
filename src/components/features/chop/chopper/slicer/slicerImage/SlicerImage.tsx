@@ -3,11 +3,15 @@ import './SlicerImage.css'
 
 interface SlicerImageProps {
   audioFile: File | undefined,
+  isWorking: boolean,
+  setWorking: (isWorking: boolean) => void
 }
 
 /**
 * The component that displays the sound graph of the original audio file.
 * @param {File | undefined} props.audioFile The original audio file to create the image for.
+* @param {boolean} props.isWorking Whether this component should render, or show some kind of loading message.
+* @param {(isWorking: boolean) => void} props.setWorking The function to call when declaring work is being done or is finished.
 * @returns {JSX.Element | null}
 */
 function SlicerImage(props: SlicerImageProps): JSX.Element | null {
@@ -17,7 +21,8 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 
   React.useEffect(() => {
     // Todo: Possible refactor.
-    async function drawToCanvas() {
+    (async function drawToCanvas() {
+      props.setWorking(true);
       if (props.audioFile == null) return;
 
       const canvas = document.querySelector('canvas#slicer-image-canvas') as HTMLCanvasElement;
@@ -61,18 +66,19 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
           canvasContext.stroke();
         }
       } catch {
-
+        console.log('Error drawing to canvas.');
       }
-    }
-
-    drawToCanvas();
-
+      props.setWorking(false);
+    })();
   }, [props.audioFile]);
 
   return (
-    <canvas height={200} id='slicer-image-canvas'>
+    <>
+    {props.isWorking ? <p>Creating audio image...</p> : null}
+      <canvas height={200} id='slicer-image-canvas' style={props.isWorking ? { opacity: 0} : { opacity: 1}}>
 
-    </canvas>
+      </canvas>
+    </>
   );
 }
 

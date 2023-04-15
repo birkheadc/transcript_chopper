@@ -89,6 +89,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
 
   return (
     <div className='joiner-wrapper'>
+      <h2>Match each audio slice to its section of the text.</h2>
       <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
       <div className='joiner-input-wrapper'>
         <div>
@@ -103,6 +104,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
       </div>
       <div className='joiner-controls'>
         <button disabled={currentSection <= 0} onClick={handleBack}>Back</button>
+        <span>{currentSection + 1} / {props.sections.length}</span>
         <button onClick={handleNext}>{currentSection >= props.sections.length - 1 ? 'Finish' : 'Next'}</button>
       </div>
     </div>
