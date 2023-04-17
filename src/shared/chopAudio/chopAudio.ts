@@ -3,12 +3,6 @@ import Range from "../../types/range/range";
 import playAudio from "../playAudio/playAudio";
 import { encode } from 'wav-encoder';
 
-
-function getFileName(numSections: number, currentSection: number): string {
-  if (numSections < 1) return 'audio.wav';
-  return 'audio_' + currentSection.toString().padStart(numSections.toString().length, '0') + '.wav';
-}
-
 function toInterleavedSamples(audioBuffer: AudioBuffer): Float32Array {
   const numChannels = audioBuffer.numberOfChannels;
   const numSamples = audioBuffer.length;
@@ -25,9 +19,9 @@ function toInterleavedSamples(audioBuffer: AudioBuffer): Float32Array {
 }
 
 
-export default async function chopAudio(originalAudioFile: File, sections: Range[]): Promise<File[] |  null> {
+export default async function chopAudio(originalAudioFile: File, sections: Range[]): Promise<Blob[] |  null> {
   try {
-    const files: File[] = [];
+    const blobs: Blob[] = [];
     const audioContext = new AudioContext();
     const url = URL.createObjectURL(originalAudioFile);
 
@@ -59,11 +53,11 @@ export default async function chopAudio(originalAudioFile: File, sections: Range
         bitDepth: 24
       });
 
-      const file = new File([wavFile], getFileName(sections.length, i), { type: 'audio/wav' });
-      files.push(file);
+      const blob = new Blob([wavFile], { type: 'audio/wav' });
+      blobs.push(blob);
     }
     
-    return files;
+    return blobs;
   } catch (error) {
     console.log('Error chopping audio.');
     return null;

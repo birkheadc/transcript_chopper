@@ -3,7 +3,7 @@ import './FinalizeSelector.css'
 
 interface FinalizeSelectorProps {
   label: string,
-  options: { label: string, value: string, hint: string }[],
+  options: { label: string, value: number, hint: string }[],
   current: string,
   change: (value: string) => void
 }
@@ -24,7 +24,7 @@ function FinalizeSelector(props: FinalizeSelectorProps): JSX.Element | null {
       <select id={props.label + '-select'} onChange={handleChange} value={props.current}>
       {props.options.map(
         option =>
-        <option value={option.value}>{option.label}</option>
+        <option key={option.value} value={option.value}>{option.label}</option>
       )}
     </select>
     </div>

@@ -9,6 +9,7 @@ import Range from '../../../../types/range/range';
 import Exporter from './exporter/Exporter';
 import StubRangePair from '../../../../types/stubRangePair/stubRangePair';
 import Finalizer from './finalizer/Finalizer';
+import { file } from 'jszip';
 
 interface ChopperProps {
 
@@ -54,7 +55,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />
 
       case 3:
-        return <Finalizer />
+        return <Finalizer originalAudioFile={originalFile.audioFile} pairs={pairs} />
 
       default:
         return null;
