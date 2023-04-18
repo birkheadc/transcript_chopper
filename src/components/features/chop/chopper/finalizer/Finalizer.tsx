@@ -77,14 +77,14 @@ function Finalizer(props: FinalizerProps): JSX.Element | null {
     },
   ];
 
-  const [format, setFormat] = React.useState<string>('');
-  const [namingScheme, setNamingScheme] = React.useState<string>('');
+  const [format, setFormat] = React.useState<FinalFileFormat>(FinalFileFormat.Null);
+  const [namingScheme, setNamingScheme] = React.useState<FinalFileNamingScheme>(FinalFileNamingScheme.Null);
 
   function renderSubcomponent(): JSX.Element | null {
-    if (format === '' || namingScheme === '') {
+    if (format === FinalFileFormat.Null || namingScheme === FinalFileNamingScheme.Null) {
       return null;
     }
-    if (format === 'clozed-anki-card') {
+    if (format === FinalFileFormat.ClozedAnkiCard) {
       return <ClozeEditor originalAudioFile={props.originalAudioFile} pairs={props.pairs} namingScheme={namingScheme} />
     }
     return <FileGenerator originalAudioFile={props.originalAudioFile} pairs={props.pairs} format={format} namingScheme={namingScheme} />

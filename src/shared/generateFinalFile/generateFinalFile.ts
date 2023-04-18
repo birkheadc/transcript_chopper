@@ -1,15 +1,17 @@
 import JSZip from "jszip";
-import { promises as fs } from 'fs';
 import { FinalFileFormat } from "../../types/formats/finalFileFormat";
 import { FinalFileNamingScheme } from "../../types/formats/finalFileNamingScheme";
 import StubRangePair from "../../types/stubRangePair/stubRangePair";
 import Range from "../../types/range/range";
 import chopAudio from "../chopAudio/chopAudio";
+import { v4 as uuidv4 } from 'uuid';
 
 async function getAnkiReadme(): Promise<string> {
-  const readmePath = 'assets/anki/anki_readme.txt';
-  const contents = await fs.readFile(readmePath, { encoding: 'utf-8'});
-  return contents;
+  // Todo: Make this work in browser. `fs` does not work in browser.
+  return "";
+  // const readmePath = 'assets/anki/anki_readme.txt';
+  // const contents = await fs.readFile(readmePath, { encoding: 'utf-8'});
+  // return contents;
 }
 
 function areArgumentsValid(originalAudioFile: File | undefined, pairs: StubRangePair[], format: FinalFileFormat, namingScheme: FinalFileNamingScheme): boolean {
@@ -48,11 +50,48 @@ function buildTextBlobs(stubs: string[]): Blob[] {
 }
 
 function generateFileName(totalFiles: number, currentFile: number, namingScheme: FinalFileNamingScheme): string {
-  // Todo
+  switch (namingScheme) {
+    case FinalFileNamingScheme.UUID:
+      return uuidv4();
+    case FinalFileNamingScheme.Timestamp:
+      const iterator = currentFile.toString().padStart(totalFiles.toString().length, '0');
+      const timestamp = new Date(Date.now()).toString().substring(0, 24);
+      return `${timestamp}_${iterator}`;
+    case FinalFileNamingScheme.Iterator:
+      return currentFile.toString().padStart(totalFiles.toString().length, '0');
+    case FinalFileNamingScheme.Null:
+      throw new Error('Naming Scheme was set to Null, it was probably not selected properly.');
+  }
 }
 
 async function readTextBlobsIntoStringArray(textBlobs: Blob[]): Promise<string[]> {
-  // Todo
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    const strings: string[] = [];
+    let count = 0;
+
+    function readNextFile() {
+      if (count < textBlobs.length) {
+        reader.onload = () => {
+          if (reader.result) {
+            const text = reader.result.toString();
+            strings.push(text);
+            count++;
+            readNextFile();
+          } else {
+            reject('Failed to read file contents');
+          }
+        };
+        reader.onerror = () => {
+          reject(reader.error);
+        };
+        reader.readAsText(textBlobs[count]);
+      } else {
+        resolve(strings);
+      }
+    }
+    readNextFile();
+  });
 }
 
 async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs: Blob[] }, format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
@@ -97,6 +136,10 @@ async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs:
         throw new Error('File Format was set to Null, it was probably not selected properly.');
       
     }
+  }
+
+  if (format === FinalFileFormat.StandardAnkiCard || format === FinalFileFormat.ClozedAnkiCard) {
+    zip.file('/deck/deck.txt', new Blob([ankiText], { type: 'text/plain' }));
   }
 
   return zip;

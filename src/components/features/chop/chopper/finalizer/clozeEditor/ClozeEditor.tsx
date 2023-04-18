@@ -2,18 +2,20 @@ import * as React from 'react';
 import './ClozeEditor.css'
 import FileGenerator from '../fileGenerator/FileGenerator';
 import StubRangePair from '../../../../../../types/stubRangePair/stubRangePair';
+import { FinalFileNamingScheme } from '../../../../../../types/formats/finalFileNamingScheme';
+import { FinalFileFormat } from '../../../../../../types/formats/finalFileFormat';
 
 interface ClozeEditorProps {
   originalAudioFile: File | undefined,
   pairs: StubRangePair[],
-  namingScheme: string
+  namingScheme: FinalFileNamingScheme
 }
 
 /**
 * The component that the user interacts with to create fill-in-the-blank style flash cards.
 * @param {File} props.originalAudioFile The original audio file to chop.
 * @param {Range[]} props.pairs The sections of the audio to split, and their respective strings.
-* @param {string} props.namingScheme How to name the files.
+* @param {FinalFileNamingScheme} props.namingScheme How to name the files.
 * @returns {JSX.Element | null}
 */
 function ClozeEditor(props: ClozeEditorProps): JSX.Element | null {
@@ -24,7 +26,7 @@ function ClozeEditor(props: ClozeEditorProps): JSX.Element | null {
     if (newPairs.length < props.pairs.length) {
       return null;
     }
-    return <FileGenerator originalAudioFile={props.originalAudioFile} pairs={newPairs} format='clozed-anki-card' namingScheme={props.namingScheme} />
+    return <FileGenerator originalAudioFile={props.originalAudioFile} pairs={newPairs} format={FinalFileFormat.ClozedAnkiCard} namingScheme={props.namingScheme} />
   }
 
   return (

@@ -4,8 +4,8 @@ import './FinalizeSelector.css'
 interface FinalizeSelectorProps {
   label: string,
   options: { label: string, value: number, hint: string }[],
-  current: string,
-  change: (value: string) => void
+  current: number,
+  change: (value: number) => void
 }
 
 /**
@@ -15,7 +15,7 @@ interface FinalizeSelectorProps {
 function FinalizeSelector(props: FinalizeSelectorProps): JSX.Element | null {
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    props.change(event.currentTarget.value);
+    props.change(parseInt(event.currentTarget.value));
   }
 
   return (
