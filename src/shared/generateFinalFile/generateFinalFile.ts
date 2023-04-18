@@ -47,8 +47,59 @@ function buildTextBlobs(stubs: string[]): Blob[] {
   return blobs;
 }
 
-async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs: Blob[] }, format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
+function generateFileName(totalFiles: number, currentFile: number, namingScheme: FinalFileNamingScheme): string {
   // Todo
+}
+
+async function readTextBlobsIntoStringArray(textBlobs: Blob[]): Promise<string[]> {
+  // Todo
+}
+
+async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs: Blob[] }, format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
+  // Hold my beer I'm going in.
+
+  // Read all text blobs into strings ahead of time if required.
+  let ankiText = '';
+  let strings: string[] = [];
+  if (format === FinalFileFormat.StandardAnkiCard || format === FinalFileFormat.ClozedAnkiCard) {
+    strings = await readTextBlobsIntoStringArray(blobs.textBlobs);
+  }
+
+  for (let i = 0; i < blobs.audioBlobs.length; i++) {
+    const audioBlob = blobs.audioBlobs[i];
+    const textBlob = blobs.textBlobs[i];
+    const fileName = generateFileName(blobs.audioBlobs.length, i, namingScheme);
+
+    switch (format) {
+      case FinalFileFormat.BasicZip:
+        zip.file('/audio/' + fileName + '.wav', audioBlob);
+        zip.file('/text/' + fileName + '.txt', textBlob);
+        break;
+
+      case FinalFileFormat.DumpZip:
+        zip.file(fileName + '.wav', audioBlob);
+        zip.file(fileName + '.txt', textBlob);
+        break;
+
+      case FinalFileFormat.InterleavedZip:
+        zip.file('/' + fileName + '/audio.wav', audioBlob);
+        zip.file('/' + fileName + '/text.txt', textBlob);
+        break;
+
+      case FinalFileFormat.StandardAnkiCard:
+      case FinalFileFormat.ClozedAnkiCard:
+        const text = strings[i];
+        zip.file('/audio/' + fileName + '.wav', audioBlob);
+        ankiText = ankiText + '[sound:' + fileName + '.wav];' + strings[i] + '\n';
+        break;
+
+      case FinalFileFormat.Null:
+        throw new Error('File Format was set to Null, it was probably not selected properly.');
+      
+    }
+  }
+
+  return zip;
 }
 
 export default async function generateFinalFile(originalAudioFile: File | undefined, pairs: StubRangePair[], format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<Blob | null> {
