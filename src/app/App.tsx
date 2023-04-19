@@ -7,7 +7,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import MainNav from '../components/features/nav/mainNav/MainNav';
 import WelcomePage from '../components/features/welcome/welcomePage/WelcomePage';
 import ChopPage from '../components/features/chop/chopPage/ChopPage';
-import Exporter from '../components/features/chop/chopper/exporter/Exporter';
 import Finalizer from '../components/features/chop/chopper/finalizer/Finalizer';
 
 interface AppProps {

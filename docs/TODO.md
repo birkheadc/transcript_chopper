@@ -5,3 +5,8 @@
   - Rename FinalFile enums
   - Write tests for Finalizer
   - Add option to trim white space on audio snippets automatically
+  - Create a demo for the app
+  - Create supporting pages
+    - Hero page
+    - Links to source code - Ask users to post issues there
+    - FAQ
