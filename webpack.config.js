@@ -53,6 +53,10 @@ module.exports = {
       {
         test: /\.(png|jpe?g|gif)$/i,
         type: 'asset/resource'
+      },
+      {
+        test: /\.txt$/i,
+        use: 'raw-loader'
       }
     ]
   },

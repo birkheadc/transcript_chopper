@@ -5,13 +5,12 @@ import StubRangePair from "../../types/stubRangePair/stubRangePair";
 import Range from "../../types/range/range";
 import chopAudio from "../chopAudio/chopAudio";
 import { v4 as uuidv4 } from 'uuid';
+import ankiReadme from '../../assets/anki/anki_readme.txt';
 
-async function getAnkiReadme(): Promise<string> {
-  // Todo: Make this work in browser. `fs` does not work in browser.
-  return "";
-  // const readmePath = 'assets/anki/anki_readme.txt';
-  // const contents = await fs.readFile(readmePath, { encoding: 'utf-8'});
-  // return contents;
+function addAnkiReadmeToZip(zip: JSZip): JSZip {
+  const readmeBlob = new Blob([ankiReadme], { type: 'text/plain' });
+  zip.file('README.txt', readmeBlob);
+  return zip;
 }
 
 function areArgumentsValid(originalAudioFile: File | undefined, pairs: StubRangePair[], format: FinalFileFormat, namingScheme: FinalFileNamingScheme): boolean {
@@ -111,8 +110,8 @@ async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs:
 
     switch (format) {
       case FinalFileFormat.BasicZip:
-        zip.file('/audio/' + fileName + '.wav', audioBlob);
-        zip.file('/text/' + fileName + '.txt', textBlob);
+        zip.file('audio/' + fileName + '.wav', audioBlob);
+        zip.file('text/' + fileName + '.txt', textBlob);
         break;
 
       case FinalFileFormat.DumpZip:
@@ -121,15 +120,15 @@ async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs:
         break;
 
       case FinalFileFormat.InterleavedZip:
-        zip.file('/' + fileName + '/audio.wav', audioBlob);
-        zip.file('/' + fileName + '/text.txt', textBlob);
+        zip.file(fileName + 'audio.wav', audioBlob);
+        zip.file(fileName + 'text.txt', textBlob);
         break;
 
       case FinalFileFormat.StandardAnkiCard:
       case FinalFileFormat.ClozedAnkiCard:
         const text = strings[i];
-        zip.file('/audio/' + fileName + '.wav', audioBlob);
-        ankiText = ankiText + '[sound:' + fileName + '.wav];' + strings[i] + '\n';
+        zip.file('audio/' + fileName + '.wav', audioBlob);
+        ankiText = ankiText + text + ';[sound:' + fileName + '.wav]\n';
         break;
 
       case FinalFileFormat.Null:
@@ -139,7 +138,7 @@ async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs:
   }
 
   if (format === FinalFileFormat.StandardAnkiCard || format === FinalFileFormat.ClozedAnkiCard) {
-    zip.file('/deck/deck.txt', new Blob([ankiText], { type: 'text/plain' }));
+    zip.file('deck.txt', new Blob([ankiText], { type: 'text/plain' }));
   }
 
   return zip;
@@ -151,7 +150,7 @@ export default async function generateFinalFile(originalAudioFile: File | undefi
   let zip = new JSZip();
 
   if (format === FinalFileFormat.StandardAnkiCard || format === FinalFileFormat.ClozedAnkiCard) {
-    zip.file('README.txt', getAnkiReadme());
+    zip = addAnkiReadmeToZip(zip);
   }
 
   const blobs = await buildBlobs(originalAudioFile!, pairs);

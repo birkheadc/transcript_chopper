@@ -26,7 +26,7 @@ function App(props: AppProps): JSX.Element | null {
         <Routes>
           <Route path={ '/welcome' } element={ <WelcomePage /> } ></Route>
           <Route path={ '/' } element={ <ChopPage /> } ></Route>
-          <Route path={ '/test' } element={<main><div className='chop-page-wrapper'><div className='chopper-wrapper'><div className='chopper-body'><Finalizer /></div></div></div></main>}></Route>
+          <Route path={ '/test' } element={<main><div className='chop-page-wrapper'><div className='chopper-wrapper'><div className='chopper-body'><Finalizer originalAudioFile={new File([''], '')} pairs={[ { stub: 'This is a stub', range: { from: 0.0, to: 0.1 }}, { stub: 'Here is another', range: { from: 0.2, to: 0.3 }} ]} /></div></div></div></main>}></Route>
           <Route path={ '*' } element={ <WelcomePage /> } ></Route>
         </Routes>
       </div>

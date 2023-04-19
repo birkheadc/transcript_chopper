@@ -4,6 +4,9 @@ import FileGenerator from '../fileGenerator/FileGenerator';
 import StubRangePair from '../../../../../../types/stubRangePair/stubRangePair';
 import { FinalFileNamingScheme } from '../../../../../../types/formats/finalFileNamingScheme';
 import { FinalFileFormat } from '../../../../../../types/formats/finalFileFormat';
+import ClozeTextbox from './clozeTextbox/ClozeTextbox';
+import ClozeControls from './clozeControls/ClozeControls';
+import playAudio from '../../../../../../shared/playAudio/playAudio';
 
 interface ClozeEditorProps {
   originalAudioFile: File | undefined,
@@ -20,18 +23,74 @@ interface ClozeEditorProps {
 */
 function ClozeEditor(props: ClozeEditorProps): JSX.Element | null {
 
+  const [isFinished, setFinished] = React.useState<boolean>(false);
+  const [current, setCurrent] = React.useState<number>(0);
   const [newPairs, setNewPairs] = React.useState<StubRangePair[]>([]);
 
+  React.useEffect(function setAllNewPairsToPairs() {
+    const newNewPairs: StubRangePair[] = [];
+    for (let i = 0; i < props.pairs.length; i++) {
+      newNewPairs.push({...props.pairs[i]});
+    }
+    setNewPairs(newNewPairs);
+  }, [ props.pairs ]);
+
+  const handleBack = () => {
+    setCurrent(current => current - 1);
+    setFinished(false);
+  }
+
+  const handleNext = () => {
+    if (current + 1 < props.pairs.length) {
+      setCurrent(current => current + 1);
+    }
+    else {
+      setFinished(true);
+    }
+  }
+
+  const resetCurrentlySelectedStub = () => {
+    console.log(props.pairs);
+    const newNewPairs = [...newPairs];
+    newNewPairs[current].stub = props.pairs[current].stub;
+    setNewPairs(newNewPairs);
+  }
+
+  const updateCurrentlySelectedStub = (newValue: string) => {
+    const newNewPairs = [...newPairs];
+    newNewPairs[current].stub = newValue;
+    setNewPairs(newNewPairs);
+  }
+
+  const playCurrentlySelectedSectionAudio = () => {
+    playAudio(props.originalAudioFile, newPairs[current].range);
+  }
+
+  function renderEditor(): JSX.Element | null {
+    if (newPairs.length < 1) return null;
+    return (
+      <>
+        <ClozeTextbox playAudio={playCurrentlySelectedSectionAudio} reset={resetCurrentlySelectedStub} updateStub={updateCurrentlySelectedStub} value={newPairs[current].stub} />
+        <ClozeControls back={handleBack} next={handleNext} current={current} total={props.pairs.length}/>
+      </>
+    );
+  }
+
   function renderFileGenerator(): JSX.Element | null {
-    if (newPairs.length < props.pairs.length) {
+    if (isFinished === false) {
       return null;
     }
     return <FileGenerator originalAudioFile={props.originalAudioFile} pairs={newPairs} format={FinalFileFormat.ClozedAnkiCard} namingScheme={props.namingScheme} />
   }
 
   return (
-    <div className='cloze-editor-wrapper'>
-      ClozeEditor
+    <div className='joiner-wrapper'>
+      <p>Select which parts of the text you would like to Cloze.
+      You may highlight a portion of the text and press `Cloze` to Cloze it. You may create multiple Cloze sections if you wish.
+      You may also simply edit the text freely.
+      Press `Reset` to reset the text to the values you created in the initial edit step.
+      Avoid creating multiple Cloze's within each other; This usually breaks the card format in Anki.</p>
+      {renderEditor()}
       {renderFileGenerator()}
     </div>
   );

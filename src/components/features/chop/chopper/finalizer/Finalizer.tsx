@@ -48,7 +48,7 @@ function Finalizer(props: FinalizerProps): JSX.Element | null {
       hint: 'All of your audio files will be in a folder /audio. All of your text snippets will be in a semi-colon separated text file, along with references to the audio files, so that you can import to Anki.'
     },
     {
-      label: 'Clozed Anki Card: Clozed text + audio on one side, full text on the other',
+      label: 'Clozed Anki Card: Clozed text on one side, audio on the other.',
       value: FinalFileFormat.ClozedAnkiCard,
       hint: 'For making fill-in-the-blank style Anki cards. Will open the cloze editor.'
     }
