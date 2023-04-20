@@ -85,6 +85,7 @@ function ClozeEditor(props: ClozeEditorProps): JSX.Element | null {
 
   return (
     <div className='joiner-wrapper'>
+      <h3>Cloze Editor</h3>
       <p>Select which parts of the text you would like to Cloze.
       You may highlight a portion of the text and press `Cloze` to Cloze it. You may create multiple Cloze sections if you wish.
       You may also simply edit the text freely.

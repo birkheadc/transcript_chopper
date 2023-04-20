@@ -60,6 +60,6 @@ describe('Finalizer', () => {
     expect(selects.fileFormat.value).toBe(fileFormatValue.toString());
     expect(selects.namingScheme.value).toBe(namingSchemeValue.toString());
 
-    // Check for editor...
+    screen.getByText('Cloze Editor');
   });
 });
