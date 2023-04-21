@@ -6,7 +6,6 @@ import { FinalFileNamingScheme } from '../../../../../../types/formats/finalFile
 import { FinalFileFormat } from '../../../../../../types/formats/finalFileFormat';
 import ClozeTextbox from './clozeTextbox/ClozeTextbox';
 import ClozeControls from './clozeControls/ClozeControls';
-import playAudio from '../../../../../../shared/playAudio/playAudio';
 
 interface ClozeEditorProps {
   originalAudioFile: File | undefined,
@@ -50,7 +49,6 @@ function ClozeEditor(props: ClozeEditorProps): JSX.Element | null {
   }
 
   const resetCurrentlySelectedStub = () => {
-    console.log(props.pairs);
     const newNewPairs = [...newPairs];
     newNewPairs[current].stub = props.pairs[current].stub;
     setNewPairs(newNewPairs);
@@ -62,15 +60,11 @@ function ClozeEditor(props: ClozeEditorProps): JSX.Element | null {
     setNewPairs(newNewPairs);
   }
 
-  const playCurrentlySelectedSectionAudio = () => {
-    playAudio(props.originalAudioFile, newPairs[current].range);
-  }
-
   function renderEditor(): JSX.Element | null {
     if (newPairs.length < 1) return null;
     return (
       <>
-        <ClozeTextbox playAudio={playCurrentlySelectedSectionAudio} reset={resetCurrentlySelectedStub} updateStub={updateCurrentlySelectedStub} value={newPairs[current].stub} />
+        <ClozeTextbox audioFile={props.originalAudioFile} range={props.pairs[current].range} reset={resetCurrentlySelectedStub} updateStub={updateCurrentlySelectedStub} value={newPairs[current].stub} />
         <ClozeControls back={handleBack} next={handleNext} current={current} total={props.pairs.length}/>
       </>
     );

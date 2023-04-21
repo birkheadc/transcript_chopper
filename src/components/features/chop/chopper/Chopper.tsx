@@ -2,14 +2,11 @@ import * as React from 'react';
 import './Chopper.css'
 import AudioWithTranscript from '../../../../types/audioWithTranscript/audioWithTranscript';
 import FileSelector from './fileSelector/FileSelector';
-import { start } from 'repl';
 import Slicer from './slicer/Slicer';
 import Joiner from './joiner/Joiner';
 import Range from '../../../../types/range/range';
-import Exporter from './exporter/Exporter';
 import StubRangePair from '../../../../types/stubRangePair/stubRangePair';
 import Finalizer from './finalizer/Finalizer';
-import { file } from 'jszip';
 
 interface ChopperProps {
 
@@ -65,6 +62,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   return (
     <div className='chopper-wrapper'>
       <div className='chopper-body'>
+        <audio id='play-button-audio'></audio>
         {displayCurrentStep()}
       </div>
       <div className='chopper-footer'>

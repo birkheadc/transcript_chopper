@@ -2,8 +2,8 @@ import * as React from 'react';
 import './Joiner.css'
 import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioWithTranscript';
 import Range from '../../../../../types/range/range';
-import playAudio from '../../../../../shared/playAudio/playAudio';
 import StubRangePair from '../../../../../types/stubRangePair/stubRangePair';
+import PlayAudioButton from '../../playAudioButton/PlayAudioButton';
 
 interface JoinerProps {
   originalFile: AudioWithTranscript,
@@ -36,7 +36,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   }, [props.originalFile, props.sections]);
 
   React.useEffect(function playAudioWhenSectionChanges() {
-    playAudio(props.originalFile.audioFile, props.sections[currentSection]);
+    // Todo
   }, [ currentSection ]);
 
   const handleBack = () => {
@@ -55,10 +55,6 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   function finish() {
     props.handleSetPairs(pairs);
     props.handleContinue();
-  }
-
-  const handlePlayAudio = () => {
-    playAudio(props.originalFile.audioFile, props.sections[currentSection]);
   }
 
   const handleTrim = () => {
@@ -93,7 +89,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
       <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
       <div className='joiner-input-wrapper'>
         <div>
-          <button onClick={handlePlayAudio}>Play Audio</button>
+          <PlayAudioButton file={props.originalFile.audioFile} range={props.sections[currentSection]}/>
           <button onClick={handleTrim}>Trim</button>
           <button onClick={handleReset}>Reset</button>
         </div>

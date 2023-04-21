@@ -33,7 +33,7 @@ function getTextarea() {
 }
 
 function getButtons() {
-  const labels = ['Play Audio', 'Trim', 'Reset', 'Back', 'Next'];
+  const labels = ['Play', 'Trim', 'Reset', 'Back', 'Next'];
   const buttons = {};
   for (let i = 0; i < labels.length; i++) {
     const button = screen.getByRole('button', { name: labels[i] });

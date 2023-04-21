@@ -50,14 +50,17 @@ function expectButtonsToBeDisabled(buttons, isDisabled) {
 function simulateSelectSection() {
   const canvas = document.querySelector('canvas#slicer-selector-canvas');
   expect(canvas).not.toBeNull();
-  
-  fireEvent.pointerDown(canvas, { offsetX: 10, offsetY: 10 });
-  fireEvent.pointerMove(canvas, { offsetX: 20, offsetY: 10 });
-  fireEvent.pointerUp(canvas);
+  canvas.getBoundingClientRect = jest.fn(() => ({
+    width: 100,
+    left: 0
+  }));
+  fireEvent.pointerDown(canvas, { clientX: 10, clientY: 10 });
+  fireEvent.pointerMove(canvas, { clientX: 20, clientY: 20 });
+  fireEvent.pointerUp(canvas, { clientX: 20, clientY: 20 });
 }
 
 function findAllSectionButtons() {
-  return document.querySelectorAll('button.slicer-section-button');
+  return screen.queryAllByRole('button', { name: 'section-select' });
 }
 
 describe('Slicer', () => {
@@ -91,16 +94,19 @@ describe('Slicer', () => {
     const buttons = getButtons();
     simulateSelectSection();
 
-    expect(findAllSectionButtons().length).toBeLessThan(1);
+    let sectionButtons = findAllSectionButtons();
+    expect(sectionButtons.length).toBeLessThan(1);
     fireEvent.click(buttons.Add);
-    expect(findAllSectionButtons().length).toBe(1);
+
+    sectionButtons = findAllSectionButtons();
+    expect(sectionButtons.length).toBe(1);
   });
 
   it('enables play and remove buttons when a previously created section is selected, but disables add button', () => {
     renderSlicer(getProps());
     const buttons = getButtons();
     simulateSelectSection();
-    fireEvent.click(buttons.Add);
+    fireEvent.click(buttons['Add']);
 
     const sectionButtons = findAllSectionButtons();
     fireEvent.click(sectionButtons[0]);
@@ -108,19 +114,23 @@ describe('Slicer', () => {
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(false, true, false, false));
   });
 
-  it('disables finish button when the only created section is removed', async () => {
+  it('disables finish button when the only created section is removed', () => {
     renderSlicer(getProps());
-    const buttons = getButtons();
+    let buttons = getButtons();
     simulateSelectSection();
     fireEvent.click(buttons.Add);
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(true, true, true, false));
 
-    fireEvent.click(findAllSectionButtons()[0]);
+    let sectionButtons = findAllSectionButtons();
+    fireEvent.click(sectionButtons[0]);
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(false, true, false, false));
 
     fireEvent.click(buttons.Remove);
 
-    // expect(findAllSectionButtons().length).toBe(0);
-    // Todo: Why doesn't this work?
+    sectionButtons = findAllSectionButtons();
+    expect(sectionButtons.length).toBe(0);
+
+    buttons = getButtons();
+    expectButtonsToBeDisabled(buttons, getIsDisabledObject(false, false, true, true));
   });
 });

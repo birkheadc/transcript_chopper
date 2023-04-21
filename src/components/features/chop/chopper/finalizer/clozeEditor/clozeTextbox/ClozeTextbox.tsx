@@ -1,10 +1,11 @@
 import * as React from 'react';
 import './ClozeTextbox.css'
-import playAudio from '../../../../../../../shared/playAudio/playAudio';
-import { text } from 'stream/consumers';
+import PlayAudioButton from '../../../../playAudioButton/PlayAudioButton';
+import Range from '../../../../../../../types/range/range';
 
 interface ClozeTextboxProps {
-  playAudio: () => void,
+  audioFile: File | undefined,
+  range: Range,
   updateStub: (newValue: string) => void,
   value: string,
   reset: () => void
@@ -15,10 +16,6 @@ interface ClozeTextboxProps {
 * @returns {JSX.Element | null}
 */
 function ClozeTextbox(props: ClozeTextboxProps): JSX.Element | null {
-
-  const handlePlayAudio = () => {
-    props.playAudio();
-  }
 
   const handleCloze = () => {
     const textarea = document.querySelector('textarea#stub-textarea') as HTMLTextAreaElement;
@@ -51,7 +48,7 @@ function ClozeTextbox(props: ClozeTextboxProps): JSX.Element | null {
   return (
     <div className='joiner-input-wrapper'>
         <div>
-          <button onClick={handlePlayAudio}>Play Audio</button>
+          <PlayAudioButton file={props.audioFile} range={props.range} />
           <button onClick={handleCloze}>Cloze</button>
           <button onClick={handleReset}>Reset</button>
         </div>

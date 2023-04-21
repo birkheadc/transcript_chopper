@@ -4,8 +4,8 @@ import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioW
 import SlicerImage from './slicerImage/SlicerImage';
 import SlicerSelector from './slicerSelector/SlicerSelector';
 import Range from '../../../../../types/range/range';
-import playAudio from '../../../../../shared/playAudio/playAudio';
 import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder';
+import PlayAudioButton from '../../playAudioButton/PlayAudioButton';
 
 interface SlicerProps {
   originalFile: AudioWithTranscript,
@@ -27,10 +27,6 @@ function Slicer(props: SlicerProps): JSX.Element | null {
   const [currentSection, setCurrentSection] = React.useState<Range | undefined>(undefined);
   const [isCurrentAdded, setCurrentAdded] = React.useState<boolean>(false);
 
-  const playCurrentSelection = () => {
-    playAudio(props.originalFile.audioFile, currentSection);
-  }
-
   const addCurrentSelection = () => {  
     if (currentSection == null) return;
     const newSections = [...sections, {...currentSection}];
@@ -39,6 +35,8 @@ function Slicer(props: SlicerProps): JSX.Element | null {
   }
 
   const removeCurrentSelection = () => {
+    console.log('Removing current section...');
+    console.log('Current section: ', currentSection);
     if (currentSection == null) return;
     const newSections = sections.filter(section => section.to !== currentSection.to || section.from !== currentSection.from);
     setSections(newSections);
@@ -84,7 +82,8 @@ function Slicer(props: SlicerProps): JSX.Element | null {
 
       <div className='slicer-controls-wrapper'>
         <div>
-          <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button>
+          {/* <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button> */}
+          <PlayAudioButton file={props.originalFile.audioFile} range={currentSection} />
           <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add</button>
           <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove</button>
         </div>

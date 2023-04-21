@@ -5,7 +5,7 @@ import { FinalFileNamingScheme } from '../../../../../../types/formats/finalFile
 
 function getButtons() {
   const BUTTON_LABELS = [
-    'Play Audio',
+    'Play',
     'Cloze',
     'Reset',
     'Back',
