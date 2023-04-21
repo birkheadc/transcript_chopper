@@ -48,7 +48,7 @@ function ClozeTextbox(props: ClozeTextboxProps): JSX.Element | null {
   return (
     <div className='joiner-input-wrapper'>
         <div>
-          <PlayAudioButton file={props.audioFile} range={props.range} />
+          <PlayAudioButton autoplay={false} file={props.audioFile} range={props.range} />
           <button onClick={handleCloze}>Cloze</button>
           <button onClick={handleReset}>Reset</button>
         </div>

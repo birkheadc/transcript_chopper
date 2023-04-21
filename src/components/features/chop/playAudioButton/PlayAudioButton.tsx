@@ -4,7 +4,8 @@ import Range from '../../../../types/range/range';
 
 interface PlayAudioButtonProps {
   file: File | undefined,
-  range: Range | undefined
+  range: Range | undefined,
+  autoplay: boolean
 }
 
 /**
@@ -23,6 +24,14 @@ function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
   function getAudioElement(): HTMLAudioElement | null {
     return document.querySelector(`audio#${AUDIO_ID}`) as HTMLAudioElement;
   }
+
+  React.useEffect(function stopAudioOnUnmount() {
+    return(() => {
+      const audio = getAudioElement();
+      if (audio == null) return;
+      audio.pause();
+    });
+  }, []);
   
   React.useEffect(function addOnEndedEventListener() {
     const audio = getAudioElement();
@@ -40,6 +49,22 @@ function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
     if (audio == null) return;
     audio.src = URL.createObjectURL(props.file);
   }, [props.file])
+
+  React.useEffect(function autoplay() {
+    const audio = getAudioElement();
+    if (audio == null) return;
+
+    const autoplayListener = () => {
+      handleClick();
+      audio.removeEventListener('canplay', autoplayListener);
+    }
+    if (props.autoplay === true) {
+      audio.addEventListener('canplay', autoplayListener);
+    }
+    return (() => {
+      audio.removeEventListener('canplay', autoplayListener);
+    })
+  }, [props.autoplay]);
 
   React.useEffect(function togglePlaying() {
     const audio = getAudioElement();
@@ -76,20 +101,6 @@ function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
       if (audio != null) setAudioStartAndEndTimes(audio, props.range ?? { from: 0.0, to: 1.0 });
       setPlaying(true);
     }
-  }
-
-  function renderAudioElement(): JSX.Element | null {
-    if (props.file == null) return null;
-    return (
-      <audio
-        id={AUDIO_ID}
-        autoPlay={false}
-        controls={false}
-        src={URL.createObjectURL(props.file)}
-        onEnded={() => setPlaying(false)}
-      >
-      </audio>
-    );
   }
 
   return (

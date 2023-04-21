@@ -89,7 +89,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
       <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
       <div className='joiner-input-wrapper'>
         <div>
-          <PlayAudioButton file={props.originalFile.audioFile} range={props.sections[currentSection]}/>
+          <PlayAudioButton autoplay={true} file={props.originalFile.audioFile} range={props.sections[currentSection]}/>
           <button onClick={handleTrim}>Trim</button>
           <button onClick={handleReset}>Reset</button>
         </div>

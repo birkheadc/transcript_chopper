@@ -83,7 +83,7 @@ function Slicer(props: SlicerProps): JSX.Element | null {
       <div className='slicer-controls-wrapper'>
         <div>
           {/* <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button> */}
-          <PlayAudioButton file={props.originalFile.audioFile} range={currentSection} />
+          <PlayAudioButton autoplay={false} file={props.originalFile.audioFile} range={currentSection} />
           <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add</button>
           <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove</button>
         </div>
