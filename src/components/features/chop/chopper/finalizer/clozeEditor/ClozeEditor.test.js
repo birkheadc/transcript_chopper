@@ -134,4 +134,25 @@ describe('ClozeEditor', () => {
 
     screen.getByText('Generating download link...');
   });
+
+  it('reverts finished state when pressing reset button on last section', () => {
+    renderClozeEditor(getProps(3));
+    const buttons = getButtons();
+    fireEvent.click(buttons['Next']);
+    fireEvent.click(buttons['Next']);
+
+    let finishButton = screen.getByRole('button', { name: 'Finish' });
+    fireEvent.click(finishButton);
+
+    let nextButton = screen.queryByRole('button', { name: 'Next' });
+    expect(nextButton).toBeNull();
+
+    let link = screen.queryByText('Generating download link...');
+    expect(link).not.toBeNull();
+
+    fireEvent.click(buttons['Reset']);
+
+    link = screen.queryByText('Generating download link...');
+    expect(link).toBeNull();
+  });
 });

@@ -52,6 +52,7 @@ function ClozeEditor(props: ClozeEditorProps): JSX.Element | null {
     const newNewPairs = [...newPairs];
     newNewPairs[current].stub = props.pairs[current].stub;
     setNewPairs(newNewPairs);
+    setFinished(false);
   }
 
   const updateCurrentlySelectedStub = (newValue: string) => {
