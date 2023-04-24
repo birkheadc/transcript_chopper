@@ -3,9 +3,9 @@ import { FinalFileFormat } from "../../types/formats/finalFileFormat";
 import { FinalFileNamingScheme } from "../../types/formats/finalFileNamingScheme";
 import StubRangePair from "../../types/stubRangePair/stubRangePair";
 import Range from "../../types/range/range";
-import chopAudio from "../chopAudio/chopAudio";
 import { v4 as uuidv4 } from 'uuid';
 import ankiReadme from '../../assets/anki/anki_readme.txt';
+import { chopAudio } from "../chopAudio/chopAudio";
 
 function addAnkiReadmeToZip(zip: JSZip): JSZip {
   const readmeBlob = new Blob([ankiReadme], { type: 'text/plain' });

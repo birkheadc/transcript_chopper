@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './ClozeTextbox.css'
-import PlayAudioButton from '../../../../playAudioButton/PlayAudioButton';
 import Range from '../../../../../../../types/range/range';
+import PlayAudioButton from '../../../playAudioButton/PlayAudioButton';
 
 interface ClozeTextboxProps {
   audioFile: File | undefined,

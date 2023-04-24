@@ -40,11 +40,23 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
       props.updateCurrentSection({ from: from, to: to});
     }
 
-    const handlePointerUp = (event: PointerEvent) => {
+    const handleMouseLeave = (event: MouseEvent) => {
       if (isDragging === false) return;
 
       isDragging = false;
-      to = (event.clientX - canvas.getBoundingClientRect().left) / (canvas.getBoundingClientRect().width / canvas.width) / canvas.width;
+      to = Math.min(1.0, Math.max(0.0, (event.clientX - canvas.getBoundingClientRect().left) / (canvas.getBoundingClientRect().width / canvas.width) / canvas.width));
+      if (from === to) {
+        props.updateCurrentSection(undefined);
+        return;
+      }
+      props.updateCurrentSection({ from: from, to: to });
+    }
+
+    const handlePointerUp = (event: PointerEvent) => {
+      if (isDragging === false) return; 
+
+      isDragging = false;
+      to = Math.min(1.0, Math.max(0.0, (event.clientX - canvas.getBoundingClientRect().left) / (canvas.getBoundingClientRect().width / canvas.width) / canvas.width));
       if (from === to) {
         props.updateCurrentSection(undefined);
         return;
@@ -55,10 +67,12 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
     canvas.addEventListener('pointerdown', handlePointerDown);
     canvas.addEventListener('pointermove', handlePointerMove);
     canvas.addEventListener('pointerup', handlePointerUp);
+    canvas.addEventListener('mouseleave', handleMouseLeave);
     return () => {
       canvas.removeEventListener('pointerdown', handlePointerDown);
       canvas.removeEventListener('pointermove', handlePointerMove);
       canvas.removeEventListener('pointerup', handlePointerUp);
+      canvas.addEventListener('mouseleave', handleMouseLeave);
     }
   }, []);
 

@@ -2,6 +2,10 @@ body {
   background-color: var(--clr-white);
 }
 
+.warning {
+  color: var(--clr-warning);
+}
+
 h1 {
   font-size: 2rem;
   text-align: center;
@@ -96,5 +100,3 @@ div.inline-label-input-wrapper>input, div.inline-label-input-wrapper>textarea, d
 div.inline-label-input-wrapper:hover, div.inline-label-input-wrapper:focus-within {
   box-shadow: 4px 4px 2px var(--clr-black);
 }
-
-option {}

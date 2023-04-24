@@ -1,50 +1,52 @@
-import * as React from 'react';
-import Range from '../../../../types/range/range';
+// Todo: I think this component can be deleted.
 
-export interface AudioPlayerProps {
-  file: File | undefined,
-  range: Range | undefined
-}
-/**
- * 
- * @param {} props
- * @returns {JSX.Element | null}
- */
-function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
+// import * as React from 'react';
+// import Range from '../../../../types/range/range';
 
-  function playAudioInRange(element: HTMLAudioElement, range: Range | undefined): EventListener {
-    const duration = element.duration;
-    const start = duration * Math.min(range?.from ?? 0.0, range?.to ?? 1.0);
-    const end = duration * Math.max(range?.from ?? 0.0, range?.to ?? 1.0);
-    element.currentTime = start;
-    element.play();
-    return (() => { if (element.currentTime >= end) element.pause() });
-  }
+// export interface AudioPlayerProps {
+//   file: File | undefined,
+//   range: Range | undefined
+// }
+// /**
+//  * 
+//  * @param {} props
+//  * @returns {JSX.Element | null}
+//  */
+// function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
 
-  React.useEffect(function playAudio() {
-    const element = document.querySelector('#audio-player') as HTMLAudioElement;
-    if (element == null) return;
+//   function playAudioInRange(element: HTMLAudioElement, range: Range | undefined): EventListener {
+//     const duration = element.duration;
+//     const start = duration * Math.min(range?.from ?? 0.0, range?.to ?? 1.0);
+//     const end = duration * Math.max(range?.from ?? 0.0, range?.to ?? 1.0);
+//     element.currentTime = start;
+//     element.play();
+//     return (() => { if (element.currentTime >= end) element.pause() });
+//   }
 
-    let timeUpdateListener: EventListener;
+//   React.useEffect(function playAudio() {
+//     const element = document.querySelector('#audio-player') as HTMLAudioElement;
+//     if (element == null) return;
 
-    const loadedMetaDataListener = () => {
-      if (timeUpdateListener != null) element.removeEventListener('timeupdate', timeUpdateListener);
-      timeUpdateListener = playAudioInRange(element, props.range);
-      element.addEventListener('timeupdate', timeUpdateListener);
-    };
+//     let timeUpdateListener: EventListener;
+
+//     const loadedMetaDataListener = () => {
+//       if (timeUpdateListener != null) element.removeEventListener('timeupdate', timeUpdateListener);
+//       timeUpdateListener = playAudioInRange(element, props.range);
+//       element.addEventListener('timeupdate', timeUpdateListener);
+//     };
     
-    element.addEventListener('loadedmetadata', loadedMetaDataListener);
+//     element.addEventListener('loadedmetadata', loadedMetaDataListener);
     
-    return (() => {
-      element.removeEventListener('loadedmetadata', loadedMetaDataListener);
-      if (timeUpdateListener != null) element.removeEventListener('timeupdate', timeUpdateListener);
-    })
-  }, [ props.file, props.range]);
+//     return (() => {
+//       element.removeEventListener('loadedmetadata', loadedMetaDataListener);
+//       if (timeUpdateListener != null) element.removeEventListener('timeupdate', timeUpdateListener);
+//     })
+//   }, [ props.file, props.range]);
 
-  if (props.file == null) return null;
-  return (
-    <audio id='audio-player' src={URL.createObjectURL(props.file)}></audio>
-  );
-}
+//   if (props.file == null) return null;
+//   return (
+//     <audio id='audio-player' src={URL.createObjectURL(props.file)}></audio>
+//   );
+// }
 
-export default AudioPlayer;
+// export default AudioPlayer;

@@ -16,8 +16,10 @@ interface SlicerImageProps {
 */
 function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 
-  const MARGIN = 10;
-  const CHUNK_SIZE = 50;
+  const MARGIN = 5;
+  const CHUNK_SIZE = 100;
+  const PIXEL_WIDTH = 980;
+  const SECONDS_PER_PIXEL_WIDTH = 30;
 
   React.useEffect(() => {
     // Todo: Possible refactor.
@@ -57,6 +59,11 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
         }
 
         canvas.width = Math.ceil(float32Array.length / CHUNK_SIZE + MARGIN * 2);
+
+        // Set CSS variable so that every SECONDS_PER_SCREEN_PIXEL_WIDTH seconds of audio stretches to PIXEL_WIDTH.
+        // Or, if less than that time in full clip, stretch to that width. 
+        const pixelWidth = Math.max(1.0, audioBuffer.duration / SECONDS_PER_PIXEL_WIDTH) * PIXEL_WIDTH;
+        document.documentElement.style.setProperty('--canvas-width', `${pixelWidth}px`);
 
         for (let index in array) {
           canvasContext.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--clr-black');

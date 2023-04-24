@@ -1,6 +1,6 @@
 div.slicer-section-recorder-wrapper {
   z-index: 3;
-  width: 90%;
+  width: var(--canvas-width);
   height: 100%;
   display: flex;
   flex-direction: column;

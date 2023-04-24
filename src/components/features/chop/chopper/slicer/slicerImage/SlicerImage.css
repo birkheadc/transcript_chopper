@@ -1,5 +1,5 @@
 canvas#slicer-image-canvas {
-  width: 90%;
+  width: var(--canvas-width);
   height: 200px;
 
   stroke: blue;

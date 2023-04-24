@@ -5,7 +5,8 @@ import SlicerImage from './slicerImage/SlicerImage';
 import SlicerSelector from './slicerSelector/SlicerSelector';
 import Range from '../../../../../types/range/range';
 import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder';
-import PlayAudioButton from '../../playAudioButton/PlayAudioButton';
+import AutomaticSlicer from './automaticSlicer/AutomaticSlicer';
+import PlayAudioButton from '../playAudioButton/PlayAudioButton';
 
 interface SlicerProps {
   originalFile: AudioWithTranscript,
@@ -91,6 +92,7 @@ function Slicer(props: SlicerProps): JSX.Element | null {
           <button disabled={sections.length < 1} onClick={finishSelecting}>Finish</button>
         </div>
       </div>
+      <AutomaticSlicer originalAudio={props.originalFile.audioFile} setSections={setSections} />
     </div>
   );
 }

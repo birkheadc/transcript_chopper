@@ -2,7 +2,7 @@ canvas#slicer-selector-canvas {
   z-index: 2;
   opacity: 0.3;
 
-  width: 90%;
+  width: var(--canvas-width);
   height: 200px;
 
   cursor: text;

@@ -1,4 +1,5 @@
 div.slicer-wrapper {
+  width: 90%;
   padding: 1em;
   display: flex;
   flex-direction: column;
@@ -8,9 +9,11 @@ div.slicer-wrapper {
 }
 
 div.slicer-canvas-wrapper {
+  width: 100%;
   display: grid;
   grid-template: 1fr / 1fr;
   place-items: center;
+  overflow-x: scroll;
 }
 
 div.slicer-canvas-wrapper>* {

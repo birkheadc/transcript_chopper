@@ -3,7 +3,7 @@ import './Joiner.css'
 import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioWithTranscript';
 import Range from '../../../../../types/range/range';
 import StubRangePair from '../../../../../types/stubRangePair/stubRangePair';
-import PlayAudioButton from '../../playAudioButton/PlayAudioButton';
+import PlayAudioButton from '../playAudioButton/PlayAudioButton';
 
 interface JoinerProps {
   originalFile: AudioWithTranscript,

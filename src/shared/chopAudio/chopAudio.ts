@@ -1,6 +1,5 @@
 import { file } from "jszip";
 import Range from "../../types/range/range";
-import playAudio from "../playAudio/playAudio";
 import { encode } from 'wav-encoder';
 
 function toInterleavedSamples(audioBuffer: AudioBuffer): Float32Array {
@@ -18,17 +17,20 @@ function toInterleavedSamples(audioBuffer: AudioBuffer): Float32Array {
   return interleavedSamples;
 }
 
-
-export default async function chopAudio(originalAudioFile: File, sections: Range[]): Promise<Blob[] |  null> {
+export async function chopAudio(originalAudioFile: File, sections: Range) : Promise<Blob | null>
+export async function chopAudio(originalAudioFile: File, sections: Range[]) : Promise<Blob[] | null>
+export async function chopAudio(originalAudioFile: File, sections: Range[] | Range): Promise<Blob[] | Blob |  null> {
   try {
     const blobs: Blob[] = [];
     const audioContext = new AudioContext();
     const url = URL.createObjectURL(originalAudioFile);
 
     const audioBuffer = await audioContext.decodeAudioData(await fetch(url).then(response => response.arrayBuffer()));
+
+    const _: Range[] = Array.isArray(sections) ? sections : [sections];
     
-    for (let i = 0; i < sections.length; i++) {
-      const section = sections[i];
+    for (let i = 0; i < _.length; i++) {
+      const section = _[i];
       let start = Math.min(section.from, section.to);
       let end = Math.max(section.from, section.to);
 
@@ -57,7 +59,7 @@ export default async function chopAudio(originalAudioFile: File, sections: Range
       blobs.push(blob);
     }
     
-    return blobs;
+    return Array.isArray(sections) ? blobs : blobs[0];
   } catch (error) {
     console.log('Error chopping audio.');
     return null;
