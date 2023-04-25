@@ -2,90 +2,48 @@ import * as React from 'react';
 import './SlicerImage.css'
 
 interface SlicerImageProps {
-  audioFile: File | undefined,
-  isWorking: boolean,
-  setWorking: (isWorking: boolean) => void
+  volumeArray: number[],
+  chunkSize: number
 }
 
 /**
 * The component that displays the sound graph of the original audio file.
-* @param {File | undefined} props.audioFile The original audio file to create the image for.
-* @param {boolean} props.isWorking Whether this component should render, or show some kind of loading message.
-* @param {(isWorking: boolean) => void} props.setWorking The function to call when declaring work is being done or is finished.
 * @returns {JSX.Element | null}
 */
 function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 
   const MARGIN = 5;
-  const CHUNK_SIZE = 100;
+  // const CHUNK_SIZE = 100;
   const PIXEL_WIDTH = 980;
   const SECONDS_PER_PIXEL_WIDTH = 30;
 
-  React.useEffect(() => {
-    // Todo: Possible refactor.
-    (async function drawToCanvas() {
-      props.setWorking(true);
-      if (props.audioFile == null) return;
+  React.useEffect(function drawVolumeArrayToCanvas() {
+    if (props.volumeArray.length < 1) return;
+    const canvas = document.querySelector('canvas#slicer-image-canvas') as HTMLCanvasElement;
+    if (canvas == null) return;
+    const canvasContext = canvas.getContext('2d');
+    if (canvasContext == null) return;
 
-      const canvas = document.querySelector('canvas#slicer-image-canvas') as HTMLCanvasElement;
-      if (canvas == null) return;
+    const { height } = canvas;
+    const centerHeight = Math.ceil(height / 2);
+    const scaleFactor = (height - MARGIN * 2) / 2;
 
-      const canvasContext = canvas.getContext('2d');
-      if (canvasContext == null) return;
+    canvas.width = Math.ceil(props.volumeArray.length + MARGIN * 2);
+    // Todo: calculate this
+    const pixelWidth = Math.max(1.0, 0.0) * PIXEL_WIDTH;
+    document.documentElement.style.setProperty('--canvas-width', `${pixelWidth}px`);
 
-      try {
-        const audioContext = new AudioContext();
-
-        const { width, height } = canvas;
-        const centerHeight = Math.ceil(height / 2);
-        const scaleFactor = (height - MARGIN * 2) / 2;
-
-        if (canvasContext == null || props.audioFile == null) return;
-
-        const buffer = await props.audioFile.arrayBuffer();
-        const audioBuffer = await audioContext.decodeAudioData(buffer);
-        const float32Array = audioBuffer.getChannelData(0);
-
-        const array = [];
-
-        let i = 0;
-        const length = float32Array.length;
-        while (i < length) {
-          array.push(
-            float32Array.slice(i, i += CHUNK_SIZE).reduce(function (total, value) {
-              return Math.max(total, Math.abs(value));
-            })
-          );
-        }
-
-        canvas.width = Math.ceil(float32Array.length / CHUNK_SIZE + MARGIN * 2);
-
-        // Set CSS variable so that every SECONDS_PER_SCREEN_PIXEL_WIDTH seconds of audio stretches to PIXEL_WIDTH.
-        // Or, if less than that time in full clip, stretch to that width. 
-        const pixelWidth = Math.max(1.0, audioBuffer.duration / SECONDS_PER_PIXEL_WIDTH) * PIXEL_WIDTH;
-        document.documentElement.style.setProperty('--canvas-width', `${pixelWidth}px`);
-
-        for (let index in array) {
-          canvasContext.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--clr-black');
-          canvasContext.beginPath();
-          canvasContext.moveTo(MARGIN + Number(index), centerHeight - array[index] * scaleFactor);
-          canvasContext.lineTo(MARGIN + Number(index), centerHeight + array[index] * scaleFactor);
-          canvasContext.stroke();
-        }
-      } catch {
-        console.log('Error drawing to canvas.');
-      }
-      props.setWorking(false);
-    })();
-  }, [props.audioFile]);
+    for (let index in props.volumeArray) {
+      canvasContext.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--clr-black');
+      canvasContext.beginPath();
+      canvasContext.moveTo(MARGIN + Number(index), centerHeight - props.volumeArray[index] * scaleFactor);
+      canvasContext.lineTo(MARGIN + Number(index), centerHeight + props.volumeArray[index] * scaleFactor);
+      canvasContext.stroke();
+    }
+  }, [ props.volumeArray ]);
 
   return (
-    <>
-    {props.isWorking ? <p>Creating audio image...</p> : null}
-      <canvas height={200} id='slicer-image-canvas' style={props.isWorking ? { opacity: 0} : { opacity: 1}}>
-
-      </canvas>
-    </>
+      <canvas height={200} id='slicer-image-canvas'></canvas>
   );
 }
 

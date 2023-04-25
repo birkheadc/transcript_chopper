@@ -17,6 +17,7 @@
     "@heroicons/react": "^2.0.17",
     "jszip": "^3.10.1",
     "react": "^18.2.0",
+    "react-collapsible": "^2.10.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.10.0",
     "uuid": "^9.0.0",

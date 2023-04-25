@@ -1,6 +1,8 @@
 import * as React from 'react';
 import './AutomaticSlicer.css';
 import Range from '../../../../../../types/range/range';
+import Collapsible from 'react-collapsible';
+import CollapsibleImplementation from '../../../../../shared/collapsibleImplementation/CollapsibleImplementation';
 
 interface AutomaticSlicerProps {
   originalAudio: File | undefined,
@@ -34,28 +36,31 @@ function AutomaticSlicer(props: AutomaticSlicerProps): JSX.Element | null {
   // Todo: Make this whole box collapsable (and collapsed to start) (probably a <Collapsable /> element could be made)
   return (
     <div className='automatic-slicer-wrapper'>
-      <h3>Automatically Slice (work-in-progress)</h3>
-      <p>
-        Attempts to automatically slice audio based on white space. Works better the cleaner the audio is.
-        Tweak the sliders below depending on the audio file. <span className='warning'>Will overwrite any current sections.</span>
-      </p>
-      <p>
-        Volume Sensitivity determines how to judge the difference between words and white space. Turn up for audio with a lot of background noise.
-      </p>
-      <p>
-        Pause Length determines how long of a pause is needed between slices. Turn up for a few long sections, turn down for many shorter sections.
-      </p>
-      <div className='automatic-slicer-controls'>
-        <div className='inline-label-input-wrapper'>
-          <label>Volume Sensitivity</label>
-          <input id='volumeSensitivityInput' onChange={handleVolumeSensitivityChange} type='range' value={volumeSensitivity}></input>
+      <CollapsibleImplementation>
+        <div className='automatic-slicer-inner-wrapper'>
+          <p>
+            Attempts to automatically slice audio based on white space. Works better the cleaner the audio is.
+            Tweak the sliders below depending on the audio file. <span className='warning'>Will overwrite any current sections.</span>
+          </p>
+          <p>
+            Volume Sensitivity determines how to judge the difference between words and white space. Turn up for audio with a lot of background noise.
+          </p>
+          <p>
+            Pause Length determines how long of a pause is needed between slices. Turn up for a few long sections, turn down for many shorter sections.
+          </p>
+          <div className='automatic-slicer-controls'>
+            <div className='inline-label-input-wrapper'>
+              <label>Volume Sensitivity</label>
+              <input id='volumeSensitivityInput' onChange={handleVolumeSensitivityChange} type='range' value={volumeSensitivity}></input>
+            </div>
+            <div className='inline-label-input-wrapper'>
+              <label>Pause Length</label>
+              <input id='pauseLengthInput' onChange={handlePauseLengthChange} type='range' value={pauseLength}></input>
+            </div>
+            <button onClick={handleSlice}>Slice</button>
+          </div>
         </div>
-        <div className='inline-label-input-wrapper'>
-          <label>Pause Length</label>
-          <input id='pauseLengthInput' onChange={handlePauseLengthChange} type='range' value={pauseLength}></input>
-        </div>
-        <button onClick={handleSlice}>Slice</button>
-      </div>
+        </CollapsibleImplementation>
     </div>
   );
 }

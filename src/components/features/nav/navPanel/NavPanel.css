@@ -13,10 +13,14 @@ div.nav-panel {
 
   box-sizing: border-box;
 
-  background-color: var(--clr-black);
+  background-color: var(--clr-accent-b);
   color: var(--clr-white);
 
   transition: transform 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  /* border-style: solid; */
+  border-width: 0 3px 0 0;
+  border-color: var(--clr-black);
 
   z-index: 2;
 }
@@ -28,4 +32,16 @@ div.nav-panel.shown {
 div.nav-panel.hidden {
   transform: translate(-20em, 0em);
   pointer-events: none;
+}
+
+div.nav-panel a {
+  color: var(--clr-white);
+  border-radius: 5px;
+  border-width: 0 0 2px 0;
+  border-style: solid;
+  padding: 0.2em;
+}
+
+div.nav-panel a:hover, div.nav-panel a:focus {
+  color: var(--clr-accent-a);
 }

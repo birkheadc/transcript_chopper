@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Slicer from './Slicer'
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 function getProps() {
   const wavBlob = new Blob([new Uint8Array(44)], { type: 'audio/wav' });
@@ -13,8 +13,12 @@ function getProps() {
   }
 }
 
-function renderSlicer(props) {
-  return render(<Slicer originalFile={props.originalFile}/>);
+async function renderSlicer(props) {
+  render(<Slicer originalFile={props.originalFile}/>);
+  await waitFor(() => {
+    const text = screen.getByText('Generating audio image...');
+    expect(text).not.toBeNull();
+  });
 }
 
 function getButtonLabels() {
@@ -64,33 +68,33 @@ function findAllSectionButtons() {
 }
 
 describe('Slicer', () => {
-  it('renders without crashing', () => {
-    renderSlicer(getProps());
+  it('renders without crashing', async () => {
+    await renderSlicer(getProps());
   });
 
-  it('disables all buttons when first rendered', () => {
-    renderSlicer(getProps());
+  it('disables all buttons when first rendered', async () => {
+    await renderSlicer(getProps());
     const buttons = getButtons();
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(true, true, true, true));
   });
 
-  it('enables play and add buttons when a selection is made', () => {
-    renderSlicer(getProps());
+  it('enables play and add buttons when a selection is made', async () => {
+    await renderSlicer(getProps());
     const buttons = getButtons();
     simulateSelectSection();
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(false, false, true, true));
   });
 
-  it('removes current selection when add button is pressed', () => {
-    renderSlicer(getProps());
+  it('removes current selection when add button is pressed', async () => {
+    await renderSlicer(getProps());
     const buttons = getButtons();
     simulateSelectSection();
     fireEvent.click(buttons.Add);
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(true, true, true, false));
   });
 
-  it('creates a selection when add button is pressed', () => {
-    renderSlicer(getProps());
+  it('creates a selection when add button is pressed', async () => {
+    await renderSlicer(getProps());
     const buttons = getButtons();
     simulateSelectSection();
 
@@ -102,8 +106,8 @@ describe('Slicer', () => {
     expect(sectionButtons.length).toBe(1);
   });
 
-  it('enables play and remove buttons when a previously created section is selected, but disables add button', () => {
-    renderSlicer(getProps());
+  it('enables play and remove buttons when a previously created section is selected, but disables add button', async () => {
+    await renderSlicer(getProps());
     const buttons = getButtons();
     simulateSelectSection();
     fireEvent.click(buttons['Add']);
@@ -114,8 +118,8 @@ describe('Slicer', () => {
     expectButtonsToBeDisabled(buttons, getIsDisabledObject(false, true, false, false));
   });
 
-  it('disables finish button when the only created section is removed', () => {
-    renderSlicer(getProps());
+  it('disables finish button when the only created section is removed', async () => {
+    await renderSlicer(getProps());
     let buttons = getButtons();
     simulateSelectSection();
     fireEvent.click(buttons.Add);

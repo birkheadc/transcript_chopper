@@ -7,6 +7,7 @@ import Range from '../../../../../types/range/range';
 import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder';
 import AutomaticSlicer from './automaticSlicer/AutomaticSlicer';
 import PlayAudioButton from '../playAudioButton/PlayAudioButton';
+import createVolumeArray from '../../../../../shared/createVolumeArray/createVolumeArray';
 
 interface SlicerProps {
   originalFile: AudioWithTranscript,
@@ -23,10 +24,25 @@ interface SlicerProps {
 */
 function Slicer(props: SlicerProps): JSX.Element | null {
 
+  const CHUNK_SIZE = 100;
+
+  const [volumeArray, setVolumeArray] = React.useState<number[]>([]);
   const [isWorking, setWorking] = React.useState<boolean>(false);
   const [sections, setSections] = React.useState<Range[]>([]);
   const [currentSection, setCurrentSection] = React.useState<Range | undefined>(undefined);
   const [isCurrentAdded, setCurrentAdded] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    (async function caluculateAndSetVolumeArray() {
+      if (props.originalFile.audioFile == null) return;
+      setWorking(true);
+      
+      const array: number[] = await createVolumeArray(props.originalFile.audioFile, CHUNK_SIZE);
+      setVolumeArray(array);
+
+      setWorking(false);
+    })();
+  }, [ props.originalFile ]);
 
   const addCurrentSelection = () => {  
     if (currentSection == null) return;
@@ -70,9 +86,10 @@ function Slicer(props: SlicerProps): JSX.Element | null {
     <div className='slicer-wrapper'>
       <h2>Choose which slices of the audio you would like to use.</h2>
       <div className='slicer-canvas-wrapper'>
-        <SlicerImage audioFile={props.originalFile.audioFile} isWorking={isWorking} setWorking={setWorking}/>
-        { isWorking ? null : 
+        
+        { isWorking ? <p>Generating audio image...</p> : 
           <>
+            <SlicerImage volumeArray={volumeArray} chunkSize={CHUNK_SIZE} />
             <SlicerSelector currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
             <SlicerSectionRecorder canvasWidth={calculateCanvasWidth()} sections={sections} select={selectSection} />
           </>
