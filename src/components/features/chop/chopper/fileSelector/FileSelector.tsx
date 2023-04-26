@@ -34,7 +34,7 @@ function FileSelector(props: FileSelectorProps): JSX.Element | null {
     <div className='file-selector-wrapper'>
       <h2>Select your audio file and transcript.</h2>
       <p>Select the audio file on your PC. Currently, only .wav and .mp3 are supported.</p>
-      <p>If you have a full transcript of the audio, pasting it into the box below will speed up editing in later steps, but it is not necessary.</p>
+      <p>If you have a full transcript of the audio, pasting it into the box below will speed up editing in later steps, but it is not necessary if you plan to manually type each section.</p>
       <div className='inline-label-input-wrapper file-selector-audio-wrapper'>
         <label htmlFor='audioFile'>Audio File</label>
         <input accept='audio/wav, audio/mp3' id='audioFile' onChange={handleUpdateAudioFile} type='file'></input>
