@@ -7,6 +7,11 @@ div.file-selector-wrapper {
   align-items: center;
 }
 
+div.file-selector-wrapper>p {
+  width: 100%;
+  text-align: justify;
+}
+
 div.file-selector-audio-wrapper {
   width: 100%;
 }

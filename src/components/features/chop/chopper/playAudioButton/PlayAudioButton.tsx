@@ -6,7 +6,8 @@ import Range from '../../../../../types/range/range';
 interface PlayAudioButtonProps {
   file: File | undefined,
   range: Range | undefined,
-  autoplay: boolean
+  autoplay: boolean,
+  hotkey: boolean
 }
 
 /**
@@ -14,6 +15,7 @@ interface PlayAudioButtonProps {
 * @param {File | undefined} props.file The audio file to play.
 * @param {Range | undefined} props.range The start and end times of the range to play.
 * @param {boolean} props.autoplay Whether to autoplay on mount or not.
+* @param {boolean} props.hotkey Whether to allow control of button via hotkey.
 * @returns {JSX.Element | null}
 */
 function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
@@ -25,6 +27,23 @@ function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
   function getAudioElement(): HTMLAudioElement | null {
     return document.querySelector(`audio#${AUDIO_ID}`) as HTMLAudioElement;
   }
+
+  React.useEffect(function addPKeyListener() {
+
+    if (props.hotkey === false) return;
+
+    const listener = (event: KeyboardEvent) => {
+      if (event.key === 'p' && props.range != null) {
+        handleClick();
+      };
+    }
+
+    window.addEventListener('keypress', listener);
+
+    return (() => {
+      window.removeEventListener('keypress', listener);
+    });
+  }, [ isPlaying, props.file, props.range ]);
 
   React.useEffect(function stopAudioOnUnmount() {
     return(() => {
@@ -79,23 +98,22 @@ function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
     if (audio == null) return;
 
     let choppedAudio: Blob;
-    chopAudio(props.file, props.range ?? { from: 0.0, to: 0.0})
+    chopAudio(props.file, props.range ?? { from: 0.0, to: 1.0})
       .then((blob: Blob | null) => {
         if (blob == null) return;
         audio.src = URL.createObjectURL(blob);
         setPlaying(true);
-      })
-    // chopAudio(props.file, [props.range ?? { from: 0.0, to: 0.0}])
-    //   .then(array => {
-    //     if (array == null || array.length < 1) return;
-    //     choppedAudio = array[0];
-    //     audio.src = URL.createObjectURL(choppedAudio);
-    //     setPlaying(true);
-    //   });
+      });
   }
 
   return (
-    <button className='play-audio-button' disabled={(props.range == null || props.file == null) && !isPlaying} onClick={handleClick}>{isPlaying ? 'Pause' : 'Play'}</button>
+    <button
+    className='play-audio-button'
+    disabled={(props.range == null || props.file == null) && !isPlaying}
+    onClick={handleClick}
+    >
+      {isPlaying ? 'Pause' : 'Play'}{props.hotkey ? ' (P)' : ''}
+    </button>
   );
 }
 

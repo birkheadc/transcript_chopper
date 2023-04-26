@@ -29,7 +29,8 @@ function getButtons() {
   const labels = getButtonLabels();
   const buttons = {};
   for (let i = 0; i < labels.length; i++) {
-    buttons[labels[i]] = screen.getByRole('button', { name: labels[i] });
+    const regex = new RegExp(labels[i], 'i');
+    buttons[labels[i]] = screen.getByRole('button', { name: regex });
 
   }
   return buttons;

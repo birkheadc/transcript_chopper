@@ -22,7 +22,7 @@ div.nav-panel {
   border-width: 0 3px 0 0;
   border-color: var(--clr-black);
 
-  z-index: 2;
+  z-index: 5;
 }
 
 div.nav-panel.shown {

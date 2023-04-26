@@ -8,6 +8,7 @@ import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder
 import AutomaticSlicer from './automaticSlicer/AutomaticSlicer';
 import PlayAudioButton from '../playAudioButton/PlayAudioButton';
 import createVolumeArray from '../../../../../shared/createVolumeArray/createVolumeArray';
+import { VolumeArray } from '../../../../../types/volumeArray/volumeArray';
 
 interface SlicerProps {
   originalFile: AudioWithTranscript,
@@ -26,19 +27,43 @@ function Slicer(props: SlicerProps): JSX.Element | null {
 
   const CHUNK_SIZE = 100;
 
-  const [volumeArray, setVolumeArray] = React.useState<number[]>([]);
+  const [volumeArray, setVolumeArray] = React.useState<VolumeArray>({ volume: [], max: 0, min: 0, chunkSize: CHUNK_SIZE});
   const [isWorking, setWorking] = React.useState<boolean>(false);
   const [sections, setSections] = React.useState<Range[]>([]);
   const [currentSection, setCurrentSection] = React.useState<Range | undefined>(undefined);
   const [isCurrentAdded, setCurrentAdded] = React.useState<boolean>(false);
+
+  React.useEffect(function addKeyboardListener() {
+    const listener = (event: KeyboardEvent) => {
+      switch (event.key) {
+        case 'a':
+          addCurrentSelection();
+          break;
+        case 'r':
+          removeCurrentSelection();
+          break;
+        case 'f':
+          finishSelecting();
+          break;
+        default:
+          break;
+      }
+    }
+
+    window.addEventListener('keypress', listener);
+
+    return (() => {
+      window.removeEventListener('keypress', listener);
+    })
+  }, [ currentSection, sections ]);
 
   React.useEffect(() => {
     (async function caluculateAndSetVolumeArray() {
       if (props.originalFile.audioFile == null) return;
       setWorking(true);
       
-      const array: number[] = await createVolumeArray(props.originalFile.audioFile, CHUNK_SIZE);
-      setVolumeArray(array);
+      const volume: VolumeArray = await createVolumeArray(props.originalFile.audioFile, CHUNK_SIZE);
+      setVolumeArray(volume);
 
       setWorking(false);
     })();
@@ -52,8 +77,6 @@ function Slicer(props: SlicerProps): JSX.Element | null {
   }
 
   const removeCurrentSelection = () => {
-    console.log('Removing current section...');
-    console.log('Current section: ', currentSection);
     if (currentSection == null) return;
     const newSections = sections.filter(section => section.to !== currentSection.to || section.from !== currentSection.from);
     setSections(newSections);
@@ -89,7 +112,7 @@ function Slicer(props: SlicerProps): JSX.Element | null {
         
         { isWorking ? <p>Generating audio image...</p> : 
           <>
-            <SlicerImage volumeArray={volumeArray} chunkSize={CHUNK_SIZE} />
+            <SlicerImage volumeArray={volumeArray} />
             <SlicerSelector currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
             <SlicerSectionRecorder canvasWidth={calculateCanvasWidth()} sections={sections} select={selectSection} />
           </>
@@ -101,15 +124,15 @@ function Slicer(props: SlicerProps): JSX.Element | null {
       <div className='slicer-controls-wrapper'>
         <div>
           {/* <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button> */}
-          <PlayAudioButton autoplay={false} file={props.originalFile.audioFile} range={currentSection} />
-          <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add</button>
-          <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove</button>
+          <PlayAudioButton autoplay={false} file={props.originalFile.audioFile} hotkey={true} range={currentSection} />
+          <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add (A)</button>
+          <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove (R)</button>
         </div>
         <div>
-          <button disabled={sections.length < 1} onClick={finishSelecting}>Finish</button>
+          <button disabled={sections.length < 1} onClick={finishSelecting}>Finish (F)</button>
         </div>
       </div>
-      <AutomaticSlicer originalAudio={props.originalFile.audioFile} setSections={setSections} />
+      <AutomaticSlicer volumeArray={volumeArray} setSections={setSections} />
     </div>
   );
 }

@@ -3,34 +3,35 @@ import './AutomaticSlicer.css';
 import Range from '../../../../../../types/range/range';
 import Collapsible from 'react-collapsible';
 import CollapsibleImplementation from '../../../../../shared/collapsibleImplementation/CollapsibleImplementation';
+import calculateSectionsByVolume from '../../../../../../shared/calculateSectionsByVolume/calculateSectionsByVolume';
+import { VolumeArray } from '../../../../../../types/volumeArray/volumeArray';
 
 interface AutomaticSlicerProps {
-  originalAudio: File | undefined,
+  volumeArray: VolumeArray
   setSections: (sections: Range[]) => void
 }
 /**
  * Subcomponent that analyzes an audio file and returns the sections that it understands as speech.
- * @param {File | undefined} props.originalAudio The audio file to analyze.
+ * @param {VolumeArray} props.volumeArray The volume array of the audio file.
  * @param {(sections: Range[]) => void} props.setSections The function to call when returning the sections.
  * @returns {JSX.Element | null}
  */
 function AutomaticSlicer(props: AutomaticSlicerProps): JSX.Element | null {
 
-  const [volumeSensitivity, setVolumeSensitivity] = React.useState<number>(50);
-  const [pauseLength, setPauseLength] = React.useState<number>(50);
+  const [volumeSensitivity, setVolumeSensitivity] = React.useState<number>(25);
+  const [sectionLength, setSectionLength] = React.useState<number>(25);
 
   const handleSlice = () => {
-    console.log('Analyzing...');
-    console.table({ 'file': props.originalAudio, volumeSensitivity, pauseLength});
-    // Create algorithm
+    const sections = calculateSectionsByVolume(props.volumeArray, volumeSensitivity, sectionLength);
+    props.setSections(sections);
   }
 
   const handleVolumeSensitivityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setVolumeSensitivity(parseInt(event.currentTarget.value));
   }
 
-  const handlePauseLengthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPauseLength(parseInt(event.currentTarget.value));
+  const handleSectionLengthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSectionLength(parseInt(event.currentTarget.value));
   }
 
   // Todo: Make this whole box collapsable (and collapsed to start) (probably a <Collapsable /> element could be made)
@@ -46,16 +47,16 @@ function AutomaticSlicer(props: AutomaticSlicerProps): JSX.Element | null {
             Volume Sensitivity determines how to judge the difference between words and white space. Turn up for audio with a lot of background noise.
           </p>
           <p>
-            Pause Length determines how long of a pause is needed between slices. Turn up for a few long sections, turn down for many shorter sections.
+            Section Length determines how long each section should be, combining shorter sections. Turn up for a few long sections, turn down for many shorter sections.
           </p>
           <div className='automatic-slicer-controls'>
             <div className='inline-label-input-wrapper'>
-              <label>Volume Sensitivity</label>
-              <input id='volumeSensitivityInput' onChange={handleVolumeSensitivityChange} type='range' value={volumeSensitivity}></input>
+              <label htmlFor='volumeSensitivityInput'>Volume Sensitivity</label>
+              <input min={1} max={99} id='volumeSensitivityInput' onChange={handleVolumeSensitivityChange} type='range' value={volumeSensitivity}></input>
             </div>
             <div className='inline-label-input-wrapper'>
-              <label>Pause Length</label>
-              <input id='pauseLengthInput' onChange={handlePauseLengthChange} type='range' value={pauseLength}></input>
+              <label htmlFor='sectionLengthInput'>Section Length</label>
+              <input min={0} max={100} id='sectionLengthInput' onChange={handleSectionLengthChange} type='range' value={sectionLength}></input>
             </div>
             <button onClick={handleSlice}>Slice</button>
           </div>

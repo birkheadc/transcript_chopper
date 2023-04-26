@@ -2,12 +2,12 @@ import * as React from 'react';
 import FileSelector from './FileSelector'
 import { render, screen } from '@testing-library/react';
 
-function getProps(isFileGood, isTranscriptGood) {
+function getProps(isFileGood) {
   return {
     updateOriginalFile: () => {},
     originalFile: {
       audioFile: isFileGood ? new File(["Hello, world!"], "hello.txt", { type: "text/plain" }) : undefined,
-      transcript: isTranscriptGood ? 'good' : ''
+      transcript: ''
     },
     handleContinue: () => {}
   }
@@ -22,29 +22,15 @@ function getContinueButton() {
 }
 
 describe('FileSelector', () => {
-  it('disables continue button when no audio file selected and no transcript supplied', () => {
-    const props = getProps(false, false);
-    renderFileSelector(props);
-    const button = getContinueButton();
-    expect(button).toBeDisabled();
-  });
-
   it('disables continue button when no audio file selected', () => {
-    const props = getProps(false, true);
+    const props = getProps(false);
     renderFileSelector(props);
     const button = getContinueButton();
     expect(button).toBeDisabled();
   });
 
-  it('disables continue button when no transcript is supplied', () => {
-    const props = getProps(true, false);
-    renderFileSelector(props);
-    const button = getContinueButton();
-    expect(button).toBeDisabled();
-  });
-
-  it('enables continue button when audio file selected and transcript supplied', () => {
-    const props = getProps(true, true);
+  it('enables continue button when audio file selected', () => {
+    const props = getProps(true);
     renderFileSelector(props);
     const button = getContinueButton();
     expect(button).not.toBeDisabled();

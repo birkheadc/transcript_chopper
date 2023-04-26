@@ -1,19 +1,16 @@
 div.file-generator-wrapper {
-  padding-top: 2em;
+  margin: 0 auto;
 }
 
 div.file-generator-wrapper>a {
   font-size: 1.8rem;
-  padding: 0.5em 0.8em;
-  border-color: var(--clr-black);
-  border-width: 3px;
+  padding: 0.2em 0.5em;
+  border-radius: 5px;
+  border-width: 0 0 3px 0;
   border-style: solid;
-  color: var(--clr-black);
-  background-color: var(--clr-accent-a);
+  color: var(--clr-accent-a);
 }
 
 div.file-generator-wrapper>a:hover, div.file-generator-wrapper>a:focus {
-  box-shadow: 4px 4px 2px var(--clr-black);
-  color: var(--clr-white);
-  background-color: var(--clr-accent-b);
+  color: var(--clr-accent-b);
 }

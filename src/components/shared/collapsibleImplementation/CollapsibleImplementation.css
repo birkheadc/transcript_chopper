@@ -17,11 +17,3 @@
 .collapsible-trigger>span {
   width: 1.5em;
 }
-
-/* .collapsible-trigger-open::after {
-  content: '^';
-}
-
-.collapsible-trigger-closed::after {
-  content: 'V';
-} */
