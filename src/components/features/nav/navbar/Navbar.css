@@ -1,7 +1,5 @@
 div.nav-bar {
-  position: fixed;
   inset: 0 0 0 0;
-
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -9,25 +7,26 @@ div.nav-bar {
 
   box-sizing: border-box;
 
-  height: 3em;
+  height: 50px;
   padding: 0 2em;
 
   background-color: var(--clr-accent-b);
   color: var(--clr-white);
 
-  transition: transform 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
-
   z-index: 6;
 
   box-shadow: 0px 4px 2px var(--clr-black);
+  transition: transform 100ms linear;
 }
 
-div.nav-bar.shown {
-  transform: translate(0em, 0em);
+div.nav-bar.open {
+  position: fixed;
+  transform: translate(0px, 0px);
 }
 
-div.nav-bar.hidden {
-  transform: translate(0em, -3em);
+div.nav-bar.closed {
+  position: fixed;
+  transform: translate(0px, -60px);
   pointer-events: none;
 }
 

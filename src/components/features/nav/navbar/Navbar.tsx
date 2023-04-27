@@ -2,21 +2,22 @@ import * as React from 'react';
 import './Navbar.css';
 import { NavLink } from 'react-router-dom';
 import { Bars3Icon } from '@heroicons/react/24/outline'
+import { NavBarState } from '../../../../types/navBarState/navBarState';
 
 interface NavbarProps {
   handleToggleNavPanel: () => void,
   isOpen: boolean
 }
 /**
- * 
+ * The navbar at the top of the screen.
  * @param {Function} props.handleToggleNavPanel The function to call when pressing the toggle-nav-pane button
- * @param {boolean} props.isOpen Sets whether or not to display the panel
+ * @param {boolean} props.isOpen Determines whether the nav is shown or not.
  * @returns {JSX.Element | null}
  */
 function Navbar(props: NavbarProps): JSX.Element | null {
-  
+
   return (
-    <div className={'nav-bar ' + (props.isOpen ? 'shown' : 'hidden')}>
+    <div className={ 'nav-bar '  + (props.isOpen ? 'open' : 'closed')}>
       <ul className='nav-bar'>
         <li>
           <button aria-label='toggle-nav' className='nav-panel-click-box nav-bar-button' onClick={props.handleToggleNavPanel} >

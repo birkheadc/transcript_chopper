@@ -1,7 +1,10 @@
 import * as React from 'react';
+import { useLocation } from 'react-router-dom';
 import './MainNav.css';
 import Navbar from '../navbar/Navbar';
 import NavPanel from '../navPanel/NavPanel';
+import { NavBarState } from '../../../../types/navBarState/navBarState';
+import { Socket } from 'dgram';
 
 interface MainNavProps {
 
@@ -13,23 +16,29 @@ interface MainNavProps {
  */
 function MainNav(props: MainNavProps): JSX.Element | null {
 
-  const [isNavPanelOpen, setNavPanelOpen] = React.useState<boolean>(false);
-  const [isNavBarOpen, setNavBarOpen] = React.useState<boolean>(true);
+  const { pathname } = useLocation();
+
   const [scrollPosition, setScrollPosition] = React.useState<number>(0);
+
+  const [isNavBarOpen, setNavBarOpen] = React.useState<boolean>(true);
+  const [isNavPanelOpen, setNavPanelOpen] = React.useState<boolean>(false);
 
   const handleToggleNavPanel = () => {
     setNavPanelOpen((isOpen) => !isOpen);
   }
 
+  React.useEffect(function closeNavPanelOnNavigate() {
+    setNavPanelOpen(false);
+  }, [ pathname ]);
+
   React.useEffect(() => {
     const handleScroll = () => {
-      setNavPanelOpen(false);
       if (window.scrollY < scrollPosition) {
         setNavBarOpen(true);
-      }
-      else {
+      } else if (window.scrollY > scrollPosition && window.scrollY >= 30) {
         setNavBarOpen(false);
       }
+      setNavPanelOpen(false);
       setScrollPosition(window.scrollY);
     }
 
@@ -47,11 +56,11 @@ function MainNav(props: MainNavProps): JSX.Element | null {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('click', handleClick);
     }
-  }, [scrollPosition]);
+  }, [ scrollPosition ]);
   
   return (
     <nav>
-      <Navbar isOpen={isNavBarOpen} handleToggleNavPanel={handleToggleNavPanel} />
+      <Navbar handleToggleNavPanel={handleToggleNavPanel} isOpen={isNavBarOpen} />
       <NavPanel isOpen={isNavPanelOpen} />
     </nav>
   );
