@@ -1,6 +1,8 @@
 # Transcript Chopper
 An application that assists the user in breaking down an audio file and its accompanying transcript into smaller pairs, especially for use in creating SRS cards for language learning.
 
+This project is open to help in the form of issues, comments or pull requests.
+
 ## The Code
 The application is entirely React/TypeScript and runs in the user's browser.
 
@@ -32,3 +34,7 @@ If the user supplied a transcript in the `FileSelector`, they can simply highlig
 The `Finalizer` lets the user select how they want their files, what format to provide them and how to name them.
 
 It also optionally lets the user open a `ClozeEditor` to create Anki cards with Clozed (fill-in-the-blank) fields.
+
+At the moment, exporting as an anki deck (`.apkg`) file is not implemented. Instead, choosing Anki Deck as the format option will create a `deck.txt` file which is in a semicolon-separated-value format, and a folder with the audio snippets. The user can add the cards to their deck by going to File -> Import in Anki and selecting the `deck.txt`, then moving the audio files into Anki's `collection.media` folder.
+
+I am open to any help in directly creating an Anki `.apkg` file with the data, if anyone with more knowledge in Anki's code base is interested.
