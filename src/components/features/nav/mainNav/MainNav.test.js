@@ -35,18 +35,18 @@ describe('MainNav', () => {
   it('hides nav-bar upon scrolling down, shows upon scrolling up', async () => {
     const {container} = renderMainNav();
 
-    expect(container.querySelector('.nav-bar.shown')).not.toBeNull();
-    expect(container.querySelector('.nav-bar.hidden')).toBeNull();
+    expect(container.querySelector('.nav-bar.open')).not.toBeNull();
+    expect(container.querySelector('.nav-bar.closed')).toBeNull();
 
-    fireEvent.scroll(window, { target: { scrollY: 10 } });
+    fireEvent.scroll(window, { target: { scrollY: 50 } });
 
-    expect(container.querySelector('.nav-bar.shown')).toBeNull();
-    expect(container.querySelector('.nav-bar.hidden')).not.toBeNull();
+    expect(container.querySelector('.nav-bar.open')).toBeNull();
+    expect(container.querySelector('.nav-bar.closed')).not.toBeNull();
 
-    fireEvent.scroll(window, { target: { scrollY: -10 } });
+    fireEvent.scroll(window, { target: { scrollY: -50 } });
 
-    expect(container.querySelector('.nav-bar.shown')).not.toBeNull();
-    expect(container.querySelector('.nav-bar.hidden')).toBeNull();
+    expect(container.querySelector('.nav-bar.open')).not.toBeNull();
+    expect(container.querySelector('.nav-bar.closed')).toBeNull();
   });
 
   it('hides nav-panel when scrolling', () => {

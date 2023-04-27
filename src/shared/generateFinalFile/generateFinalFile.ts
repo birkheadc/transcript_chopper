@@ -22,7 +22,7 @@ function areArgumentsValid(originalAudioFile: File | undefined, pairs: StubRange
   return true;
 }
 
-async function buildBlobs(originalAudioFile: File, pairs: StubRangePair[]): Promise<{ audioBlobs: Blob[], textBlobs: Blob[] } | null> {
+async function buildData(originalAudioFile: File, pairs: StubRangePair[]): Promise<FinalFileData | null> {
   const audioSections: Range[] = [];
   const textSections: string[] = [];
   pairs.map(pair => {
@@ -31,9 +31,8 @@ async function buildBlobs(originalAudioFile: File, pairs: StubRangePair[]): Prom
   });
   const audioBlobs = await buildAudioBlobs(originalAudioFile!, audioSections);
   if (audioBlobs == null) return null;
-  const textBlobs = buildTextBlobs(textSections);
 
-  return { audioBlobs, textBlobs };
+  return { audioBlobs: audioBlobs, strings: textSections };
 }
 
 async function buildAudioBlobs(originalAudioFile: File, ranges: Range[]): Promise<Blob[] | null> {
@@ -93,20 +92,34 @@ async function readTextBlobsIntoStringArray(textBlobs: Blob[]): Promise<string[]
   });
 }
 
-async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs: Blob[] }, format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
-  // Hold my beer I'm going in.
+async function addDataToZip(zip: JSZip, data: FinalFileData, format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
+  
+  switch (format) {
+    case FinalFileFormat.BasicZip:
+    case FinalFileFormat.DumpZip:
+    case FinalFileFormat.InterleavedZip:
+      return await addDataToZipSimpleFileFormat(zip, data, format, namingScheme);
 
-  // Read all text blobs into strings ahead of time if required.
-  let ankiText = '';
-  let strings: string[] = [];
-  if (format === FinalFileFormat.StandardAnkiCard || format === FinalFileFormat.ClozedAnkiCard) {
-    strings = await readTextBlobsIntoStringArray(blobs.textBlobs);
+    case FinalFileFormat.StandardAnkiCard:
+    case FinalFileFormat.ClozedAnkiCard:
+      return await addDataToZipAnkiDeckAndAudioFiles(zip, data, format, namingScheme);
+
+    case FinalFileFormat.AnkiAPKG:
+      return await addDataToZipAPKGFormat(zip, data, format, namingScheme);
+    
+    case FinalFileFormat.Null:
+      throw new Error('File Format was set to Null, it was probably not selected properly.');
   }
+}
 
-  for (let i = 0; i < blobs.audioBlobs.length; i++) {
-    const audioBlob = blobs.audioBlobs[i];
-    const textBlob = blobs.textBlobs[i];
-    const fileName = generateFileName(blobs.audioBlobs.length, i, namingScheme);
+async function addDataToZipSimpleFileFormat(zip: JSZip, data: FinalFileData, format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
+  
+  const textBlobs = buildTextBlobs(data.strings);
+  
+  for (let i = 0; i < data.audioBlobs.length; i++) {
+    const audioBlob = data.audioBlobs[i];
+    const textBlob = textBlobs[i];
+    const fileName = generateFileName(data.audioBlobs.length, i, namingScheme);
 
     switch (format) {
       case FinalFileFormat.BasicZip:
@@ -120,28 +133,34 @@ async function addBlobsToZip(zip: JSZip, blobs: { audioBlobs: Blob[], textBlobs:
         break;
 
       case FinalFileFormat.InterleavedZip:
-        zip.file(fileName + 'audio.wav', audioBlob);
-        zip.file(fileName + 'text.txt', textBlob);
+        zip.file(fileName + '/audio.wav', audioBlob);
+        zip.file(fileName + '/text.txt', textBlob);
         break;
-
-      case FinalFileFormat.StandardAnkiCard:
-      case FinalFileFormat.ClozedAnkiCard:
-        const text = strings[i];
-        zip.file('audio/' + fileName + '.wav', audioBlob);
-        ankiText = ankiText + text + ';[sound:' + fileName + '.wav]\n';
-        break;
-
-      case FinalFileFormat.Null:
-        throw new Error('File Format was set to Null, it was probably not selected properly.');
-      
     }
   }
 
-  if (format === FinalFileFormat.StandardAnkiCard || format === FinalFileFormat.ClozedAnkiCard) {
-    zip.file('deck.txt', new Blob([ankiText], { type: 'text/plain' }));
+  return zip;
+}
+
+async function addDataToZipAnkiDeckAndAudioFiles(zip: JSZip, data: FinalFileData, format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
+  let fullText = '';
+
+  for (let i = 0; i < data.audioBlobs.length; i++) {
+    const audioBlob = data.audioBlobs[i];
+    const text = data.strings[i];
+    const fileName = generateFileName(data.audioBlobs.length, i, namingScheme);
+  
+    zip.file('audio/' + fileName + '.wav', audioBlob);
+    fullText = fullText + text + ';[sound:' + fileName + '.wav]\n';
   }
 
+  zip.file('deck.txt', new Blob([fullText], { type: 'text/plain' }));
   return zip;
+}
+
+async function addDataToZipAPKGFormat(zip: JSZip, data: FinalFileData, format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
+  // Todo
+  throw new Error('APKG format not yet implemented.');
 }
 
 export default async function generateFinalFile(originalAudioFile: File | undefined, pairs: StubRangePair[], format: FinalFileFormat, namingScheme: FinalFileNamingScheme): Promise<Blob | null> {
@@ -153,10 +172,15 @@ export default async function generateFinalFile(originalAudioFile: File | undefi
     zip = addAnkiReadmeToZip(zip);
   }
 
-  const blobs = await buildBlobs(originalAudioFile!, pairs);
+  const blobs = await buildData(originalAudioFile!, pairs);
   if (blobs == null) return null;
 
-  zip = await addBlobsToZip(zip, blobs, format, namingScheme);
+  zip = await addDataToZip(zip, blobs, format, namingScheme);
 
   return await zip.generateAsync({ type: 'blob'});
+}
+
+interface FinalFileData {
+  audioBlobs: Blob[],
+  strings: string[]
 }

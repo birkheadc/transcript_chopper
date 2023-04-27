@@ -4,5 +4,6 @@ export enum FinalFileFormat {
   DumpZip = 2,
   InterleavedZip = 3,
   StandardAnkiCard = 4,
-  ClozedAnkiCard = 5
+  ClozedAnkiCard = 5,
+  AnkiAPKG = 6
 }

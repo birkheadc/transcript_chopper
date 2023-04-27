@@ -34,6 +34,11 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
     return true;
   }
 
+  function getFileName(format: FinalFileFormat): string {
+    if (format === FinalFileFormat.AnkiAPKG) return 'deck.apkg';
+    return 'file.zip';
+  } 
+
   React.useEffect(() => {
     if (arePropsValid() === false) return;
     (async function createDownloadLink() {
@@ -53,7 +58,7 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
   function renderBody(): JSX.Element | null {
     if (isWorking) return <p>Generating download link...</p>
     if (downloadUrl == null) return null;
-    return <a download='file.zip' href={downloadUrl}>Download</a>
+    return <a download={getFileName(props.format)} href={downloadUrl}>Download</a>
   }
 
   return (
