@@ -1,0 +1,17 @@
+version: '3'
+
+networks:
+  my-net:
+    external: true
+
+services:
+  transcript-chopper:
+    image: transcript-chopper
+    container_name: transcript-chopper-container
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+    networks:
+      - my-net

@@ -23,7 +23,6 @@ export default function calculateSectionsByVolume(volumeArray: VolumeArray, sens
     previousValue = value;
   }
 
-  console.log(`Points is ${points.length} long`);
 
   // If there are an odd number of points, add the end of the track as a final point.
   if (points.length % 2 !== 0) {
@@ -31,7 +30,6 @@ export default function calculateSectionsByVolume(volumeArray: VolumeArray, sens
   }
 
   const sections: Range[] = breakPointsIntoSections(points, sectionLength);
-  console.log(`Sections is ${sections.length} long.`);
   return sections;
 }
 
@@ -93,7 +91,6 @@ function breakPointsIntoSections(points: number[], sectionLength: number): Range
       i = i + 2;
     }
   }
-  console.log(`Sections:`, sections);
   return sections;
 }
 

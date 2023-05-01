@@ -25,7 +25,7 @@ function FinalizeSelector(props: FinalizeSelectorProps): JSX.Element | null {
   }
 
   const handleMouseOver = () => {
-    console.log('event');
+    
   }
 
   return (
