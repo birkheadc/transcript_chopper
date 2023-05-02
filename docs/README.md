@@ -3,6 +3,34 @@ An application that assists the user in breaking down an audio file and its acco
 
 This project is open to help in the form of issues, comments or pull requests.
 
+## Development and Deployment
+The application is configured to be deployable to a subdirectory (i.e. `www.example.com/this-app`). It took some time to figure out how to do this, but the end result is simple.
+
+I deploy with Docker, using the Dockerfile in the root directory. The Dockerfile creates a single environment variable `PUBLIC_PATH`; this defines the subdirectory on the server that the application will be hosted on. If deploying to the root directory, the variable can be omitted; it defaults to `/`.
+
+In the developer environment, I simply omit the variable, which causes everything to be run in the root directory (i.e. `localhost:3000`).
+
+`PUBLIC_PATH` is only used in two places by the application.
+  - `webpack.config.js` uses it to define the `output.publicPath`, so that the bundled application knows where to find its assets.
+  - `src/app/App.tsx` uses it to set the `basename` of the main `<BrowserRouter>`, so that the application knows how to parse the url and navigate.
+
+In both cases, the variable is searched for with `const PUBLIC_PATH = process.env.PUBLIC_PATH || '/'`, defaulting to `/` if no environment variable is set.
+
+When deploying, make sure to configure the subdirectory on the server to be the same as `PUBLIC_PATH`. If using nginx as a reverse-proxy as I do, this can be done with something like this:
+
+```
+http {
+  server {
+    listen 80;
+    location /PUBLIC_PATH/ {
+      proxy_pass http://DOCKER_SERVICE_NAME:80/;
+    }
+  }
+}
+```
+
+Note: the leading and trailing slashes on `location` and the trailing slash on `proxy_pass` are necessary for the proxy to work correctly.
+
 ## The Code
 The application is entirely React/TypeScript and runs in the user's browser.
 
