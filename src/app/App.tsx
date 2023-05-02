@@ -9,7 +9,8 @@ import MainNav from '../components/features/nav/mainNav/MainNav';
 import WelcomePage from '../components/features/welcome/welcomePage/WelcomePage';
 import ChopPage from '../components/features/chop/chopPage/ChopPage';
 import Finalizer from '../components/features/chop/chopper/finalizer/Finalizer';
-import Slicer from '../components/features/chop/chopper/slicer/Slicer';
+
+const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
 
 interface AppProps {
 
@@ -21,7 +22,7 @@ interface AppProps {
  */
 function App(props: AppProps): JSX.Element | null {
   return (
-    <BrowserRouter basename='/transcript-chopper'>
+    <BrowserRouter basename={PUBLIC_PATH}>
       <MainNav />
       <div id='main-wrapper'>
         <Routes>
