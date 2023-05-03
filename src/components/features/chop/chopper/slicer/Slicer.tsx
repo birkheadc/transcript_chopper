@@ -2,13 +2,13 @@ import * as React from 'react';
 import './Slicer.css'
 import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioWithTranscript';
 import SlicerImage from './slicerImage/SlicerImage';
-import SlicerSelector from './slicerSelector/SlicerSelector';
-import Range from '../../../../../types/range/range';
 import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder';
 import AutomaticSlicer from './automaticSlicer/AutomaticSlicer';
 import PlayAudioButton from '../playAudioButton/PlayAudioButton';
 import createVolumeArray from '../../../../../shared/createVolumeArray/createVolumeArray';
 import { VolumeArray } from '../../../../../types/volumeArray/volumeArray';
+import Range from '../../../../../types/range/range';
+import SlicerSelector from './slicerSelector/SlicerSelector';
 
 interface SlicerProps {
   originalFile: AudioWithTranscript,
@@ -25,9 +25,7 @@ interface SlicerProps {
 */
 function Slicer(props: SlicerProps): JSX.Element | null {
 
-  const CHUNK_SIZE = 100;
-
-  const [volumeArray, setVolumeArray] = React.useState<VolumeArray>({ volume: [], max: 0, min: 0, chunkSize: CHUNK_SIZE});
+  const [volumeArray, setVolumeArray] = React.useState<VolumeArray>({ volume: [], max: 0, min: 0, chunkSize: 1, duration: 0});
   const [isWorking, setWorking] = React.useState<boolean>(false);
   const [sections, setSections] = React.useState<Range[]>([]);
   const [currentSection, setCurrentSection] = React.useState<Range | undefined>(undefined);
@@ -62,7 +60,7 @@ function Slicer(props: SlicerProps): JSX.Element | null {
       if (props.originalFile.audioFile == null) return;
       setWorking(true);
       
-      const volume: VolumeArray = await createVolumeArray(props.originalFile.audioFile, CHUNK_SIZE);
+      const volume: VolumeArray = await createVolumeArray(props.originalFile.audioFile);
       setVolumeArray(volume);
 
       setWorking(false);

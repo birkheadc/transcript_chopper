@@ -1,6 +1,13 @@
 import { VolumeArray } from "../../types/volumeArray/volumeArray";
 
-export default async function createVolumeArray(audio: File | Blob, chunkSize: number): Promise<VolumeArray> {
+const VOLUME_MAX_LENGTH = 2500;
+const MIN_CHUNK_SIZE = 100;
+
+function determineChunkSize(channelDataLength: number): number {
+  return Math.max(Math.ceil(channelDataLength / VOLUME_MAX_LENGTH), MIN_CHUNK_SIZE);
+}
+
+export default async function createVolumeArray(audio: File | Blob): Promise<VolumeArray> {
   try {
     const audioContext = new AudioContext();
     const buffer = await audio.arrayBuffer();
@@ -12,30 +19,47 @@ export default async function createVolumeArray(audio: File | Blob, chunkSize: n
     let max: number = float32Array[0];
     let i = 0;
     const length = float32Array.length;
+
+    const chunkSize = determineChunkSize(length);
+
     while (i < length) {
-      const value = (
-        float32Array.slice(i, i += chunkSize).reduce(function (total, value) {
-          return Math.max(total, Math.abs(value));
-        })
-      );
+      // const value = (
+      //   float32Array.slice(i, i += chunkSize).reduce(function (total, value) {
+      //     return Math.max(total, Math.abs(value));
+      //   })
+      // );
+      const slice = float32Array.slice(i, i += chunkSize);
+
+      let sum = 0;
+      for (let ii = 0; ii < slice.length; ii++) sum += slice[ii];
+
+      const value = sum / slice.length;
+
       array.push(value);
       if (value > max) max = value;
       if (value < min) min = value;
     }
 
-    return {
+    const output = {
       volume: array,
       max: max,
       min: min,
-      chunkSize: chunkSize
-    };
+      chunkSize: chunkSize,
+      duration: audioBuffer.duration
+    }
+
+    console.log('Created Volume Array.');
+    console.log(output);
+
+    return output;
   } catch {
     console.log('Error creating volume array.');
     return {
       volume: [],
       max: 0,
       min: 0,
-      chunkSize: chunkSize
+      chunkSize: 1,
+      duration: 0
     };
   }
 }

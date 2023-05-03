@@ -3,18 +3,21 @@ import './SlicerImage.css'
 import { VolumeArray } from '../../../../../../types/volumeArray/volumeArray';
 
 interface SlicerImageProps {
-  volumeArray: VolumeArray
+  volumeArray: VolumeArray,
 }
 
 /**
 * The component that displays the sound graph of the original audio file.
 * @param {VolumeArray} props.volumeArray The volume array for the audio file.
+* @param {Range | undefined} props.currentSection The currently selected section, expressed as a ratio from 0.0 to 1.0.
+* @param {(selection: Range) => void} props.updateCurrentSection The function this component calls when updating the selected section.
 * @returns {JSX.Element | null}
 */
 function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 
   const MARGIN = 5;
-  const PIXEL_WIDTH = 980;
+
+  const [width, setWidth] = React.useState<number>(0);
 
   React.useEffect(function drawVolumeArrayToCanvas() {
     if (props.volumeArray.volume.length < 1) return;
@@ -25,11 +28,14 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 
     const { height } = canvas;
     const centerHeight = Math.ceil(height / 2);
-    const scaleFactor = (height - MARGIN * 2) / 2;
+    const scaleFactor = (height - MARGIN * 2) / (props.volumeArray.max * 2);
 
-    canvas.width = Math.ceil(props.volumeArray.volume.length + MARGIN * 2);
-    // Todo: calculate this
-    const pixelWidth = Math.max(1.0, 0.0) * PIXEL_WIDTH;
+    const width = Math.ceil(props.volumeArray.volume.length + MARGIN * 2);
+    canvas.width = width;
+    const selectorCanvas = document.querySelector('canvas#slicer-selector-canvas') as HTMLCanvasElement;
+    if (selectorCanvas != null) selectorCanvas.width = width;
+
+    const pixelWidth = width;
     document.documentElement.style.setProperty('--canvas-width', `${pixelWidth}px`);
 
     for (let index in props.volumeArray.volume) {
@@ -42,7 +48,7 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
   }, [ props.volumeArray ]);
 
   return (
-      <canvas height={200} id='slicer-image-canvas'></canvas>
+    <canvas height={200} id='slicer-image-canvas'></canvas>
   );
 }
 

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import './AutomaticSlicer.css';
 import Range from '../../../../../../types/range/range';
-import Collapsible from 'react-collapsible';
 import CollapsibleImplementation from '../../../../../shared/collapsibleImplementation/CollapsibleImplementation';
 import calculateSectionsByVolume from '../../../../../../shared/calculateSectionsByVolume/calculateSectionsByVolume';
 import { VolumeArray } from '../../../../../../types/volumeArray/volumeArray';

@@ -1,7 +1,6 @@
 import * as React from 'react';
-import './SlicerSelector.css'
+import './SlicerSelector.css';
 import Range from '../../../../../../types/range/range';
-import { start } from 'repl';
 
 interface SlicerSelectorProps {
   currentSection: Range | undefined,

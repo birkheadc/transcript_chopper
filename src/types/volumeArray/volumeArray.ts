@@ -2,5 +2,6 @@ export interface VolumeArray {
   volume: number[],
   min: number,
   max: number,
-  chunkSize: number
+  chunkSize: number,
+  duration: number
 }

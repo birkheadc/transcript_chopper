@@ -1,5 +1,5 @@
-# Transcript Chopper
-An application that assists the user in breaking down an audio file and its accompanying transcript into smaller pairs, especially for use in creating SRS cards for language learning.
+# Audio Flashcard Wizard (Transcript Chopper)
+An application that assists the user in breaking down an audio file and its accompanying transcript into smaller pairs, especially for use in creating SRS cards for language learning. Original name was Transcript Chopper, which it is still referred to as internally.
 
 This project is open to help in the form of issues, comments or pull requests.
 

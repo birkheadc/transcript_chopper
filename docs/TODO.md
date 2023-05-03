@@ -1,4 +1,6 @@
 # Todo
+  - Rename the app, or at least the name that the end user sees. 'Transcript Chopper' isn't great.
+  - Anything longer than around 2 minutes of audio breaks the audio image for some reason.
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages
