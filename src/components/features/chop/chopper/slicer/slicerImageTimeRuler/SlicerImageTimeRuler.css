@@ -1,0 +1,12 @@
+div.slicer-time-ruler-wrapper {
+  width: var(--canvas-width);
+  height: 20px;
+  white-space: nowrap;
+  overflow-x: hidden;
+}
+
+div.slicer-time-ruler-wrapper>span {
+  width: var(--time-ruler-span-width);
+  text-align: right;
+  display: inline-block;
+}

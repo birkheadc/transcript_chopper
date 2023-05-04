@@ -9,6 +9,7 @@ import createVolumeArray from '../../../../../shared/createVolumeArray/createVol
 import { VolumeArray } from '../../../../../types/volumeArray/volumeArray';
 import Range from '../../../../../types/range/range';
 import SlicerSelector from './slicerSelector/SlicerSelector';
+import SlicerImageTimeRuler from './slicerImageTimeRuler/SlicerImageTimeRuler';
 
 interface SlicerProps {
   originalFile: AudioWithTranscript,
@@ -110,9 +111,12 @@ function Slicer(props: SlicerProps): JSX.Element | null {
         
         { isWorking ? <p>Generating audio image...</p> : 
           <>
-            <SlicerImage volumeArray={volumeArray} />
-            <SlicerSelector currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
-            <SlicerSectionRecorder canvasWidth={calculateCanvasWidth()} sections={sections} select={selectSection} />
+            <SlicerImageTimeRuler duration={volumeArray.duration} />
+            <div className='slicer-canvas-inner-wrapper'>
+              <SlicerImage volumeArray={volumeArray} />
+              <SlicerSelector currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
+              <SlicerSectionRecorder canvasWidth={calculateCanvasWidth()} sections={sections} select={selectSection} />
+            </div>
           </>
         }
       </div>

@@ -9,14 +9,20 @@ div.slicer-wrapper {
 }
 
 div.slicer-canvas-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow-x: scroll;
+}
+
+div.slicer-canvas-inner-wrapper {
   width: 100%;
   display: grid;
   grid-template: 1fr / 1fr;
   place-items: center;
-  overflow-x: scroll;
 }
 
-div.slicer-canvas-wrapper>* {
+div.slicer-canvas-inner-wrapper>* {
   grid-column: 1 / 1;
   grid-row: 1 / 1;
 }
