@@ -35,7 +35,7 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
     const selectorCanvas = document.querySelector('canvas#slicer-selector-canvas') as HTMLCanvasElement;
     if (selectorCanvas != null) selectorCanvas.width = width;
 
-    const pixelWidth = width;
+    const pixelWidth = Math.max(600, (width / 500) * props.volumeArray.chunkSize);
     document.documentElement.style.setProperty('--canvas-width', `${pixelWidth}px`);
 
     for (let index in props.volumeArray.volume) {

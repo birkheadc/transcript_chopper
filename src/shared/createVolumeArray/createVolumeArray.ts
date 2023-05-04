@@ -1,7 +1,7 @@
 import { VolumeArray } from "../../types/volumeArray/volumeArray";
 
-const VOLUME_MAX_LENGTH = 2500;
-const MIN_CHUNK_SIZE = 100;
+const VOLUME_MAX_LENGTH = 50000;
+const MIN_CHUNK_SIZE = 1;
 
 function determineChunkSize(channelDataLength: number): number {
   return Math.max(Math.ceil(channelDataLength / VOLUME_MAX_LENGTH), MIN_CHUNK_SIZE);
@@ -23,11 +23,6 @@ export default async function createVolumeArray(audio: File | Blob): Promise<Vol
     const chunkSize = determineChunkSize(length);
 
     while (i < length) {
-      // const value = (
-      //   float32Array.slice(i, i += chunkSize).reduce(function (total, value) {
-      //     return Math.max(total, Math.abs(value));
-      //   })
-      // );
       const slice = float32Array.slice(i, i += chunkSize);
 
       let sum = 0;
