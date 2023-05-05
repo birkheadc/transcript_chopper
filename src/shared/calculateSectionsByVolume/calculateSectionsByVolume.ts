@@ -16,6 +16,18 @@ export default function calculateSectionsByVolume(volumeArray: VolumeArray, sens
   const thresholdVolume = calculateThreshold(volumeArray.max, volumeArray.min, sensitivity);
   const maxWhiteSpace = calculateMaxWhiteSpace(volumeArray, sectionLength);
 
+  const sections = calculateSections(volumeArray, thresholdVolume, maxWhiteSpace);
+  return sections;
+}
+
+/**
+ * Iterates over the volume array, deciding where to break up the sections based on the threshold volume and maximum white space allowed in a section
+ * @param {VolumeArray} volumeArray The volume array to work on.
+ * @param {number} thresholdVolume How high the amplitude must be to no longer be considered white space.
+ * @param {number} maxWhiteSpace How long a string of white space can be before a counting as a section break
+ * @returns {Range[]} The calculated sections
+ */
+function calculateSections(volumeArray: VolumeArray, thresholdVolume: number, maxWhiteSpace: number): Range[] {
   const sections: Range[] = [];
   let isWhitespace = true;
   let from = 0.0;
@@ -50,34 +62,7 @@ export default function calculateSectionsByVolume(volumeArray: VolumeArray, sens
   }
 
   return sections;
-
-  // Tracks turning points, where the audio passes the threshold between whitespace and important audio,
-  // as a float representing the point in time (0.0 is start of track, 1.0 is end of track).
-  // const points: number[] = [];
-
-  // let previousValue: number = volumeArray.min;
-  
-  // for (let i = 0; i < volumeArray.volume.length; i++) {
-  //   const value = volumeArray.volume[i];
-  //   if (isThresholdBetweenTwoNumbers(threshold, previousValue, value) === true) {
-  //     points.push(i / (volumeArray.volume.length - 1));
-  //   }
-  //   previousValue = value;
-  // }
-
-  // // If there are an odd number of points, add the end of the track as a final point.
-  // if (points.length % 2 !== 0) {
-  //   points.push(volumeArray.volume[volumeArray.volume.length - 1]);
-  // }
-
-  // console.log('Calculating Sections...');
-  // console.log(`Found ${points.length} points that cross the threshold.`);
-
-  // const sections: Range[] = breakPointsIntoSections(volumeArray, points, sectionLength);
-  // console.log(`Broke into ${sections.length} sections based on length of white space between point pairs`);
-  // console.log(sections);
-  // return sections;
-}
+} 
 
 /**
  * Calculates where the threshold between white space and meaningful audio will be determined.
@@ -97,62 +82,9 @@ function calculateThreshold(max: number, min: number, sensitivity: number): numb
 }
 
 /**
- * Checks 2 consecutive frames to determine whether the threshold is being crossed.
- * @param {number} threshold The threshold between white space and meaningful audio.
- * @param {number} valueA The first frame's volume.
- * @param {number} valueB The second frame's volume.
- * @returns Whether the 2 frames cross the threshold.
- */
-function isThresholdBetweenTwoNumbers(threshold: number, valueA: number, valueB: number): boolean {
-  // Todo: There might be some bad edge cases if a string of numbers equal / near the threshold occurs.
-  // Also, this can probably be made faster somehow.
-  if (valueA <= threshold) {
-    return (valueB > threshold);
-  } else /* valueA > threshold */ {
-    return (valueB <= threshold);
-  }
-}
-
-/**
- * Breaks the series of boundary points into from-to pairs.
- * @param {number[]} points The points where the audio volume crosses the threshold between white space and meaningful audio.
- * @param {number} sectionLength The parameter supplied by the user to determine how much whitespace to allow in a section of audio.
- */
-function breakPointsIntoSections(volumeArray: VolumeArray, points: number[], sectionLength: number): Range[] {
-  if (points.length < 2) return [];
-
-  const padding = PADDING_IN_SECONDS / volumeArray.duration;
-
-  if (points.length === 2) return [
-    {from: Math.max(points[0] - padding, 0.0), to: Math.min(points[1] + padding, 1.0)}
-  ]
-
-  const maxWhiteSpace = calculateMaxWhiteSpace(volumeArray, sectionLength);
-
-  const sections: Range[] = [];
-  let i = 2;
-  let currentFrom = points[0];
-  let currentTo = points[1];
-  while (i < points.length) {
-    if (points[i] - currentTo < maxWhiteSpace) {
-      currentTo = points[i+1];
-      i = i + 2;
-      if (i >= points.length) {
-        sections.push({ from: Math.max(currentFrom - padding, 0.0), to: Math.min(currentTo + padding, 1.0) });
-      }
-    } else {
-      sections.push({ from: Math.max(currentFrom - padding, 0.0), to: Math.min(currentTo + padding, 1.0) });
-      currentFrom = points[i];
-      currentTo = points[i+1];
-      i = i + 2;
-    }
-  }
-  return sections;
-}
-
-/**
  * Calculates a value to represent how long of a whitespace is needed to separate two sections.
- * @param {number} sectionLength 
+ * @param {VolumeArray} volumeArray The volume array being worked on.
+ * @param {number} sectionLength The value given by the user to represent relative section length.
  */
 function calculateMaxWhiteSpace(volumeArray: VolumeArray, sectionLength: number): number {
   const minWhiteSpace = MIN_WHITE_SPACE_IN_SECONDS / volumeArray.duration;
@@ -162,57 +94,3 @@ function calculateMaxWhiteSpace(volumeArray: VolumeArray, sectionLength: number)
 
   return Math.max(minWhiteSpace, modifiedMax);
 }
-
-// Might go back to this later... (2023.5.3)
-// function convertVolumeArrayToRoundedArray(volumeArray: VolumeArray): VolumeArray {
-//   const ROUND_RADIUS: number = 0;
-
-//   const newVolume: number[] = [];
-
-//   let sum = 0;
-//   let count = 0;
-
-//   // Handle first edge of array first
-//   for (let i = 0; i < ROUND_RADIUS; i++) {
-//     sum = 0;
-//     count = 0;
-//     for (let j = Math.max(0, i - ROUND_RADIUS); j <= Math.min(i + ROUND_RADIUS, volumeArray.volume.length - 1); j++) {
-//       sum += volumeArray.volume[j];
-//       count++;
-//     }
-
-//     newVolume.push(sum / count);
-//   }
-  
-//   // Handle body of array
-//   sum = 0;
-//   for (let i = 0; i < ROUND_RADIUS * 2 + 1; i++) {
-//     sum += volumeArray.volume[i];
-//   }
-
-//   for (let i = ROUND_RADIUS; i < volumeArray.volume.length - ROUND_RADIUS; i++) {
-//     newVolume.push(sum / ROUND_RADIUS * 2 + 1);
-//     sum -= volumeArray.volume[i - ROUND_RADIUS];
-//     sum += volumeArray.volume[i + ROUND_RADIUS + 1];
-//   }
-
-//   // Handle the other edge of array
-//   for (let i = volumeArray.volume.length - 1; i > (volumeArray.volume.length - 1) - ROUND_RADIUS; i--) {
-//     sum = 0;
-//     count = 0;
-//     for (let j = Math.max(0, i - ROUND_RADIUS); j <= Math.min(i + ROUND_RADIUS, volumeArray.volume.length - 1); j++) {
-//       sum += volumeArray.volume[j];
-//       count++;
-//     }
-
-//     newVolume.push(sum / count);
-//   }
-
-//   return {
-//     volume: newVolume,
-//     max: volumeArray.max,
-//     min: volumeArray.min,
-//     duration: volumeArray.duration,
-//     chunkSize: volumeArray.chunkSize
-//   }
-// }

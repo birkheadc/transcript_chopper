@@ -4,14 +4,12 @@ import Range from '../../../../../../types/range/range';
 
 interface SlicerSectionRecorderProps {
   sections: Range[],
-  canvasWidth: number,
   select: (index: number) => void
 }
 
 /**
 * The component that creates a button for each section passed to it, which visually represents the range of that section, and can be clicked to reselect that section.
 * @param {Range[]} props.sections The current group of selected sections.
-* @param {number} props.canvasWidth The width of the SlicerImage canvas, used to calculate where to draw the buttons and how long to make them.
 * @param {(index: number) => void} props.select The function to call when clicking on a button, passed the index of that button's section.
 * @returns {JSX.Element | null}
 */
@@ -29,7 +27,7 @@ function SlicerSectionRecorder(props: SlicerSectionRecorderProps): JSX.Element |
     {props.sections.map(
       (section, index) =>
       <div className='slicer-section-recorder-section' key={index} style={{
-        left: props.canvasWidth * Math.min(section.from, section.to) + 'px', right: props.canvasWidth - (props.canvasWidth * Math.max(section.from, section.to)) + 'px'
+        left: 100 * Math.min(section.from, section.to) + '%', right: 100 - (100 * Math.max(section.from, section.to)) + '%'
       }}>
         <button aria-label='section-select' className='slicer-section-button' data-index={index} onClick={handleSelect}></button>
       </div>

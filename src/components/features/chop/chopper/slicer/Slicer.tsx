@@ -10,6 +10,13 @@ import { VolumeArray } from '../../../../../types/volumeArray/volumeArray';
 import Range from '../../../../../types/range/range';
 import SlicerSelector from './slicerSelector/SlicerSelector';
 import SlicerImageTimeRuler from './slicerImageTimeRuler/SlicerImageTimeRuler';
+import SlicerCanvasDetails from '../../../../../types/slicerCanvasDetails/slicerCanvasDetails';
+
+const CANVAS_DETAILS: SlicerCanvasDetails = {
+  height: 200,
+  individualCanvasMaxWidth: 10000,
+  widthMultiplier: 0.4
+}
 
 interface SlicerProps {
   originalFile: AudioWithTranscript,
@@ -98,12 +105,6 @@ function Slicer(props: SlicerProps): JSX.Element | null {
     setCurrentAdded(true);
   }
 
-  function calculateCanvasWidth(): number {
-    const canvas = document.querySelector('canvas#slicer-selector-canvas') as HTMLCanvasElement;
-    if (canvas == null) return 0;
-    return canvas.getBoundingClientRect().width;
-  }
-
   return (
     <div className='slicer-wrapper'>
       <h2>Choose which slices of the audio you would like to use.</h2>
@@ -113,9 +114,9 @@ function Slicer(props: SlicerProps): JSX.Element | null {
           <>
             <SlicerImageTimeRuler duration={volumeArray.duration} />
             <div className='slicer-canvas-inner-wrapper'>
-              <SlicerImage volumeArray={volumeArray} />
-              <SlicerSelector currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
-              <SlicerSectionRecorder canvasWidth={calculateCanvasWidth()} sections={sections} select={selectSection} />
+              <SlicerImage details={CANVAS_DETAILS} volumeArray={volumeArray} />
+              <SlicerSelector details={CANVAS_DETAILS} length={volumeArray.volume.length} currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
+              <SlicerSectionRecorder sections={sections} select={selectSection} />
             </div>
           </>
         }

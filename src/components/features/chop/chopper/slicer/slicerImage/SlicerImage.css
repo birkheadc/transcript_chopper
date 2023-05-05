@@ -1,13 +1,14 @@
-canvas#slicer-image-canvas {
+div#slicer-image-wrapper {
   width: var(--canvas-width);
-  height: 200px;
-
-  stroke: blue;
-  background-color: var(--clr-white);
-
+  display: flex;
+  flex-direction: row;
   border-style: dotted;
-  border-width: 1px;
   border-color: var(--clr-black);
+  border-width: 1px;
+}
 
+canvas.slicer-image-canvas {
+  background-color: var(--clr-white);
   z-index: 1;
+  height: var(--canvas-height);
 }
