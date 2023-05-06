@@ -110,7 +110,7 @@ function Slicer(props: SlicerProps): JSX.Element | null {
       <h2>Choose which slices of the audio you would like to use.</h2>
       <div className='slicer-canvas-wrapper'>
         
-        { isWorking ? <p>Generating audio image...</p> : 
+        { isWorking ? <p className='generating-message'>Generating audio image...</p> : 
           <>
             <SlicerImageTimeRuler duration={volumeArray.duration} />
             <div className='slicer-canvas-inner-wrapper'>
@@ -121,21 +121,22 @@ function Slicer(props: SlicerProps): JSX.Element | null {
           </>
         }
       </div>
-      
-      <p>Highlight a section, then press `Play` to listen to it, or `Add` to create a section.</p>
+      { isWorking ? <></> : <>
+        <p>Highlight a section, then press `Play` to listen to it, or `Add` to create a section.</p>
 
-      <div className='slicer-controls-wrapper'>
-        <div>
-          {/* <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button> */}
-          <PlayAudioButton autoplay={false} file={props.originalFile.audioFile} hotkey={true} range={currentSection} />
-          <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add (A)</button>
-          <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove (R)</button>
+        <div className='slicer-controls-wrapper'>
+          <div>
+            {/* <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button> */}
+            <PlayAudioButton autoplay={false} file={props.originalFile.audioFile} hotkey={true} range={currentSection} />
+            <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add (A)</button>
+            <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove (R)</button>
+          </div>
+          <div>
+            <button disabled={sections.length < 1} onClick={finishSelecting}>Finish (F)</button>
+          </div>
         </div>
-        <div>
-          <button disabled={sections.length < 1} onClick={finishSelecting}>Finish (F)</button>
-        </div>
-      </div>
-      <AutomaticSlicer volumeArray={volumeArray} setSections={setSections} />
+        <AutomaticSlicer volumeArray={volumeArray} setSections={setSections} />
+      </>}
     </div>
   );
 }

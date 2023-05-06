@@ -20,13 +20,9 @@ interface PlayAudioButtonProps {
 */
 function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
 
-  const AUDIO_ID = 'play-button-audio';
+  const stopPlaybackTimeout = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [isPlaying, setPlaying] = React.useState<boolean>(false);
-
-  function getAudioElement(): HTMLAudioElement | null {
-    return document.querySelector(`audio#${AUDIO_ID}`) as HTMLAudioElement;
-  }
 
   React.useEffect(function addPKeyListener() {
 
@@ -45,65 +41,93 @@ function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
     });
   }, [ isPlaying, props.file, props.range ]);
 
+  React.useEffect(function setAudioUrl() {
+    const audio = getAudioElement();
+    if (audio == null || props.file == null) return;
+    audio.src = URL.createObjectURL(props.file);
+  }, []);
+
   React.useEffect(function stopAudioOnUnmount() {
     return(() => {
       const audio = getAudioElement();
-      if (audio == null) return;
-      audio.pause();
+      if (audio != null) audio.pause();
     });
   }, []);
 
   React.useEffect(function autoplay() {
     if (props.autoplay === false) return;
     if (props.file == null) return;
-
-    const audio = getAudioElement();
-    if (audio == null) return;
-
     handleClick();
-
   }, [ props.autoplay, props.range ]);
 
   React.useEffect(function addOnEndedEventListener() {
     const audio = getAudioElement();
     if (audio == null) return;
-    const onEndedListener = () => {
+
+    const pauseListener = () => {
+      if (stopPlaybackTimeout.current != null) clearTimeout(stopPlaybackTimeout.current);
       setPlaying(false);
     }
-    audio.addEventListener('ended', onEndedListener);
+
+    const playingListener = () => {
+      setPlaying(true);
+    }
+    
+    audio.addEventListener('pause', pauseListener);
+    audio.addEventListener('playing', playingListener);
     return (() => {
-      audio.removeEventListener('ended', onEndedListener);
+      audio.removeEventListener('pause', pauseListener);
+      audio.removeEventListener('playing', playingListener);
     });
   }, []);
 
-  React.useEffect(function togglePlaying() {
-    const audio = getAudioElement();
-    if (audio == null) return;
-
-    if (isPlaying === true) {
-      audio.play();
-    } else {
-      audio.pause();
-    }
-  }, [isPlaying]);
-
   const handleClick = async () => {
-    if (isPlaying === true) {
-      setPlaying(false);
-      return;
-    }
-    if (props.file == null) return;
-
     const audio = getAudioElement();
     if (audio == null) return;
+    isPlaying ? stopAudio(audio) : playAudio(audio);
+    // if (isPlaying === true) {
+    //   setPlaying(false);
+    //   return;
+    // }
+    // if (props.file == null) return;
 
-    let choppedAudio: Blob;
-    chopAudio(props.file, props.range ?? { from: 0.0, to: 1.0})
-      .then((blob: Blob | null) => {
-        if (blob == null) return;
-        audio.src = URL.createObjectURL(blob);
-        setPlaying(true);
-      });
+    // const audio = getAudioElement();
+    // if (audio == null) return;
+
+    // chopAudio(props.file, props.range ?? { from: 0.0, to: 1.0})
+    //   .then((blob: Blob | null) => {
+    //     if (blob == null) return;
+    //     audio.src = URL.createObjectURL(blob);
+    //     setPlaying(true);
+    //   });
+  }
+
+  function playAudio (audio: HTMLAudioElement) {
+    if (audio.paused && !isPlaying) {
+      let startTime = 0.0;
+      let endTime = audio.duration;
+
+      if (props.range != null) {
+        startTime = Math.min(props.range.from, props.range.to) * audio.duration;
+        endTime = Math.max(props.range.from, props.range.to) * audio.duration;
+      }
+
+      audio.currentTime = startTime;
+      stopPlaybackTimeout.current = setTimeout(() => {
+        audio.pause();
+        audio.currentTime = 0;
+      }, (endTime - startTime) * 1000);
+
+      audio.play();
+    }
+  }
+  
+  function stopAudio(audio: HTMLAudioElement) {
+    if (!audio.paused && isPlaying) {
+      console.log('stop.');
+      audio.pause();
+      audio.currentTime = 0;
+    }
   }
 
   return (
@@ -118,3 +142,9 @@ function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
 }
 
 export default PlayAudioButton;
+
+const AUDIO_ID = 'play-button-audio';
+
+function getAudioElement(): HTMLAudioElement | null {
+  return document.querySelector(`audio#${AUDIO_ID}`) as HTMLAudioElement;
+}

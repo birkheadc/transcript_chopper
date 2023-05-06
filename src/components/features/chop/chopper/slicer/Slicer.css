@@ -15,6 +15,12 @@ div.slicer-canvas-wrapper {
   overflow-x: scroll;
 }
 
+p.generating-message {
+  font-size: 1.3em;
+  padding: 0.5em;
+  text-align: center;
+}
+
 div.slicer-canvas-inner-wrapper {
   width: 100%;
   display: grid;

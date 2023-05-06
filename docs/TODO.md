@@ -1,5 +1,4 @@
 # Todo
-  - Fix playback of partial audio file; With large audio files, it takes too long to cut the file into a little file and then play that every time.
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages
