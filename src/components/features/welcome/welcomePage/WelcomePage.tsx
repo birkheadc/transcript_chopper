@@ -14,7 +14,7 @@ function WelcomePage(props: WelcomePageProps): JSX.Element | null {
   return (
     <main>
       <div className='welcome-wrapper'>
-      <h1>WELCOME</h1>
+      <h1>Audio Flashcard Wizard</h1>
       <p>Welcome</p>
       <p>Welcome</p>
       <p>Welcome</p>
