@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './WelcomePage.css';
 import { Bars3Icon } from '@heroicons/react/24/outline';
+import WelcomeBanner from './welcomeBanner/WelcomeBanner';
 
 interface WelcomePageProps {
 
@@ -12,111 +13,64 @@ interface WelcomePageProps {
  */
 function WelcomePage(props: WelcomePageProps): JSX.Element | null {
   return (
-    <main>
-      <div className='welcome-wrapper'>
-      <h1>Audio Flashcard Wizard</h1>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
-      <p>Welcome</p>
+    <>
+      <WelcomeBanner />
+      <div className='welcome-page-wrapper'>
+        <main>
+          <p>Hello</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+          <p>Welcome to the welcome page</p>
+        </main>
       </div>
-    </main>
+    </>
   );
 }
 

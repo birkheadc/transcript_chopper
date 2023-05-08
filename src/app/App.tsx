@@ -24,14 +24,12 @@ function App(props: AppProps): JSX.Element | null {
   return (
     <BrowserRouter basename={PUBLIC_PATH}>
       <MainNav />
-      <div id='main-wrapper'>
         <Routes>
           <Route path={ '/welcome' } element={ <WelcomePage /> } ></Route>
           <Route path={ '/' } element={ <ChopPage /> } ></Route>
           <Route path={ '/test' } element={<main><div className='chop-page-wrapper'><div className='chopper-wrapper'><div className='chopper-body'><Finalizer originalAudioFile={new File([''], '')}  pairs= {[]} /></div></div></div></main>}></Route>
           <Route path={ '*' } element={ <Navigate replace={true} to={{ pathname: '/welcome' }} /> } ></Route>
         </Routes>
-      </div>
     </BrowserRouter>
   );
 }

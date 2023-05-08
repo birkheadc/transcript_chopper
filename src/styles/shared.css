@@ -1,3 +1,7 @@
+html {
+  font-family: var(--font-main);
+}
+
 body {
   background-color: var(--clr-white);
 }
@@ -32,10 +36,15 @@ a:hover, a:focus {
 }
 
 main {
+  /* height: 100%; */
+}
+
+div.full-height-wrapper {
   min-height: 100%;
-  max-width: 980px;
+  height: 100%;
   margin: 0 auto;
-  padding: 4em 1em 1em 1em;
+  padding: 3em 0em 0em 0em;
+  background-color: red;
 }
 
 input, textarea, select {

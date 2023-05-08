@@ -6,6 +6,8 @@ import NavPanel from '../navPanel/NavPanel';
 import { NavBarState } from '../../../../types/navBarState/navBarState';
 import { Socket } from 'dgram';
 
+const SCROLL_CLOSE_DISTANCE = 30;
+
 interface MainNavProps {
 
 }
@@ -35,7 +37,7 @@ function MainNav(props: MainNavProps): JSX.Element | null {
     const handleScroll = () => {
       if (window.scrollY < scrollPosition) {
         setNavBarOpen(true);
-      } else if (window.scrollY > scrollPosition && window.scrollY >= 30) {
+      } else if (window.scrollY > scrollPosition && window.scrollY >= SCROLL_CLOSE_DISTANCE) {
         setNavBarOpen(false);
       }
       setNavPanelOpen(false);
