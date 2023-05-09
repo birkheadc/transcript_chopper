@@ -9,13 +9,12 @@ section.welcome-page-section {
   display: flex;
   flex-direction: column;
   gap: 5em;
-
-  border-style: double;
-  border-width: 9px 0 0 0;
-  border-color: var(--clr-accent-a);
 }
 
-section.welcome-page-section a {
+section.welcome-page-section:not(:first-child) {
+  border-style: dotted;
+  border-width: 9px 0 0 0;
+  border-color: var(--clr-accent-b);
 }
 
 section.welcome-page-section h2 {

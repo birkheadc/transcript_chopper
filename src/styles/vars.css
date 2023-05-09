@@ -1,11 +1,14 @@
 :root {
-  --clr-black: #0D0A0B;
-  --clr-white: #F3EFF5;
+  --clr-black: #131B23;
+  --clr-white: #E9F1F7;
+  
+  --clr-accent-b: #92C892;
+  --clr-accent-b-dark: #52A352;
 
-  --clr-accent-a: #DDBCA6;
-  --clr-accent-b: #8E7DBE;
+  --clr-accent-a: #d4bca5;
+  --clr-accent-a-dark: #7A4300;
 
-  --clr-warning: #dd9933;
+  --clr-warning: orange;
 
   --font-main: 'Roboto', sans-serif;
   --font-button: 'Bebas Neue', cursive;

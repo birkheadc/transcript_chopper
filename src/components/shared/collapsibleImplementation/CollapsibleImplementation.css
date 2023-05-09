@@ -10,10 +10,14 @@
 }
 
 .collapsible-trigger:hover, .collapsible-trigger:focus {
-  background-color: var(--clr-accent-b);
+  background-color: var(--clr-accent-b-dark);
   color: var(--clr-white);
 }
 
 .collapsible-trigger>span {
   width: 1.5em;
+}
+
+.collapsible-trigger-title {
+  font-family: var(--font-button);
 }

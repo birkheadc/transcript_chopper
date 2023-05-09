@@ -8,7 +8,7 @@ div.welcome-banner-wrapper {
   flex-direction: column;
   justify-content: space-between;
 
-  background-image: linear-gradient(var(--clr-accent-b), var(--clr-accent-a));
+  background-image: radial-gradient(circle, var(--clr-accent-b) -50%, var(--clr-accent-b-dark) 100%);
   color: var(--clr-white);
 }
 
@@ -51,11 +51,12 @@ div.welcome-banner-call-to-action-wrapper a {
   color: var(--clr-white);
 
   font-family: var(--font-button);
-  font-weight: 700;
+
+  background-color: var(--clr-accent-b-dark);
 }
 
 div.welcome-banner-call-to-action-wrapper a:hover, div.welcome-banner-call-to-action-wrapper a:focus {
-  background-color: var(--clr-accent-b);
+  background-color: var(--clr-accent-a-dark);
 }
 
 @media (max-width: 980px) {

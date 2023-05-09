@@ -30,12 +30,12 @@ h3 {
 }
 
 a {
-  color: var(--clr-accent-a);
+  color: var(--clr-accent-a-dark);
   font-family: var(--font-main);
 }
 
 a:hover, a:focus {
-  color: var(--clr-accent-b);
+  color: var(--clr-accent-b-dark);
 }
 
 main {
@@ -79,7 +79,7 @@ button:disabled {
 }
 
 button:hover, button:focus {
-  background-color: var(--clr-accent-b);
+  background-color: var(--clr-accent-b-dark);
   color: var(--clr-white);
   box-shadow: 2px 2px 2px var(--clr-black);
 }
