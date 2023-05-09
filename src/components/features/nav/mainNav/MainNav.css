@@ -1,3 +1,7 @@
 nav {
   
 }
+
+nav a {
+  font-family: var(--font-button);
+}

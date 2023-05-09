@@ -1,5 +1,18 @@
 div.chop-page-wrapper {
   padding: 3em 1em 1em 1em;
-  max-width: 980px;
-  margin: 0 auto;
+  background-color: var(--clr-accent-a);
+}
+
+div.chop-page-wrapper h1 {
+  padding: 1em;
+  font-size: 2.5em;
+  font-weight: 700;
+
+  color: var(--clr-white);
+  text-shadow: 0 1px 1px var(--clr-black);
+}
+
+div.chop-page-wrapper h2 {
+  font-size: 2.0em;
+  font-weight: 700;
 }

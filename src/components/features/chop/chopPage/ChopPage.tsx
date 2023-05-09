@@ -14,8 +14,10 @@ function ChopPage(props: ChopPageProps): JSX.Element | null {
   return (
     <main>
       <div className='chop-page-wrapper'>
-        <h1>Audio Flashcard Wizard</h1>
-        <Chopper />
+        <div className='chop-page-inner-wrapper'>
+          <h1>Audio Flashcard Wizard</h1>
+          <Chopper />
+        </div>
       </div>
     </main>
   );

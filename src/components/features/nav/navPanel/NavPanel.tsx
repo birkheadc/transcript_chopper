@@ -15,7 +15,7 @@ function NavPanel(props: NavPanelProps): JSX.Element | null {
     <div className={'nav-panel-click-box nav-panel ' + (props.isOpen ? 'shown' : 'hidden')}>
       <ul>
         <li>
-          <NavLink className={'nav-panel-click-box'} tabIndex={props.isOpen ? 0 : -1} to={ '/welcome '}>About</NavLink>
+          <NavLink className={'nav-panel-click-box'} tabIndex={props.isOpen ? 0 : -1} to={ '/welcome '}>Home</NavLink>
         </li>
       </ul>
     </div>

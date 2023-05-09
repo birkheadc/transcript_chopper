@@ -1,4 +1,6 @@
 div.chopper-wrapper {
+  max-width: 980px;
+  margin: 0 auto;
   border-color: var(--clr-black);
   border-style: solid;
   border-width: 2px;

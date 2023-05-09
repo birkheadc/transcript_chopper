@@ -1,3 +1,37 @@
-div.welcome-wrapper {
+div.welcome-page-wrapper {
   background-color: var(--clr-white);
+}
+
+section.welcome-page-section {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 3em 1em;
+  display: flex;
+  flex-direction: column;
+  gap: 5em;
+
+  border-style: double;
+  border-width: 9px 0 0 0;
+  border-color: var(--clr-accent-a);
+}
+
+section.welcome-page-section a {
+}
+
+section.welcome-page-section h2 {
+  font-size: 3em;
+  font-weight: 700;
+}
+
+div.welcome-page-section-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  max-width: 600px;
+  font-size: 1.2em;
+}
+
+div.welcome-page-section-text>ol>li {
+  margin-left: 2em;
+  list-style:disc;
 }

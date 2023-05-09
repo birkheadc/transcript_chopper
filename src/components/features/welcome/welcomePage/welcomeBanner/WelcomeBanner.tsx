@@ -18,7 +18,7 @@ function WelcomeBanner(props: WelcomeBannerProps): JSX.Element | null {
       <WelcomeExample />
       <div className='welcome-banner-call-to-action-wrapper'>
         <p>
-          Automatically generate dozens of language-learning flash cards from audio and text.
+          Automatically generate language-learning flash cards from audio and text.
           Everything runs in your browser.
           No registration required.
         </p>

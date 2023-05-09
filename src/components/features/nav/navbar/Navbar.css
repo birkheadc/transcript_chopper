@@ -7,8 +7,8 @@ div.nav-bar {
 
   box-sizing: border-box;
 
-  height: 50px;
-  padding: 0 2em;
+  height: 3em;
+  padding: 0 2em 0 0.5em;
 
   background-color: var(--clr-accent-b);
   color: var(--clr-white);
@@ -53,12 +53,29 @@ button.nav-bar-button>* {
 
 div.nav-bar a {
   color: var(--clr-white);
-  border-radius: 5px;
   border-width: 0 0 2px 0;
   border-style: solid;
-  padding: 0.2em;
+  padding: 0 0.2em;
+  user-select: none;
+
+  font-size: 1.2em;
 }
 
 div.nav-bar a:hover, div.nav-bar a:focus {
   color: var(--clr-accent-a);
+}
+
+div.nav-bar span {
+  font-size: 1.5em;
+  user-select: none;
+}
+
+@media (max-width: 980px) {
+  div.nav-bar {
+    padding: 0 1em 0 0;
+  }
+
+  div.nav-bar span {
+    visibility: hidden;
+  }
 }

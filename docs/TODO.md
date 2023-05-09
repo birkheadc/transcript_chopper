@@ -3,7 +3,7 @@
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages
-    - Hero page?
+    - Welcome page
     - Links to source code - Ask users to post issues there
     - FAQ?
   - Write more in the README
@@ -13,3 +13,5 @@
     - This way, the next step, file generation, can simply take those pairs and create the actual zip, OR send that data to a cloze editor.
     - The end result being a less coupled cloze editor, that can be used standalone in the event that the user already has a list of shortened audio files + transcripts.
   - Add ability to say 'nevermind' while joining or while clozing (essentially mark the current pair as do-not-create and skip it)
+  - Create a stylized version of an SRS clozed-text card for the welcome page
+  - Add support for more customized flash card output

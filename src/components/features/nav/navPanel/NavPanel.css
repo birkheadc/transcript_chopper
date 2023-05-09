@@ -39,7 +39,10 @@ div.nav-panel a {
   border-radius: 5px;
   border-width: 0 0 2px 0;
   border-style: solid;
-  padding: 0.2em;
+  padding: 0 0.2em;
+  user-select: none;
+
+  font-size: 2em;
 }
 
 div.nav-panel a:hover, div.nav-panel a:focus {

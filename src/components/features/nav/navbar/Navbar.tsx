@@ -18,18 +18,10 @@ function Navbar(props: NavbarProps): JSX.Element | null {
 
   return (
     <div className={ 'nav-bar '  + (props.isOpen ? 'open' : 'closed')}>
-      <ul className='nav-bar'>
-        <li>
-          <button aria-label='toggle-nav' className='nav-panel-click-box nav-bar-button' onClick={props.handleToggleNavPanel} >
-            <Bars3Icon className='icon' />
-          </button>
-        </li>
-      </ul>
-      <ul>
-        <li>
-          <NavLink tabIndex={props.isOpen ? 0 : -1} to="/">Get Started</NavLink>
-        </li>
-      </ul>
+      <button aria-label='toggle-nav' className='nav-panel-click-box nav-bar-button' onClick={props.handleToggleNavPanel} >
+        <Bars3Icon className='icon' />
+      </button>
+      <NavLink tabIndex={props.isOpen ? 0 : -1} to="/">Get Started</NavLink>
     </div>
     
   );

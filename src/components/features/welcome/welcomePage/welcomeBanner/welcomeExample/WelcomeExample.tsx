@@ -15,12 +15,14 @@ interface WelcomeExampleProps {
 */
 function WelcomeExample(props: WelcomeExampleProps): JSX.Element | null {
   return (
-    <div className='welcome-example-wrapper'>
-      <div>
-        <img src={audioImage}></img>
-      </div>
-      <div>
-        <img src={outputImage}></img>
+    <div className='welcome-example-outer-wrapper'>
+      <div className='welcome-example-wrapper'>
+        <div className='welcome-example-input-image-wrapper'>
+          <img src={audioImage}></img>
+        </div>
+        <div className='welcome-example-output-image-wrapper'>
+          <img src={outputImage}></img>
+        </div>
       </div>
     </div>
   );

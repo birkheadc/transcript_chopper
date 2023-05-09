@@ -31,5 +31,5 @@ div.file-selector-transcript-wrapper>textarea {
 }
 
 div.inline-label-input-wrapper:hover, div.inline-label-input-wrapper:focus-within {
-  box-shadow: 4px 4px 2px var(--clr-black);
+  box-shadow: 2px 2px 2px var(--clr-black);
 }

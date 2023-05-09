@@ -1,4 +1,12 @@
+div.welcome-example-outer-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
 div.welcome-example-wrapper {
+  position: absolute;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -7,7 +15,7 @@ div.welcome-example-wrapper {
   flex-grow: 1;
 }
 
-div.welcome-example-wrapper>div {
+div.welcome-example-input-image-wrapper, div.welcome-example-output-image-wrapper {
   display: flex;
   flex-direction: column;
   gap: 1em;
@@ -24,6 +32,16 @@ div.welcome-example-wrapper img {
   }
 
   div.welcome-example-wrapper>div {
-    width: 400px;
+    width: 90%;
+  }
+
+  div.welcome-example-output-image-wrapper {
+    display: none;
   }
 }
+
+@media (max-height: 500px) {
+  div.welcome-example-input-image-wrapper, div.welcome-example-output-image-wrapper {
+    display: none;
+  }
+} 
