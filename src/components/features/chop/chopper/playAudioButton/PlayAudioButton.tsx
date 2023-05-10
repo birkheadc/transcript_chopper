@@ -1,8 +1,6 @@
 import * as React from 'react';
 import './PlayAudioButton.css'
-import { chopAudio } from '../../../../../shared/chopAudio/chopAudio';
 import Range from '../../../../../types/range/range';
-import DisabledPlayAudioButton from './disabledPlayAudioButton/DisabledPlayAudioButton';
 import EnabledPlayAudioButton from './enabledPlayAudioButton/EnabledPlayAudioButton';
 
 interface PlayAudioButtonProps {
@@ -22,7 +20,7 @@ interface PlayAudioButtonProps {
 function PlayAudioButton(props: PlayAudioButtonProps): JSX.Element | null {
 
   const audio = getAudioElement();
-  if (audio == null) return <DisabledPlayAudioButton />;
+  if (audio == null) return <button className='play-audio-button' disabled={true} >Play</button>;
 
   return <EnabledPlayAudioButton audio={audio} range={props.range} autoplay={props.autoplay} hotkey={props.hotkey} />
 }
