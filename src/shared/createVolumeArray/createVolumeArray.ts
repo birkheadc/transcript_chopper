@@ -43,8 +43,6 @@ export default async function createVolumeArray(audio: File | Blob): Promise<Vol
       duration: audioBuffer.duration
     }
 
-    console.log('Created Volume Array.');
-    console.log(output);
 
     return output;
   } catch {

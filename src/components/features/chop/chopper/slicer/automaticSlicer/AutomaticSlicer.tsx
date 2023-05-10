@@ -18,7 +18,7 @@ interface AutomaticSlicerProps {
 function AutomaticSlicer(props: AutomaticSlicerProps): JSX.Element | null {
 
   const [volumeSensitivity, setVolumeSensitivity] = React.useState<number>(1);
-  const [sectionLength, setSectionLength] = React.useState<number>(25);
+  const [sectionLength, setSectionLength] = React.useState<number>(10);
 
   const handleSlice = () => {
     const sections = calculateSectionsByVolume(props.volumeArray, volumeSensitivity, sectionLength);

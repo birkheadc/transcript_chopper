@@ -72,12 +72,9 @@ function calculateSections(volumeArray: VolumeArray, thresholdVolume: number, ma
  * @returns A number to be used as the threshold in further calculations.
  */
 function calculateThreshold(max: number, min: number, sensitivity: number): number {
-  console.log('Calculating threshold...');
-  console.log(`Sensitivity: ${sensitivity}`);
   const distance = (max / 2) - 0;
   const offset = distance * (sensitivity / 100);
   const threshold = offset + 0;
-  console.log(`Threshold: ${threshold}`);
   return threshold;
 }
 

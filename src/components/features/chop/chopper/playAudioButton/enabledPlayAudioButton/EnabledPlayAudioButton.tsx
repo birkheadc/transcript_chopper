@@ -92,7 +92,7 @@ function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element
   React.useEffect(function autoplay() {
     if (props.autoplay === false) return;
     handleClick();
-  }, [ props.autoplay ]);
+  }, [ props.autoplay, props.range ]);
 
   return (
     <button

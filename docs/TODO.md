@@ -1,5 +1,4 @@
 # Todo
-  - There is an occasional bug with section playback -- the timer to stop playback starts immediately, so if there is any delay in starting playback, the end is cut off by that delay amount.
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages

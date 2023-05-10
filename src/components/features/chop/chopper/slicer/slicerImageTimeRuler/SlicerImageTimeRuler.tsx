@@ -14,7 +14,6 @@ function SlicerImageTimeRuler(props: SlicerImageTimeRulerProps): JSX.Element | n
   const breaks: number[] = Array.from({ length: Math.floor(props.duration) }, (_, index) => index + 1);
 
   React.useEffect(function calculateSpanWidth() {
-    console.log(`Duration: ${props.duration}`);
     const width: number = 100.0 / (props.duration);
 
     document.documentElement.style.setProperty('--time-ruler-span-width', `${width}%`);
