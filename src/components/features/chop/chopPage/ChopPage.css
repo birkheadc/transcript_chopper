@@ -1,6 +1,8 @@
 div.chop-page-wrapper {
   padding: 3em 1em 1em 1em;
   background-image: radial-gradient(circle, var(--clr-accent-b) -50%, var(--clr-accent-b-dark) 100%);
+  min-height: 100vh;
+  min-height: 100svh;
 }
 
 div.chop-page-wrapper h1 {

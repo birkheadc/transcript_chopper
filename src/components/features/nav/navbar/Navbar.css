@@ -34,7 +34,7 @@ div.nav-bar.open {
 
 div.nav-bar.closed {
   position: fixed;
-  transform: translate(0px, -60px);
+  transform: translate(0px, -4em);
   pointer-events: none;
   transition: transform 100ms 200ms linear;
 

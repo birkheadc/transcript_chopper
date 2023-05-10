@@ -14,6 +14,7 @@ interface JoinerProps {
 
 /**
 * The combiner that the user interacts with to join transcript stubs to their respective audio snippets.
+* @param {number} props.audioDuration The duration of the audio file.
 * @param {AudioWithTranscript} props.originalFile The original audio file and transcript.
 * @param {Range[]} props.sections The sections of the audio to split.
 * @param {() => void} props.handleContinue The function to call when the user is finished.
@@ -89,7 +90,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
       <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
       <div className='joiner-input-wrapper'>
         <div>
-          <PlayAudioButton autoplay={true} hotkey={false} file={props.originalFile.audioFile} range={props.sections[currentSection]}/>
+          <PlayAudioButton autoplay={true} hotkey={false} range={props.sections[currentSection]}/>
           <button onClick={handleTrim}>Trim</button>
           <button onClick={handleReset}>Reset</button>
         </div>

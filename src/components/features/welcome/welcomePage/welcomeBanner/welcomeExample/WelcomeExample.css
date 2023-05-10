@@ -20,6 +20,9 @@ div.welcome-example-input-image-wrapper, div.welcome-example-output-image-wrappe
   flex-direction: column;
   gap: 1em;
   width: 40%;
+  /* padding: 0.5em 1em; */
+  /* border-radius: 15px; */
+  /* box-shadow: 5px 5px 5px var(--clr-accent-b),-5px 5px 5px var(--clr-accent-b), -5px -5px 5px var(--clr-accent-b), 5px -5px 5px var(--clr-accent-b); */
 }
 
 div.welcome-example-wrapper img {
@@ -29,19 +32,22 @@ div.welcome-example-wrapper img {
 @media (max-width: 980px) {
   div.welcome-example-wrapper {
     flex-direction: column;
+    gap: 1em;
   }
 
   div.welcome-example-wrapper>div {
     width: 90%;
   }
+}
 
+@media (max-height: 800px) {
   div.welcome-example-output-image-wrapper {
-    display: none;
+    display: none
   }
 }
 
-@media (max-height: 500px) {
-  div.welcome-example-input-image-wrapper, div.welcome-example-output-image-wrapper {
+@media (max-height: 600px) {
+  div.welcome-example-input-image-wrapper {
     display: none;
   }
 } 

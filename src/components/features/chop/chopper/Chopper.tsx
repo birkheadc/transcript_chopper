@@ -23,6 +23,11 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   const [sections, setSections] = React.useState<Range[]>([]);
   const [pairs, setPairs] = React.useState<StubRangePair[]>([]);
 
+  const handleUpdateOriginalFile = (file: AudioWithTranscript) => {
+    setAudioSrc(file.audioFile);
+    setOriginalFile(file);
+  }
+
   const goBack = () => {
     if (step < 1) return;
     goToStep(step - 1);
@@ -43,7 +48,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   function displayCurrentStep(): JSX.Element | null {
     switch (step) {
       case 0:
-        return <FileSelector handleContinue={() => goToStep(1)} updateOriginalFile={(file: AudioWithTranscript) => setOriginalFile(file)} originalFile={originalFile} />
+        return <FileSelector handleContinue={() => goToStep(1)} updateOriginalFile={handleUpdateOriginalFile} originalFile={originalFile} />
     
       case 1:
         return <Slicer handleContinue={() => goToStep(2)} handleUpdateSections={setSections} originalFile={originalFile} />
@@ -74,3 +79,10 @@ function Chopper(props: ChopperProps): JSX.Element | null {
 }
 
 export default Chopper;
+
+const AUDIO_ID = 'play-button-audio';
+function setAudioSrc(file: File | undefined) {
+  if (file == null) return;
+  const audio = document.querySelector(`audio#${AUDIO_ID}`) as HTMLAudioElement;
+  audio.src = URL.createObjectURL(file);
+}

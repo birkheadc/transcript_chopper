@@ -3,7 +3,7 @@ import './WelcomeExample.css'
 
 import audioImage from '../../../../../../assets/example/audio_image.png';
 import textImage from '../../../../../../assets/example/text_image.png';
-import outputImage from '../../../../../../assets/example/output_image.png';
+import outputImage from '../../../../../../assets/example/output_image_new.png';
 
 interface WelcomeExampleProps {
 
