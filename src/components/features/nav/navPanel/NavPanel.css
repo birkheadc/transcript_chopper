@@ -22,11 +22,17 @@ div.nav-panel-inner-wrapper {
   background-image: radial-gradient(circle, var(--clr-accent-a-dark) 30%, var(--clr-black) 200%);;
   box-shadow: 5px 5px 5px var(--clr-black);
   width: min(90%, 400px);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   pointer-events: all;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: baseline;
+
+  border-style:ridge;
+  border-color: var(--clr-accent-a);
+  border-width: 2px;
+
+  transition: border-style 0ms 200ms linear;
 }
 
 div.nav-panel.shown>div.nav-panel-inner-wrapper {
@@ -38,6 +44,7 @@ div.nav-panel.hidden>div.nav-panel-inner-wrapper {
   height: 0px;
   pointer-events: none;
   transition: height 200ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  border-style: none;
 }
 
 div.nav-panel.shown>div.nav-panel-inner-wrapper>* {
@@ -47,6 +54,16 @@ div.nav-panel.shown>div.nav-panel-inner-wrapper>* {
 
 div.nav-panel.hidden>div.nav-panel-inner-wrapper>* {
   opacity: 0.0;
+}
+
+ul.nav-panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  justify-content: baseline;
+  align-items: baseline;
+
+  padding: 2em;
 }
 
 div.nav-panel a {

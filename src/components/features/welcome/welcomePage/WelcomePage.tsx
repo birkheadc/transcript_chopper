@@ -17,7 +17,7 @@ function WelcomePage(props: WelcomePageProps): JSX.Element | null {
       <WelcomeBanner />
       <div className='welcome-page-wrapper'>
         <main>
-          <section className='welcome-page-section'>
+          <section className='welcome-page-section' id='welcome-page-about'>
             <h2>What is this?</h2>
             <div className='welcome-page-section-body'>
               <div className='welcome-page-section-text'>

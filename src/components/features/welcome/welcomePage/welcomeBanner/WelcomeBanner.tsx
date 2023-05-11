@@ -13,7 +13,7 @@ interface WelcomeBannerProps {
 */
 function WelcomeBanner(props: WelcomeBannerProps): JSX.Element | null {
   return (
-    <div className='welcome-banner-wrapper'>
+    <div className='welcome-banner-wrapper' id='welcome-banner'>
       <h1>Audio Flashcard Wizard</h1>
       <WelcomeExample />
       <div className='welcome-banner-call-to-action-wrapper'>

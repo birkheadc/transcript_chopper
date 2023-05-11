@@ -24,6 +24,11 @@ div.nav-bar-inner-wrapper {
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+
+  border-style:ridge;
+  border-color: var(--clr-accent-a);
+  border-width: 2px;
+
 }
 
 div.nav-bar.open {

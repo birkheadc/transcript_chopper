@@ -63,7 +63,7 @@ function MainNav(props: MainNavProps): JSX.Element | null {
   return (
     <nav>
       <Navbar handleToggleNavPanel={handleToggleNavPanel} isOpen={isNavBarOpen} />
-      <NavPanel isOpen={isNavPanelOpen} />
+      <NavPanel isOpen={isNavPanelOpen} handleClick={() => setNavPanelOpen(false)}/>
     </nav>
   );
 }
