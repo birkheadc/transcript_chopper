@@ -30,12 +30,12 @@ h3 {
 }
 
 a {
-  color: var(--clr-accent-a-dark);
+  color: var(--clr-accent-b-dark);
   font-family: var(--font-main);
 }
 
 a:hover, a:focus {
-  color: var(--clr-accent-b-dark);
+  color: var(--clr-accent-a-dark);
 }
 
 main {

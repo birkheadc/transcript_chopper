@@ -11,9 +11,10 @@ section.welcome-page-section {
   gap: 5em;
 }
 
-section.welcome-page-section:not(:first-child) {
+/* This is separate from above because sometimes I fiddle with it and put the border on :not(:first-child) or similar */
+section.welcome-page-section {
   border-style: dotted;
-  border-width: 9px 0 0 0;
+  border-width: 0 0 9px 0;
   border-color: var(--clr-accent-b);
 }
 

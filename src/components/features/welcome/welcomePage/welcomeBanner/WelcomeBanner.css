@@ -7,9 +7,12 @@ div.welcome-banner-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
 
   background-image: radial-gradient(circle, var(--clr-accent-b) -50%, var(--clr-accent-b-dark) 100%);
   color: var(--clr-white);
+
+  overflow: hidden;
 }
 
 div.welcome-banner-wrapper h1 {
@@ -29,6 +32,11 @@ div.welcome-banner-wrapper p {
   margin: 0 auto;
   text-align: justify;
   text-align-last: center;
+}
+
+img.welcome-banner-image {
+  max-width: 980px;
+  
 }
 
 div.welcome-banner-call-to-action-wrapper {
@@ -71,4 +79,14 @@ div.welcome-banner-call-to-action-wrapper a:hover, div.welcome-banner-call-to-ac
   div.welcome-banner-call-to-action-wrapper {
     gap: 2em;
   }
+
+  img.welcome-banner-image {
+    
+  }
 }
+
+@media (max-height: 38em) {
+  img.welcome-banner-image {
+    display: none;
+  }
+} 

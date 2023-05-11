@@ -4,13 +4,9 @@ div.file-generator-wrapper {
 
 div.file-generator-wrapper>a {
   font-size: 1.8rem;
-  padding: 0.2em 0.5em;
-  border-radius: 5px;
+  padding: 0 0.2em;
   border-width: 0 0 3px 0;
   border-style: solid;
-  color: var(--clr-accent-a);
-}
 
-div.file-generator-wrapper>a:hover, div.file-generator-wrapper>a:focus {
-  color: var(--clr-accent-b);
+  font-family: var(--font-button);
 }

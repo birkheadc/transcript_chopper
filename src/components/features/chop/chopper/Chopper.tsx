@@ -7,6 +7,7 @@ import Joiner from './joiner/Joiner';
 import Range from '../../../../types/range/range';
 import StubRangePair from '../../../../types/stubRangePair/stubRangePair';
 import Finalizer from './finalizer/Finalizer';
+import FlashcardFormatter from './flashcardFormatter/FlashcardFormatter';
 
 interface ChopperProps {
 
@@ -57,7 +58,10 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />
 
       case 3:
-        return <Finalizer originalAudioFile={originalFile.audioFile} pairs={pairs} />
+        return <Finalizer handleFlashcardFormat={() => goToStep(4)} originalAudioFile={originalFile.audioFile} pairs={pairs} />
+
+      case 4:
+        return <FlashcardFormatter originalAudioFile={originalFile.audioFile} pairs={pairs} />
 
       default:
         return null;

@@ -1,0 +1,16 @@
+div.flashcard-extra-textbox-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  gap: 1em;
+
+  width: 100%;
+}
+
+div.flashcard-extra-textbox-wrapper>div.inline-label-input-wrapper {
+  width: 100%;
+}
+
+div.flashcard-extra-textbox-wrapper>div.inline-label-input-wrapper>textarea {
+  width: 100%;
+}

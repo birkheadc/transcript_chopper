@@ -6,7 +6,6 @@ div.welcome-example-outer-wrapper {
 }
 
 div.welcome-example-wrapper {
-  position: absolute;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -16,10 +15,10 @@ div.welcome-example-wrapper {
 }
 
 div.welcome-example-input-image-wrapper, div.welcome-example-output-image-wrapper {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  gap: 1em;
-  width: 40%;
+  gap: 1em; */
+  height: 100%;
   /* padding: 0.5em 1em; */
   /* border-radius: 15px; */
   /* box-shadow: 5px 5px 5px var(--clr-accent-b),-5px 5px 5px var(--clr-accent-b), -5px -5px 5px var(--clr-accent-b), 5px -5px 5px var(--clr-accent-b); */
@@ -40,13 +39,16 @@ div.welcome-example-wrapper img {
   }
 }
 
-@media (max-height: 800px) {
+@media (max-height: 700px) {
   div.welcome-example-output-image-wrapper {
     display: none
   }
+  div.welcome-example-input-image-wrapper {
+    width: 100%;
+  }
 }
 
-@media (max-height: 600px) {
+@media (max-height: 500px) {
   div.welcome-example-input-image-wrapper {
     display: none;
   }

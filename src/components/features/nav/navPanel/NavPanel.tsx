@@ -29,9 +29,9 @@ function NavPanel(props: NavPanelProps): JSX.Element | null {
           <li>
             <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-about' >About</HashLink>
           </li>
-          <li>
+          {/* <li>
             <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-faq' >FAQ</HashLink>
-          </li>
+          </li> */}
           <li>
             <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-contribute' >Contribute</HashLink>
           </li>

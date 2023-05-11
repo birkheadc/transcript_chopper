@@ -1,0 +1,12 @@
+div.flashcard-formatter-wrapper {
+  padding: 2em;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+
+  width: min(90%, 40em);
+}
+
+div.flashcard-formatter-wrapper h2 {
+  text-align: center;
+}

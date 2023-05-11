@@ -57,7 +57,7 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
 
   function renderBody(): JSX.Element | null {
     if (isWorking) return <p>Generating download link...</p>
-    if (downloadUrl == null) return null;
+    if (downloadUrl == null) return <p>Error: Could not generate files.</p>;
     return <a download={getFileName(props.format)} href={downloadUrl}>Download</a>
   }
 

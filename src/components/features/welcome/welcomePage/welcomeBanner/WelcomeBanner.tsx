@@ -2,6 +2,8 @@ import * as React from 'react';
 import './WelcomeBanner.css'
 import { NavLink } from 'react-router-dom';
 import WelcomeExample from './welcomeExample/WelcomeExample';
+import audioImage from '../../../../../assets/example/audio_image.png';
+
 
 interface WelcomeBannerProps {
 
@@ -15,7 +17,7 @@ function WelcomeBanner(props: WelcomeBannerProps): JSX.Element | null {
   return (
     <div className='welcome-banner-wrapper' id='welcome-banner'>
       <h1>Audio Flashcard Wizard</h1>
-      <WelcomeExample />
+      <img className='welcome-banner-image' src={audioImage}></img>
       <div className='welcome-banner-call-to-action-wrapper'>
         <p>
           Automatically generate language-learning flash cards from audio and text.

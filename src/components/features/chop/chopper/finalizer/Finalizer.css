@@ -14,3 +14,10 @@ div.finalize-selectors {
 div.finalize-selectors>h2 {
   text-align: center;
 }
+
+div.finalizer-buttons-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap:2em;
+  margin: 0 auto;
+}

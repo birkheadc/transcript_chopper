@@ -21,23 +21,7 @@ const FORMATS: { label: string, value: FinalFileFormat, hint: string }[] = [
     label: 'Interleaved Zip: Audio-text pairs each in their own folder',
     value: FinalFileFormat.InterleavedZip,
     hint: 'All of your files will be separated by snippet into their own folder. (file1.wav and file1.txt will be in a folder called file1, etc.'
-  },
-  {
-    label: 'Standard Anki Card: Text on one side, audio on the other',
-    value: FinalFileFormat.StandardAnkiCard,
-    hint: 'All of your audio files will be in a folder /audio. All of your text snippets will be in a semi-colon separated text file, along with references to the audio files, so that you can import to Anki.'
-  },
-  {
-    label: 'Clozed Anki Card: Clozed text on one side, audio on the other.',
-    value: FinalFileFormat.ClozedAnkiCard,
-    hint: 'For making fill-in-the-blank style Anki cards. Will open the cloze editor.'
-  },
-  // Todo: Not yet implemented
-  // {
-  //   label: 'Anki Deck (.apkg): A ready-to-go anki deck.',
-  //   value: FinalFileFormat.AnkiAPKG,
-  //   hint: 'Can be used to create a new deck or simply imported into an already existing one.'
-  // }
+  }
 ];
 
 const NAMES: { label: string, value: FinalFileNamingScheme, hint: string}[] = [

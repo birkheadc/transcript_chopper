@@ -17,7 +17,6 @@ Steps to import into Anki:
 
 2. In Anki, go to File -> Import. Select `deck.txt`.
 
-  - All of the default options should be fine as is, but you may wish to modify them to suit your study methods.
-    `deck.txt` puts the text of the card in field 1, and the link to the audio file in field 2. Keep this in mind when choosing where to map which field.
+  - All of the default options should be fine as is, but take note of how the fields are lined up in `deck.txt` and make sure you to line them up with the correct fields in Anki.
 
 3. After importing, you can safely delete this folder; Anki will keep its own copies of the contents.
