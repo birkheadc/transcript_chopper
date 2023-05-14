@@ -22,6 +22,7 @@ interface AppProps {
  * @returns {JSX.Element | null}
  */
 function App(props: AppProps): JSX.Element | null {
+  
   return (
     <BrowserRouter basename={PUBLIC_PATH}>
       <MainNav />

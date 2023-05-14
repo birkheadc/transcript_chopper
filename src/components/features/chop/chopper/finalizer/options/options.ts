@@ -1,25 +1,25 @@
-import { FinalFileFormat } from "../../../../../../types/formats/finalFileFormat";
+import { BasicFileFormat } from "../../../../../../types/formats/finalFileFormat";
 import { FinalFileNamingScheme } from "../../../../../../types/formats/finalFileNamingScheme";
 
-const FORMATS: { label: string, value: FinalFileFormat, hint: string }[] = [
+const FORMATS: { label: string, value: BasicFileFormat, hint: string }[] = [
   {
     label: 'How would you like your files formatted?',
-    value: FinalFileFormat.Null,
+    value: BasicFileFormat.Null,
     hint: 'Select which format you would like to download your files as.'
   },
   {
     label: 'Basic Zip: Audio snippets in one folder, text snippets in another',
-    value: FinalFileFormat.BasicZip,
+    value: BasicFileFormat.BasicZip,
     hint: ' All of your audio files will be in /audio, and all of your text will be in /text. Respective files will have the same name. (file1.wav will be the audio for file1.txt)'
   },
   {
     label: 'Dump Zip: Audio snippets and text snippets all in one folder',
-    value: FinalFileFormat.DumpZip,
+    value: BasicFileFormat.DumpZip,
     hint: 'Respective files will have the same name. (file1.wav will be the audio for file1.txt)'
   },
   {
     label: 'Interleaved Zip: Audio-text pairs each in their own folder',
-    value: FinalFileFormat.InterleavedZip,
+    value: BasicFileFormat.InterleavedZip,
     hint: 'All of your files will be separated by snippet into their own folder. (file1.wav and file1.txt will be in a folder called file1, etc.'
   }
 ];

@@ -6,16 +6,21 @@ import FlashcardTextbox from './flashcardTextbox/FlashcardTextbox';
 import FlashcardExtraTextbox from './flashcardExtraTextbox/FlashcardExtraTextbox';
 import FlashcardEditorControls from './flashcardEditorControls/FlashcardEditorControls';
 import DeckGenerator from '../deckGenerator/DeckGenerator';
+import { FlashcardFileFormat } from '../../../../../../types/formats/finalFileFormat';
 
 interface FlashcardEditorProps {
   originalAudioFile: File | undefined,
   pairs: StubRangePair[],
+  format: FlashcardFileFormat,
+  updateCards: (cards: Card[]) => void
 }
 
 /**
 * The editor the user interacts with to create custom flashcards from their data.
 * @param {File} props.originalAudioFile The original audio file to chop.
 * @param {Range[]} props.pairs The sections of the audio to split, and their respective strings.
+* @param {FlashcardFileFormat} props.format The format to eventually generate the deck in.
+* @param {(cards: Card[]) => void} props.updateCards The function to call when finished editing.
 * @returns {JSX.Element | null}
 */
 function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
@@ -34,6 +39,11 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
     setCards(newCards);
   }, [ props.pairs ]);
 
+  React.useEffect(function handleFinished() {
+    if (isFinished === true) props.updateCards(cards);
+    else props.updateCards([]);
+  }, [ isFinished ]);
+
   const handleBack = () => {
     setCurrent(current => current - 1);
     setFinished(false);
@@ -49,6 +59,9 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
   }
 
   const resetCurrentSelected = () => {
+
+    // TODO
+
     // const newNewPairs = [...newPairs];
     // newNewPairs[current].stub = props.pairs[current].stub;
     // setNewPairs(newNewPairs);
@@ -114,11 +127,6 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
     );
   }
 
-  function renderGenerator(): JSX.Element | null {
-    if (isFinished === false) return null; 
-    return <DeckGenerator />
-  }
-
   return (
     <div className='flashcard-editor-wrapper'>
       <h3>Flashcard Editor</h3>
@@ -127,7 +135,6 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
         <p>When Cloze editing, it is not advisable to create overlapping Cloze fields; this tends to break the card when importing.</p>
       </div>
       {renderEditor()}
-      {renderGenerator()}
     </div>
   );
 }

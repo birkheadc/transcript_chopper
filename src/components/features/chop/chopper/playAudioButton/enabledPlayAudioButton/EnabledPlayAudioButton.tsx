@@ -52,8 +52,8 @@ function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element
 
         const interval = setInterval(() => {
           if (audio.currentTime >= endTime) {
-            audio.pause();
             clearInterval(interval);
+            if (!audio.paused) audio.pause();
           }
         }, CHECK_PLAYBACK_INTERVAL_MS);
         playbackInterval.current = interval;
@@ -68,6 +68,26 @@ function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element
       if (playbackInterval) clearInterval(playbackInterval.current);
       audio.pause();
     }
+  }
+
+  function restartAudio(audio: HTMLAudioElement) {   
+    stopAudio(audio);
+    if (props.range != null) {
+        const startTime = Math.min(props.range.from, props.range.to) * audio.duration;
+        const endTime = Math.max(props.range.from, props.range.to) * audio.duration;
+
+        audio.currentTime = startTime;
+
+        const interval = setInterval(() => {
+          if (audio.currentTime >= endTime) {
+            audio.pause();
+            clearInterval(interval);
+          }
+        }, CHECK_PLAYBACK_INTERVAL_MS);
+        playbackInterval.current = interval;
+      }
+
+      audio.play();
   }
 
   React.useEffect(function addPausePlayingListeners() {
@@ -108,10 +128,11 @@ function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element
     });
   }, []);
 
-  React.useEffect(function autoplay() {
-    if (props.autoplay === false) return;
-    handleClick();
-  }, [ props.autoplay, props.range ]);
+  React.useEffect(function autoplayIfEnabled() {
+    if (props.autoplay === true) {
+      restartAudio(props.audio);
+    }
+  }, [ props.audio, props.range, props.autoplay ]);
 
   return (
     <button

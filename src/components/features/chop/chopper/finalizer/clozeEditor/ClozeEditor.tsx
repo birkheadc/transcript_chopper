@@ -3,7 +3,7 @@ import './ClozeEditor.css'
 import FileGenerator from '../fileGenerator/FileGenerator';
 import StubRangePair from '../../../../../../types/stubRangePair/stubRangePair';
 import { FinalFileNamingScheme } from '../../../../../../types/formats/finalFileNamingScheme';
-import { FinalFileFormat } from '../../../../../../types/formats/finalFileFormat';
+import { BasicFileFormat } from '../../../../../../types/formats/finalFileFormat';
 import ClozeTextbox from './clozeTextbox/ClozeTextbox';
 import ClozeControls from './clozeControls/ClozeControls';
 
@@ -75,7 +75,7 @@ function ClozeEditor(props: ClozeEditorProps): JSX.Element | null {
     if (isFinished === false) {
       return null;
     }
-    return <FileGenerator originalAudioFile={props.originalAudioFile} pairs={newPairs} format={FinalFileFormat.ClozedAnkiCard} namingScheme={props.namingScheme} />
+    return <FileGenerator originalAudioFile={props.originalAudioFile} pairs={newPairs} format={BasicFileFormat.ClozedAnkiCard} namingScheme={props.namingScheme} />
   }
 
   return (

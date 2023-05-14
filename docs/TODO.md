@@ -1,9 +1,10 @@
 # Todo
+  - Rewrite Issue on github explaining how to solve APKG support.
+  - Move more of these 'todos' into issues.
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages
     - Welcome page
-    - Links to source code - Ask users to post issues there
     - FAQ?
   - Write more in the README
   - Track down 'Failed to load ./.env' that comes up when running dev server and building, I think it's a package that I'm not using currently.

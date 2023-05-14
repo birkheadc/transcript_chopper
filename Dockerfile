@@ -1,7 +1,7 @@
 FROM node:18-alpine3.15 as build
 WORKDIR /app
 
-ENV PUBLIC_PATH="/audio-flashcard-wizard"
+ENV PUBLIC_PATH="/audio-flashcard-wizard/"
 
 ENV PATH /app/node_modules/.bin:$PATH
 

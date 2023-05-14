@@ -5,10 +5,9 @@ import Deck from '../../../../../types/deck/deck';
 import options from './options/options';
 import FinalizeSelector from '../finalizer/finalizeSelector/FinalizeSelector';
 import FlashcardEditor from './flashcardEditor/FlashcardEditor';
-import FileGenerator from '../finalizer/fileGenerator/FileGenerator';
-import { FinalFileFormat } from '../../../../../types/formats/finalFileFormat';
-import { FinalFileNamingScheme } from '../../../../../types/formats/finalFileNamingScheme';
+import { FlashcardFileFormat } from '../../../../../types/formats/finalFileFormat';
 import DeckGenerator from './deckGenerator/DeckGenerator';
+import Card from '../../../../../types/deck/card';
 
 interface FlashcardFormatterProps {
   originalAudioFile: File | undefined,
@@ -26,28 +25,42 @@ function FlashcardFormatter(props: FlashcardFormatterProps): JSX.Element | null 
   const [format, setFormat] = React.useState<number>(0);
   const [deck, setDeck] = React.useState<Deck | undefined>(undefined);
 
-  function renderSelector(): JSX.Element | null {
-    if (format !== 0) return null;
-    return <FinalizeSelector label={'Deck Style'} options={options.FORMATS} current={format} change={(n: number) => setFormat(n)}/>
+  React.useEffect(function buildBasicDeckFromDataIfStandardFormatSelected() {
+    console.log('1');
+    if (props.originalAudioFile == null) return;
+    console.log('2');
+    if (format !== FlashcardFileFormat.StandardZip) return;
+    console.log('3');
+
+    const cards: Card[] = Array.from(props.pairs, pair => ({ transcript: pair.stub, range: pair.range, extras: [] }));
+    console.log('Cards: ', cards);
+    setDeck({ originalAudioFile: props.originalAudioFile, cards: cards });
+  }, [ props.originalAudioFile, props.pairs, format ]);
+
+  const handleUpdateCards = (cards: Card[]) => {
+    if (props.originalAudioFile == null) return;
+    if (cards.length < 1) setDeck(undefined);
+    else setDeck({ originalAudioFile: props.originalAudioFile, cards: cards });
   }
 
-  function renderEditor(): JSX.Element | null {
-    if (format !== 2) return null;
-    return <FlashcardEditor originalAudioFile={props.originalAudioFile} pairs={props.pairs} />
+  function renderBody(): JSX.Element | null {
+    if (format === FlashcardFileFormat.Null) {
+      return <FinalizeSelector label={'Deck Style'} options={options.FORMATS} current={format} change={(n: number) => setFormat(n)}/>
+    }
+    if (format === FlashcardFileFormat.StandardZip) return null;
+    return <FlashcardEditor originalAudioFile={props.originalAudioFile} format={format} pairs={props.pairs} updateCards={handleUpdateCards} />
   }
 
-  function renderFileGenerator(): JSX.Element | null {
-    if (format === 1) return <FileGenerator originalAudioFile={props.originalAudioFile} pairs={props.pairs} format={FinalFileFormat.StandardAnkiCard} namingScheme={FinalFileNamingScheme.UUID} />
-    if (format === 2 && deck != null) return <DeckGenerator />
-    return null;
+  function renderDownloadLink(): JSX.Element | null {
+    if (deck == null) return null;
+    return <DeckGenerator deck={deck} format={format} />
   }
 
   return (
     <div className='flashcard-formatter-wrapper'>
       <h2>How would you like your flashcards?</h2>
-      {renderSelector()}
-      {renderEditor()}
-      {renderFileGenerator()}
+      {renderBody()}
+      {renderDownloadLink()}
     </div>
   );
 }
