@@ -21,6 +21,7 @@ section.welcome-page-section {
 section.welcome-page-section h2 {
   font-size: 3em;
   font-weight: 700;
+  text-align: justify;
 }
 
 div.welcome-page-section-text {
