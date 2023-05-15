@@ -2,12 +2,10 @@ import * as React from 'react';
 import './Finalizer.css'
 import FinalizeSelector from './finalizeSelector/FinalizeSelector';
 import StubRangePair from '../../../../../types/stubRangePair/stubRangePair';
-import ClozeEditor from './clozeEditor/ClozeEditor';
 import FileGenerator from './fileGenerator/FileGenerator';
 import { BasicFileFormat } from '../../../../../types/formats/finalFileFormat';
 import { FinalFileNamingScheme } from '../../../../../types/formats/finalFileNamingScheme';
 import options from './options/options';
-import { render } from 'react-dom';
 
 interface FinalizerProps {
   originalAudioFile: File | undefined,

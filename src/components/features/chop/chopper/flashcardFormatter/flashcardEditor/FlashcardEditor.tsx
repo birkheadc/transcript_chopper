@@ -33,7 +33,7 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
   React.useEffect(function initializeCards() {
     let newCards: Card[] = [];
     for (let i = 0; i < props.pairs.length; i++) {
-      const card: Card = { transcript: props.pairs[i].stub, range: props.pairs[i].range, extras: [] };
+      const card: Card = { transcript: props.pairs[i].stub, audio: props.pairs[i].audio, extras: [] };
       newCards.push(card);
     }
     setCards(newCards);
@@ -117,7 +117,7 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
     if (cards.length < 1) return null;
     return (
       <>
-      <FlashcardTextbox audioFile={props.originalAudioFile} range={props.pairs[current].range} updateTranscript={updateCurrentSelectedTranscript} value={cards[current].transcript} reset={resetCurrentSelected} />
+      <FlashcardTextbox audioFile={cards[current].audio} updateTranscript={updateCurrentSelectedTranscript} value={cards[current].transcript} reset={resetCurrentSelected} />
       {extras.map(
         (extra, index) =>
         <FlashcardExtraTextbox key={index} index={index} fieldName={extra} value={cards[current].extras[index]} update={updateCurrentSelectedExtra} delete={deleteExtraField} />

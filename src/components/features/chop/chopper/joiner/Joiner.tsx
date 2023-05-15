@@ -3,13 +3,12 @@ import './Joiner.css'
 import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioWithTranscript';
 import Range from '../../../../../types/range/range';
 import StubRangePair from '../../../../../types/stubRangePair/stubRangePair';
-import PlayAudioButton from '../playAudioButton/PlayAudioButton';
 import { chopAudio } from '../../../../../shared/chopAudio/chopAudio';
 import AudioPlayer from '../audioPlayer/AudioPlayer';
 
 interface JoinerProps {
   originalFile: AudioWithTranscript,
-  sections: Range[],
+  sections: Blob[],
   handleSetPairs: (pairs: StubRangePair[]) => void,
   handleContinue: () => void
 }
@@ -25,28 +24,16 @@ interface JoinerProps {
 function Joiner(props: JoinerProps): JSX.Element | null {
 
   const [isWorking, setWorking] = React.useState<boolean>(false);
-  const [audioSlices, setAudioSlices] = React.useState<Blob[] | undefined>(undefined);
 
   const [currentSection, setCurrentSection] = React.useState<number>(0);
   const [pairs, setPairs] = React.useState<StubRangePair[]>([]);
-
-  React.useEffect(() => {
-    (async function sliceAudio() {
-      setWorking(true);
-      if (props.originalFile.audioFile == null) return;
-      const slices: Blob[] | null = await chopAudio(props.originalFile.audioFile, props.sections);
-      if (slices == null) return;
-      setAudioSlices(slices);
-      setWorking(false);
-    })();
-  }, [ props.originalFile, props.sections ]);
 
   React.useEffect(function initializeStubs() {
     const newPairs: StubRangePair[] = [];
       for (let i = 0; i < props.sections.length; i++) {
         newPairs.push({
           stub: props.originalFile.transcript,
-          range: props.sections[i]
+          audio: props.sections[i]
         });
       }
       setPairs(newPairs);
@@ -98,7 +85,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
 
   function renderBody(): JSX.Element {
 
-    if (isWorking === true || audioSlices == null) {
+    if (isWorking === true || props.sections == null) {
       return <p>Splitting audio...</p>
     }
 
@@ -108,7 +95,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
         <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
         <div className='joiner-input-wrapper'>
           <div>
-            <AudioPlayer audio={audioSlices[currentSection]} range={{ from: 0.0, to: 1.0 }} autoplay={true} hotkey={false} />
+            <AudioPlayer audio={props.sections[currentSection]} range={{ from: 0.0, to: 1.0 }} autoplay={true} hotkey={false} />
             <button onClick={handleTrim}>Trim</button>
             <button onClick={handleReset}>Reset</button>
           </div>

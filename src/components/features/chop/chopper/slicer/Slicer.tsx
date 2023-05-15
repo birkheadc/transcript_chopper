@@ -4,7 +4,6 @@ import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioW
 import SlicerImage from './slicerImage/SlicerImage';
 import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder';
 import AutomaticSlicer from './automaticSlicer/AutomaticSlicer';
-import PlayAudioButton from '../playAudioButton/PlayAudioButton';
 import createVolumeArray from '../../../../../shared/createVolumeArray/createVolumeArray';
 import { VolumeArray } from '../../../../../types/volumeArray/volumeArray';
 import Range from '../../../../../types/range/range';

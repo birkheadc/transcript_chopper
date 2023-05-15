@@ -26,7 +26,6 @@ function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
 
   React.useEffect(function clearPlaybackIntervalOnUnmount() {
     return (() => {
-      console.log('clear interval');
       if (playbackInterval) clearInterval(playbackInterval.current);
     });
   }, []);
@@ -121,7 +120,6 @@ function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
 
       if (endTime < audioElement.duration) {
         const interval = setInterval(() => {
-          console.log('interval!');
           if (audioElement.currentTime >= endTime) {
             clearInterval(interval);
             if (!audioElement.paused) audioElement.pause();
@@ -170,9 +168,7 @@ function getAudioElement(): HTMLAudioElement | null {
 async function setAudioElementSource(source: string) {
   const audioElement = getAudioElement();
   if (audioElement == null) return;
-  console.log('setsrc');
   await pauseAudioAndWait(audioElement);
-  console.log('done');
   audioElement.src = source;
 }
 

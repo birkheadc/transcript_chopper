@@ -26,14 +26,10 @@ function FlashcardFormatter(props: FlashcardFormatterProps): JSX.Element | null 
   const [deck, setDeck] = React.useState<Deck | undefined>(undefined);
 
   React.useEffect(function buildBasicDeckFromDataIfStandardFormatSelected() {
-    console.log('1');
     if (props.originalAudioFile == null) return;
-    console.log('2');
     if (format !== FlashcardFileFormat.StandardZip) return;
-    console.log('3');
 
-    const cards: Card[] = Array.from(props.pairs, pair => ({ transcript: pair.stub, range: pair.range, extras: [] }));
-    console.log('Cards: ', cards);
+    const cards: Card[] = Array.from(props.pairs, pair => ({ transcript: pair.stub, audio: pair.audio, extras: [] }));
     setDeck({ originalAudioFile: props.originalAudioFile, cards: cards });
   }, [ props.originalAudioFile, props.pairs, format ]);
 
