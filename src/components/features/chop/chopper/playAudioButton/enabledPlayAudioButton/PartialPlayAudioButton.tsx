@@ -1,23 +1,21 @@
 import * as React from 'react';
-import './EnabledPlayAudioButton.css'
+import './PartialPlayAudioButton.css'
 import Range from '../../../../../../types/range/range';
 
-interface EnabledPlayAudioButtonProps {
-  audio: HTMLAudioElement,
+interface PartialPlayAudioButtonProps {
+  audioElement: HTMLAudioElement,
   range: Range | undefined,
-  autoplay: boolean,
   hotkey: boolean
 }
 
 /**
 * // The actual button that is rendered when PlayAudioButton decides that the button should be active (namely, when the audio element is found on the page)
-* @param {HTMLAudioElement} props.audio The audio element to control with this button.
+* @param {HTMLAudioElement} props.audioElement The audio element to control with this button.
 * @param {Range | undefined} props.range The range (as a ratio from 0.0 ~ 1.0) of the audio to play. Defaults to playing the entire file if undefined.
-* @param {boolean} props.autoplay Whether to autoplay when the component mounts or the range changes.
 * @param {boolean} props.hotkey Whether to register this button to be used by pressing the `P` key.
 * @returns {JSX.Element | null}
 */
-function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element | null {
+function PartialPlayAudioButton(props: PartialPlayAudioButtonProps): JSX.Element | null {
 
   // How often in ms to check if playback has reached endTime. Turn down for more precision.
   // ontimeupdate of audio element does not call often enough
@@ -39,7 +37,7 @@ function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element
   // so this component's state does not change until the audio actually plays or pauses
 
   const handleClick = () => {
-    isPlaying ? stopAudio(props.audio) : playAudio(props.audio);
+    isPlaying ? stopAudio(props.audioElement) : playAudio(props.audioElement);
   }
 
   function playAudio (audio: HTMLAudioElement) {
@@ -70,42 +68,22 @@ function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element
     }
   }
 
-  function restartAudio(audio: HTMLAudioElement) {   
-    stopAudio(audio);
-    if (props.range != null) {
-        const startTime = Math.min(props.range.from, props.range.to) * audio.duration;
-        const endTime = Math.max(props.range.from, props.range.to) * audio.duration;
-
-        audio.currentTime = startTime;
-
-        const interval = setInterval(() => {
-          if (audio.currentTime >= endTime) {
-            audio.pause();
-            clearInterval(interval);
-          }
-        }, CHECK_PLAYBACK_INTERVAL_MS);
-        playbackInterval.current = interval;
-      }
-
-      audio.play();
-  }
-
   React.useEffect(function addPausePlayingListeners() {
 
     const pauseListener = () => {
       setPlaying(false);
-      props.audio.currentTime = 0;
+      props.audioElement.currentTime = 0;
     }
 
     const playingListener = () => {
       setPlaying(true);
     }
     
-    props.audio.addEventListener('pause', pauseListener);
-    props.audio.addEventListener('playing', playingListener);
+    props.audioElement.addEventListener('pause', pauseListener);
+    props.audioElement.addEventListener('playing', playingListener);
     return (() => {
-      props.audio.removeEventListener('pause', pauseListener);
-      props.audio.removeEventListener('playing', playingListener);
+      props.audioElement.removeEventListener('pause', pauseListener);
+      props.audioElement.removeEventListener('playing', playingListener);
     });
   }, []);
 
@@ -124,15 +102,9 @@ function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element
 
   React.useEffect(function stopAudioOnUnmount() {
     return(() => {
-      props.audio.pause();
+      props.audioElement.pause();
     });
   }, []);
-
-  React.useEffect(function autoplayIfEnabled() {
-    if (props.autoplay === true) {
-      restartAudio(props.audio);
-    }
-  }, [ props.audio, props.range, props.autoplay ]);
 
   return (
     <button
@@ -144,4 +116,4 @@ function EnabledPlayAudioButton(props: EnabledPlayAudioButtonProps): JSX.Element
   );
 }
 
-export default EnabledPlayAudioButton;
+export default PartialPlayAudioButton;
