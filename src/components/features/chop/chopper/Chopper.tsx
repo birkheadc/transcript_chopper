@@ -8,6 +8,7 @@ import Range from '../../../../types/range/range';
 import StubRangePair from '../../../../types/stubRangePair/stubRangePair';
 import Finalizer from './finalizer/Finalizer';
 import FlashcardFormatter from './flashcardFormatter/FlashcardFormatter';
+import { chopAudio } from '../../../../shared/chopAudio/chopAudio';
 
 interface ChopperProps {
 
@@ -21,12 +22,18 @@ function Chopper(props: ChopperProps): JSX.Element | null {
 
   const [step, setStep] = React.useState<number>(0);
   const [originalFile, setOriginalFile] = React.useState<AudioWithTranscript>({ audioFile: undefined, transcript: '' });
-  const [sections, setSections] = React.useState<Range[]>([]);
+  const [sections, setSections] = React.useState<Blob[]>([]);
   const [pairs, setPairs] = React.useState<StubRangePair[]>([]);
 
   const handleUpdateOriginalFile = (file: AudioWithTranscript) => {
-    setAudioSrc(file.audioFile);
     setOriginalFile(file);
+  }
+
+  const handleUpdateSections = async (sections: Range[]) => {
+    if (originalFile.audioFile == null) return;
+    const slices: Blob[] | null = await chopAudio(originalFile.audioFile, sections);
+    if (slices == null) return;
+    setSections(slices);
   }
 
   const goBack = () => {
@@ -52,7 +59,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <FileSelector handleContinue={() => goToStep(1)} updateOriginalFile={handleUpdateOriginalFile} originalFile={originalFile} />
     
       case 1:
-        return <Slicer handleContinue={() => goToStep(2)} handleUpdateSections={setSections} originalFile={originalFile} />
+        return <Slicer handleContinue={() => goToStep(2)} handleUpdateSections={handleUpdateSections} originalFile={originalFile} />
 
       case 2:
         return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />
@@ -71,7 +78,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   return (
     <div className='chopper-wrapper'>
       <div className='chopper-body'>
-        <audio id='play-button-audio'></audio>
+        <audio id='audio-player'></audio>
         {displayCurrentStep()}
       </div>
       <div className='chopper-footer'>
@@ -83,10 +90,3 @@ function Chopper(props: ChopperProps): JSX.Element | null {
 }
 
 export default Chopper;
-
-const AUDIO_ID = 'play-button-audio';
-function setAudioSrc(file: File | undefined) {
-  if (file == null) return;
-  const audio = document.querySelector(`audio#${AUDIO_ID}`) as HTMLAudioElement;
-  audio.src = URL.createObjectURL(file);
-}

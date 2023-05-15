@@ -64,14 +64,12 @@ function addAnkiReadmeToZip(zip: JSZip): JSZip {
 }
 
 async function addDeckDataToZip(deck: Deck, zip: JSZip) {
-  const audioBlobs = await chopAudio(deck.originalAudioFile, Array.from(deck.cards, card => card.range))
-  if (audioBlobs == null || audioBlobs.length < 1) return;
   let deckText = '';
-  for (let i = 0; i < audioBlobs.length; i++) {
-    const fileName = generateFileName(audioBlobs.length, i, FinalFileNamingScheme.UUID) + '.wav';
-    const audio = audioBlobs[i];
+  for (let i = 0; i < deck.cards.length; i++) {
+    const fileName = generateFileName(deck.cards.length, i, FinalFileNamingScheme.UUID) + '.wav';
+    const audio = deck.cards[i];
     const deckLine = getDecklineFromCardAndAudioFilename(deck.cards[i], fileName);
-    zip.file('audio/' + fileName, audio);
+    zip.file('audio/' + fileName, deck.cards[i].audio);
     deckText = deckText + deckLine;
   }
 
@@ -102,16 +100,14 @@ function areArgumentsValid(originalAudioFile: File | undefined, pairs: StubRange
 }
 
 async function buildData(originalAudioFile: File, pairs: StubRangePair[]): Promise<FinalFileData | null> {
-  const audioSections: Range[] = [];
+  const audioSections: Blob[] = [];
   const textSections: string[] = [];
   pairs.map(pair => {
-    audioSections.push(pair.range);
+    audioSections.push(pair.audio);
     textSections.push(pair.stub);
   });
-  const audioBlobs = await buildAudioBlobs(originalAudioFile!, audioSections);
-  if (audioBlobs == null) return null;
 
-  return { audioBlobs: audioBlobs, strings: textSections };
+  return { audioBlobs: audioSections, strings: textSections };
 }
 
 async function buildAudioBlobs(originalAudioFile: File, ranges: Range[]): Promise<Blob[] | null> {

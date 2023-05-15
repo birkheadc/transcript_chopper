@@ -3,11 +3,12 @@ import './Joiner.css'
 import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioWithTranscript';
 import Range from '../../../../../types/range/range';
 import StubRangePair from '../../../../../types/stubRangePair/stubRangePair';
-import PlayAudioButton from '../playAudioButton/PlayAudioButton';
+import { chopAudio } from '../../../../../shared/chopAudio/chopAudio';
+import AudioPlayer from '../audioPlayer/AudioPlayer';
 
 interface JoinerProps {
   originalFile: AudioWithTranscript,
-  sections: Range[],
+  sections: Blob[],
   handleSetPairs: (pairs: StubRangePair[]) => void,
   handleContinue: () => void
 }
@@ -22,6 +23,8 @@ interface JoinerProps {
 */
 function Joiner(props: JoinerProps): JSX.Element | null {
 
+  const [isWorking, setWorking] = React.useState<boolean>(false);
+
   const [currentSection, setCurrentSection] = React.useState<number>(0);
   const [pairs, setPairs] = React.useState<StubRangePair[]>([]);
 
@@ -30,15 +33,11 @@ function Joiner(props: JoinerProps): JSX.Element | null {
       for (let i = 0; i < props.sections.length; i++) {
         newPairs.push({
           stub: props.originalFile.transcript,
-          range: props.sections[i]
+          audio: props.sections[i]
         });
       }
       setPairs(newPairs);
   }, [props.originalFile, props.sections]);
-
-  React.useEffect(function playAudioWhenSectionChanges() {
-    // Todo
-  }, [ currentSection ]);
 
   const handleBack = () => {
     if (currentSection <= 0) return;
@@ -84,26 +83,39 @@ function Joiner(props: JoinerProps): JSX.Element | null {
     setPairs(newStubs);
   }
 
+  function renderBody(): JSX.Element {
+
+    if (isWorking === true || props.sections == null) {
+      return <p>Splitting audio...</p>
+    }
+
+    return (
+      <>
+        <h2>Match each audio slice to its section of the text.</h2>
+        <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
+        <div className='joiner-input-wrapper'>
+          <div>
+            <AudioPlayer audio={props.sections[currentSection]} range={{ from: 0.0, to: 1.0 }} autoplay={true} hotkey={false} />
+            <button onClick={handleTrim}>Trim</button>
+            <button onClick={handleReset}>Reset</button>
+          </div>
+          <div className='inline-label-input-wrapper'>
+            <label htmlFor='stub-textarea'>Text</label>
+            <textarea id='stub-textarea' onChange={handleUpdateStub} value={pairs[currentSection]?.stub}></textarea>
+          </div>
+        </div>
+        <div className='joiner-controls'>
+          <button disabled={currentSection <= 0} onClick={handleBack}>Back</button>
+          <span>{currentSection + 1} / {props.sections.length}</span>
+          <button onClick={handleNext}>{currentSection >= props.sections.length - 1 ? 'Finish' : 'Next'}</button>
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className='joiner-wrapper'>
-      <h2>Match each audio slice to its section of the text.</h2>
-      <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
-      <div className='joiner-input-wrapper'>
-        <div>
-          <PlayAudioButton autoplay={true} hotkey={false} range={props.sections[currentSection]}/>
-          <button onClick={handleTrim}>Trim</button>
-          <button onClick={handleReset}>Reset</button>
-        </div>
-        <div className='inline-label-input-wrapper'>
-          <label htmlFor='stub-textarea'>Text</label>
-          <textarea id='stub-textarea' onChange={handleUpdateStub} value={pairs[currentSection]?.stub}></textarea>
-        </div>
-      </div>
-      <div className='joiner-controls'>
-        <button disabled={currentSection <= 0} onClick={handleBack}>Back</button>
-        <span>{currentSection + 1} / {props.sections.length}</span>
-        <button onClick={handleNext}>{currentSection >= props.sections.length - 1 ? 'Finish' : 'Next'}</button>
-      </div>
+      {renderBody()}
     </div>
   );
 }

@@ -2,6 +2,6 @@ import Range from "../range/range";
 
 export default interface Card {
   transcript: string,
-  range: Range,
+  audio: Blob,
   extras: string[]
 }

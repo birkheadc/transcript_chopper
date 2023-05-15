@@ -4,13 +4,13 @@ import AudioWithTranscript from '../../../../../types/audioWithTranscript/audioW
 import SlicerImage from './slicerImage/SlicerImage';
 import SlicerSectionRecorder from './slicerSectionRecorder/SlicerSectionRecorder';
 import AutomaticSlicer from './automaticSlicer/AutomaticSlicer';
-import PlayAudioButton from '../playAudioButton/PlayAudioButton';
 import createVolumeArray from '../../../../../shared/createVolumeArray/createVolumeArray';
 import { VolumeArray } from '../../../../../types/volumeArray/volumeArray';
 import Range from '../../../../../types/range/range';
 import SlicerSelector from './slicerSelector/SlicerSelector';
 import SlicerImageTimeRuler from './slicerImageTimeRuler/SlicerImageTimeRuler';
 import SlicerCanvasDetails from '../../../../../types/slicerCanvasDetails/slicerCanvasDetails';
+import AudioPlayer from '../audioPlayer/AudioPlayer';
 
 const CANVAS_DETAILS: SlicerCanvasDetails = {
   height: 200,
@@ -126,8 +126,7 @@ function Slicer(props: SlicerProps): JSX.Element | null {
 
         <div className='slicer-controls-wrapper'>
           <div>
-            {/* <button disabled={currentSection == null} onClick={playCurrentSelection}>Play</button> */}
-            <PlayAudioButton autoplay={false} hotkey={true} range={currentSection} />
+            <AudioPlayer audio={props.originalFile.audioFile} range={currentSection} autoplay={false} hotkey={true} />
             <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add (A)</button>
             <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove (R)</button>
           </div>

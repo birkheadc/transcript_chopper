@@ -1,12 +1,10 @@
 import * as React from 'react';
 import './FlashcardTextbox.css'
-import PlayAudioButton from '../../../playAudioButton/PlayAudioButton';
-import Card from '../../../../../../../types/deck/card';
 import Range from '../../../../../../../types/range/range';
+import AudioPlayer from '../../../audioPlayer/AudioPlayer';
 
 interface FlashcardTextboxProps {
-  audioFile: File | undefined,
-  range: Range,
+  audioFile: Blob,
   updateTranscript: (newText: string) => void,
   value: string,
   reset: () => void
@@ -17,10 +15,6 @@ interface FlashcardTextboxProps {
 * @returns {JSX.Element | null}
 */
 function FlashcardTextbox(props: FlashcardTextboxProps): JSX.Element | null {
-
-  const updateCard = () => {
-
-  }
   
   const handleCloze = () => {
     const textarea = document.querySelector('textarea#transcript-textarea') as HTMLTextAreaElement;
@@ -53,7 +47,7 @@ function FlashcardTextbox(props: FlashcardTextboxProps): JSX.Element | null {
   return (
     <div className='flashcard-textbox-wrapper'>
       <div>
-        <PlayAudioButton autoplay={false} hotkey={false} range={props.range} />
+        <AudioPlayer autoplay={true} hotkey={false} audio={props.audioFile} range={{ from: 0.0, to: 1.0 }} />
         <button onClick={handleCloze}>Cloze</button>
         <button onClick={handleReset}>Reset</button>
       </div>
