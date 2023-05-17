@@ -6,11 +6,5 @@
     - Welcome page
     - FAQ?
   - Write more in the README
-  - Track down 'Failed to load ./.env' that comes up when running dev server and building, I think it's a package that I'm not using currently.
-  - Refactor Joiner component to do the actual joining.
-    - When joining is complete, the application should have an array of audioFile + transcript pairs. i.e., Joiner should do the actual joining.
-    - This way, the next step, file generation, can simply take those pairs and create the actual zip, OR send that data to a cloze editor.
-    - The end result being a less coupled cloze editor, that can be used standalone in the event that the user already has a list of shortened audio files + transcripts.
   - Add ability to say 'nevermind' while joining or while clozing (essentially mark the current pair as do-not-create and skip it)
-  - Create a stylized version of an SRS clozed-text card for the welcome page
-  - Add support for more customized flash card output
+  - When the user clicks Go Back and returns to the Joiner component, their data should not be reset
