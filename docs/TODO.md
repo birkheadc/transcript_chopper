@@ -1,5 +1,4 @@
 # Todo
-  - In Slicer, change section buttons to not look like the horizontal scroll bar. Maybe move them to top of window.
   - Move more of these 'todos' into issues.
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
