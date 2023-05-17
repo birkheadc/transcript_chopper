@@ -29,10 +29,10 @@ async function generateFilesFromDeck(deck: Deck, format: FlashcardFileFormat): P
 
     case FlashcardFileFormat.StandardZip:
     case FlashcardFileFormat.CustomZip:
-      return createZipfileFromDeck(deck);
+      return await createZipfileFromDeck(deck);
 
     case FlashcardFileFormat.APKG:
-      return createAPKGFileFromDeck(deck);
+      return await createAPKGFileFromDeck(deck);
   }
 }
 
@@ -48,8 +48,8 @@ async function createZipfileFromDeck(deck: Deck): Promise<Blob | null> {
   return await zip.generateAsync({ type: 'blob' });
 }
 
-function createAPKGFileFromDeck(deck: Deck): Blob | null {
-  // TODO
+async function createAPKGFileFromDeck(deck: Deck): Promise<Blob | null> {
+  // TODO Implement APKG formatting
   throw new Error('Not yet implemented.');
 }
 

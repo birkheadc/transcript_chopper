@@ -16,7 +16,7 @@ const FORMATS: { label: string, value: number, hint: string }[] = [
     value: FlashcardFileFormat.CustomZip,
     hint: 'Not yet implemented'
   },
-  // TODO
+  // TODO: Uncomment this section if/when APKG formatting is worked out
   // {
   //   label: 'Custom APKG: Open the editor which allows Cloze editing and adding extra fields, download in APKG format for Anki',
   //   value: FlashcardFileFormat.APKG,
