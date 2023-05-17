@@ -1,7 +1,7 @@
 # Audio Flashcard Wizard (Transcript Chopper)
 An application that assists the user in breaking down an audio file and its accompanying transcript into smaller pairs, especially for use in creating SRS cards for language learning. Original name was Transcript Chopper, which it is still referred to as internally.
 
-This project is open to help in the form of issues, comments or pull requests.
+This project is open to help in the form of issues, comments or pull requests. If you would like to help, a good first step would be to check the issues section of this repo.
 
 ## Development and Deployment
 The application is configured to be deployable to a subdirectory (i.e. `www.example.com/this-app`). It took some time to figure out how to do this, but the end result is simple.
@@ -40,6 +40,7 @@ The `Chopper` component is the main component that the user interacts with to ge
   - `Slicer`
   - `Joiner`
   - `Finalizer`
+  - `FlashcardFormatter`
 
 I am not very good at naming things.
 
@@ -61,7 +62,8 @@ If the user supplied a transcript in the `FileSelector`, they can simply highlig
 ### Finalizer
 The `Finalizer` lets the user select how they want their files, what format to provide them and how to name them.
 
-It also optionally lets the user open a `ClozeEditor` to create Anki cards with Clozed (fill-in-the-blank) fields.
+### FlashcardFormatter
+If the user selects exporting to a flashcard format in the `Finalizer`, this component aids in this, optionally opening an editor for creating more custom flashcards.
 
 At the moment, exporting as an anki deck (`.apkg`) file is not implemented. Instead, choosing Anki Deck as the format option will create a `deck.txt` file which is in a semicolon-separated-value format, and a folder with the audio snippets. The user can add the cards to their deck by going to File -> Import in Anki and selecting the `deck.txt`, then moving the audio files into Anki's `collection.media` folder.
 
