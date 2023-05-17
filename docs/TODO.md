@@ -1,5 +1,5 @@
 # Todo
-  - Move more of these 'todos' into issues.
+  - Big refactoring all over the codebase is in order
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages
