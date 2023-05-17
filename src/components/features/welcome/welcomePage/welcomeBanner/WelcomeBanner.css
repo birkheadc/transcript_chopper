@@ -35,8 +35,7 @@ div.welcome-banner-wrapper p {
 }
 
 img.welcome-banner-image {
-  max-width: 980px;
-  
+  width: 980px;
 }
 
 div.welcome-banner-call-to-action-wrapper {
@@ -68,6 +67,7 @@ div.welcome-banner-call-to-action-wrapper a:hover, div.welcome-banner-call-to-ac
 }
 
 @media (max-width: 980px) {
+
   div.welcome-banner-wrapper h1 {
     font-size: 3em;  
   }
@@ -78,10 +78,6 @@ div.welcome-banner-call-to-action-wrapper a:hover, div.welcome-banner-call-to-ac
 
   div.welcome-banner-call-to-action-wrapper {
     gap: 2em;
-  }
-
-  img.welcome-banner-image {
-    
   }
 }
 

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import './WelcomeBanner.css'
 import { NavLink } from 'react-router-dom';
-import WelcomeExample from './welcomeExample/WelcomeExample';
 import audioImage from '../../../../../assets/example/audio_image.png';
 
 
