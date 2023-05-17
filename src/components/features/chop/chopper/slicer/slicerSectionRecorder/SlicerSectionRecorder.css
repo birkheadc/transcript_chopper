@@ -4,7 +4,7 @@ div.slicer-section-recorder-wrapper {
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: start;
   pointer-events: none;
 }
 
