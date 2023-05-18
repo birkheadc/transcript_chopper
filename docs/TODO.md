@@ -1,5 +1,6 @@
 # Todo
   - Big refactoring all over the codebase is in order
+  - More / better tests
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages

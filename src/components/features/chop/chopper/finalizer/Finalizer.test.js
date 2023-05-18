@@ -45,33 +45,32 @@ describe('Finalizer', () => {
     getButtons();
   });
 
-  // it('contains a select for file-format and naming-scheme', () => {
-  //   renderFinalizer(getProps());
-  //   getSelects();
-  // });
+  it('does not contain selects for file-format and naming-scheme before pressing JUST_THE_FILES button', () => {
+    renderFinalizer(getProps());
+    const fileFormatSelect = screen.queryByLabelText('File Format');
+    const namingSchemeSelect = screen.queryByLabelText('Naming Scheme');
+    expect(fileFormatSelect).toBeNull();
+    expect(namingSchemeSelect).toBeNull();
+  });
 
-  // it('attempts to create a download link after selecting file-format and naming-scheme', () => {
-  //   renderFinalizer(getProps());
-  //   const selects = getSelects();
-  //   const value = 1;
-  //   fireEvent.change(selects.fileFormat, { target: { value: value }});
-  //   fireEvent.change(selects.namingScheme, { target: { value: value }});
-  //   expect(selects.fileFormat.value).toBe(value.toString());
-  //   expect(selects.namingScheme.value).toBe(value.toString());
+  it('contains a select for file-format and naming-scheme after pressing JUST_THE_FILES button', () => {
+    renderFinalizer(getProps());
+    const buttons = getButtons();
+    fireEvent.click(buttons.justTheFiles);
+    getSelects();
+  });
+
+  it('attempts to create a download link after selecting file-format and naming-scheme', () => {
+    renderFinalizer(getProps());
+    const buttons = getButtons();
+    fireEvent.click(buttons.justTheFiles);
+    const selects = getSelects();
+    const value = 1;
+    fireEvent.change(selects.fileFormat, { target: { value: value }});
+    fireEvent.change(selects.namingScheme, { target: { value: value }});
+    expect(selects.fileFormat.value).toBe(value.toString());
+    expect(selects.namingScheme.value).toBe(value.toString());
     
-  //   screen.getByText('Generating download link...');
-  // });
-
-  // it('opens cloze editor after selecting cloze anki card as file-format and selecting a naming-scheme', () => {
-  //   renderFinalizer(getProps());
-  //   const selects = getSelects();
-  //   const fileFormatValue = FinalFileFormat.ClozedAnkiCard;
-  //   const namingSchemeValue = FinalFileNamingScheme.UUID;
-  //   fireEvent.change(selects.fileFormat, { target: { value: fileFormatValue }});
-  //   fireEvent.change(selects.namingScheme, { target: { value: namingSchemeValue }});
-  //   expect(selects.fileFormat.value).toBe(fileFormatValue.toString());
-  //   expect(selects.namingScheme.value).toBe(namingSchemeValue.toString());
-
-  //   screen.getByText('Cloze Editor');
-  // });
+    screen.getByText('Generating download link...');
+  });
 });
