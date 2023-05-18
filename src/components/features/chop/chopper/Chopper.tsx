@@ -65,7 +65,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />
 
       case 3:
-        return <Finalizer handleFlashcardFormat={() => goToStep(4)} originalAudioFile={originalFile.audioFile} pairs={pairs} />
+        return <Finalizer handleFlashcardFormat={() => goToStep(4)} pairs={pairs} />
 
       case 4:
         return <FlashcardFormatter originalAudioFile={originalFile.audioFile} pairs={pairs} />

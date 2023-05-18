@@ -9,11 +9,11 @@ import { chopAudio } from "../chopAudio/chopAudio";
 import Deck from "../../types/deck/deck";
 import Card from "../../types/deck/card";
 
-async function generateBasicZipFile(originalAudioFile: File | undefined, pairs: StubRangePair[], format: BasicFileFormat, namingScheme: FinalFileNamingScheme): Promise<Blob | null> {
-  if (areArgumentsValid(originalAudioFile, pairs, format, namingScheme) === false) return null;
+async function generateBasicZipFile(pairs: StubRangePair[], format: BasicFileFormat, namingScheme: FinalFileNamingScheme): Promise<Blob | null> {
+  if (areArgumentsValid(pairs, format, namingScheme) === false) return null;
   let zip = new JSZip();
 
-  const blobs = await buildData(originalAudioFile!, pairs);
+  const blobs = await buildData(pairs);
   if (blobs == null) return null;
 
   zip = await addDataToZip(zip, blobs, format, namingScheme);
@@ -90,8 +90,7 @@ function getDecklineFromCardAndAudioFilename(card: Card, fileName: string): stri
   return line + '\n';
 }
 
-function areArgumentsValid(originalAudioFile: File | undefined, pairs: StubRangePair[], format: BasicFileFormat, namingScheme: FinalFileNamingScheme): boolean {
-  if (originalAudioFile == null) return false;
+function areArgumentsValid(pairs: StubRangePair[], format: BasicFileFormat, namingScheme: FinalFileNamingScheme): boolean {
   if (pairs.length < 1) return false;
   if (format === BasicFileFormat.Null) return false;
   if (namingScheme === FinalFileNamingScheme.Null) return false;
@@ -99,7 +98,7 @@ function areArgumentsValid(originalAudioFile: File | undefined, pairs: StubRange
   return true;
 }
 
-async function buildData(originalAudioFile: File, pairs: StubRangePair[]): Promise<FinalFileData | null> {
+async function buildData(pairs: StubRangePair[]): Promise<FinalFileData | null> {
   const audioSections: Blob[] = [];
   const textSections: string[] = [];
   pairs.map(pair => {

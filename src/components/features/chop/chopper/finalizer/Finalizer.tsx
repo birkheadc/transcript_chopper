@@ -8,7 +8,6 @@ import { FinalFileNamingScheme } from '../../../../../types/formats/finalFileNam
 import options from './options/options';
 
 interface FinalizerProps {
-  originalAudioFile: File | undefined,
   pairs: StubRangePair[],
   handleFlashcardFormat: () => void
 }
@@ -43,7 +42,7 @@ function Finalizer(props: FinalizerProps): JSX.Element | null {
     if (format === BasicFileFormat.Null || namingScheme === FinalFileNamingScheme.Null) {
       return null;
     }
-    return <FileGenerator originalAudioFile={props.originalAudioFile} pairs={props.pairs} format={format} namingScheme={namingScheme} />
+    return <FileGenerator pairs={props.pairs} format={format} namingScheme={namingScheme} />
   }
 
   return (

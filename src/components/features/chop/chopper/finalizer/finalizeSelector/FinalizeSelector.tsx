@@ -25,7 +25,7 @@ function FinalizeSelector(props: FinalizeSelectorProps): JSX.Element | null {
   }
 
   const handleMouseOver = () => {
-    
+    // Todo: Standard <option> elements in a <select> do not really support mouseOver, need to create a custom component or use a package
   }
 
   return (

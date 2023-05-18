@@ -6,7 +6,6 @@ import { BasicFileFormat } from '../../../../../../types/formats/finalFileFormat
 import { FinalFileNamingScheme } from '../../../../../../types/formats/finalFileNamingScheme';
 
 interface FileGeneratorProps {
-  originalAudioFile: File | undefined,
   pairs: StubRangePair[],
   format: BasicFileFormat,
   namingScheme: FinalFileNamingScheme
@@ -14,7 +13,6 @@ interface FileGeneratorProps {
 
 /**
 * The component that creates and serves the final files.
-* @param {File} props.originalAudioFile The original audio file to chop.
 * @param {Range[]} props.pairs The sections of the audio to split, and their respective strings.
 * @param {BasicFileFormat} props.format The format the user selected to receive their files as.
 * @param {FinalFileNamingScheme} props.namingScheme How to name the files.
@@ -26,7 +24,6 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
   const [downloadUrl, setDownloadUrl] = React.useState<string | undefined>(undefined);
 
   function arePropsValid(): boolean {
-    if (props.originalAudioFile == null) return false;
     if (props.pairs.length < 1) return false;
     if (props.format === BasicFileFormat.Null) return false;
     if (props.namingScheme === FinalFileNamingScheme.Null) return false;
@@ -43,7 +40,7 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
     (async function createDownloadLink() {  
       setWorking(true);
       try {
-        const blob: Blob | null = await generateFinalFile.generateBasicZipFile(props.originalAudioFile, props.pairs, props.format, props.namingScheme);
+        const blob: Blob | null = await generateFinalFile.generateBasicZipFile(props.pairs, props.format, props.namingScheme);
         if (blob == null) return;
         setDownloadUrl(URL.createObjectURL(blob));
       } catch {
@@ -52,7 +49,7 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
       setWorking(false);
     })();
 
-  }, [ props.originalAudioFile, props.pairs, props.format, props.namingScheme ]);
+  }, [ props.pairs, props.format, props.namingScheme ]);
 
   function renderBody(): JSX.Element | null {
     if (isWorking) return <p>Generating download link...</p>
