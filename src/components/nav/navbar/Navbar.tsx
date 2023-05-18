@@ -2,7 +2,7 @@ import * as React from 'react';
 import './Navbar.css';
 import { NavLink } from 'react-router-dom';
 import { Bars3Icon } from '@heroicons/react/24/outline'
-import { NavBarState } from '../../../../types/enums/navBarState/navBarState';
+import { NavBarState } from '../../../types/enums/navBarState/navBarState';
 
 interface NavbarProps {
   handleToggleNavPanel: () => void,
