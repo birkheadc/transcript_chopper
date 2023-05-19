@@ -44,24 +44,25 @@ function WelcomePage(props: WelcomePageProps): JSX.Element | null {
               </div>
             </div>
           </section>
-          {/* <section className='welcome-page-section' id='welcome-page-faq'>
+          {/* Todo: One day when I have any questions at all let alone 'frequently asked' ones
+          <section className='welcome-page-section' id='welcome-page-faq'>
             <h2>FAQ</h2>
             <div className='welcome-page-section-body'>
               <div className='welcome-page-section-text'>
 
               </div>
             </div>
-          </section> */}
+          </section>
+          */}
           <section className='welcome-page-section' id='welcome-page-contribute'>
             <h2>Contribute</h2>
             <div className='welcome-page-section-body'>
               <div className='welcome-page-section-text'>
-                <p>The source code for this entire website is on github <a href='https://github.com/birkheadc/transcript_chopper'>here</a></p>
+                <p>The source code for this entire website is on github <a href='https://github.com/birkheadc/transcript_chopper'>here</a>.</p>
                 <p>If you would like to contribute to the project, feel free to make suggestions, open issues, or send a pull request.</p>
               </div>
             </div>
           </section>
-          
         </main>
         <WelcomeFooter />
       </div>

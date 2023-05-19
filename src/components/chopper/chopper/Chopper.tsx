@@ -15,12 +15,12 @@ interface ChopperProps {
 }
 
 /**
-* The component that the user interacts with to split an audio file / transcript into multiple smaller files and transcripts.
+* The main component of the app, which the user interacts with to split an audio file / transcript into multiple smaller files and transcripts.
 * @returns {JSX.Element | null}
 */
 function Chopper(props: ChopperProps): JSX.Element | null {
 
-  const [step, setStep] = React.useState<number>(0);
+  const [currentStep, setCurrentStep] = React.useState<number>(0);
   const [originalFile, setOriginalFile] = React.useState<AudioWithTranscript>({ audioFile: undefined, transcript: '' });
   const [sections, setSections] = React.useState<Blob[]>([]);
   const [pairs, setPairs] = React.useState<StubAudioPair[]>([]);
@@ -37,8 +37,8 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   }
 
   const goBack = () => {
-    if (step < 1) return;
-    goToStep(step - 1);
+    if (currentStep < 1) return;
+    goToStep(currentStep - 1);
   }
 
   const startOver = () => {
@@ -50,11 +50,11 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   }
 
   const goToStep = (step: number) => {
-    setStep(step);
+    setCurrentStep(step);
   }
 
   function displayCurrentStep(): JSX.Element | null {
-    switch (step) {
+    switch (currentStep) {
       case 0:
         return <FileSelector handleContinue={() => goToStep(1)} updateOriginalFile={handleUpdateOriginalFile} originalFile={originalFile} />
     
@@ -82,7 +82,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         {displayCurrentStep()}
       </div>
       <div className='chopper-footer'>
-        <button disabled={step < 1} onClick={goBack}>Go Back</button>
+        <button disabled={currentStep < 1} onClick={goBack}>Go Back</button>
         <button onClick={startOver}>Start Over</button>
       </div>
     </div>

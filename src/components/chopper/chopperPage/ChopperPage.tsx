@@ -1,16 +1,15 @@
 import * as React from 'react';
-import './ChopPage.css';
+import './ChopperPage.css';
 import Chopper from '../chopper/Chopper';
 
-interface ChopPageProps {
+interface ChopperPageProps {
 
 }
 /**
- * 
- * @param {} props
+ * The page that displays the main component of the app.
  * @returns {JSX.Element | null}
  */
-function ChopPage(props: ChopPageProps): JSX.Element | null {
+function ChopperPage(props: ChopperPageProps): JSX.Element | null {
   return (
     <main>
       <div className='chop-page-wrapper'>
@@ -23,4 +22,4 @@ function ChopPage(props: ChopPageProps): JSX.Element | null {
   );
 }
 
-export default ChopPage;
+export default ChopperPage;

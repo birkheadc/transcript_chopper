@@ -8,7 +8,7 @@ section.welcome-page-section {
   padding: 3em 1em;
   display: flex;
   flex-direction: column;
-  gap: 5em;
+  gap: 2em;
 }
 
 /* This is separate from above because sometimes I fiddle with it and put the border on :not(:first-child) or similar */

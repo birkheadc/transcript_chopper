@@ -10,7 +10,7 @@ interface NavbarProps {
 }
 /**
  * The navbar at the top of the screen.
- * @param {Function} props.handleToggleNavPanel The function to call when pressing the toggle-nav-pane button
+ * @param {Function} props.handleToggleNavPanel The function to call when pressing the toggle-nav-panel button
  * @param {boolean} props.isOpen Determines whether the nav is shown or not.
  * @returns {JSX.Element | null}
  */

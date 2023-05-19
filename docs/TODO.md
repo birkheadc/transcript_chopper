@@ -9,3 +9,4 @@
   - Write more in the README
   - Add ability to say 'nevermind' while joining or while clozing (essentially mark the current pair as do-not-create and skip it)
   - When the user clicks Go Back and returns to the Joiner component, their data should not be reset
+  - Add footer content -- what do I even need in the footer?

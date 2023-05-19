@@ -10,7 +10,7 @@ interface NavPanelProps {
 /**
  * The nav panel that the user can open and close.
  * @param {boolean} props.isOpen Sets whether or not to display the panel
- * @param {() => void} props.handleClick Function to call when clicking a link, likely to close the nav panel even if no navigation happens.
+ * @param {() => void} props.handleClick Function to call when clicking a link, usually used to close the nav panel even if no navigation happens.
  * @returns {JSX.Element | null}
  */
 function NavPanel(props: NavPanelProps): JSX.Element | null {
@@ -29,9 +29,11 @@ function NavPanel(props: NavPanelProps): JSX.Element | null {
           <li>
             <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-about' >About</HashLink>
           </li>
-          {/* <li>
+          {/* Todo: One day when I have any questions at all let alone 'frequently asked' ones
+          <li>
             <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-faq' >FAQ</HashLink>
-          </li> */}
+          </li>
+          */}
           <li>
             <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-contribute' >Contribute</HashLink>
           </li>

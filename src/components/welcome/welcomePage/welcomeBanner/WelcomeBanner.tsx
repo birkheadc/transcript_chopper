@@ -9,7 +9,7 @@ interface WelcomeBannerProps {
 }
 
 /**
-*
+* Displays the 'hero' -like element at the top of the welcome page.
 * @returns {JSX.Element | null}
 */
 function WelcomeBanner(props: WelcomeBannerProps): JSX.Element | null {

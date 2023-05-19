@@ -7,7 +7,7 @@ import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import MainNav from '../components/nav/mainNav/MainNav';
 import WelcomePage from '../components/welcome/welcomePage/WelcomePage';
-import ChopPage from '../components/chopper/chopPage/ChopPage';
+import ChopperPage from '../components/chopper/chopperPage/ChopperPage';
 
 const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
 
@@ -25,7 +25,7 @@ function App(props: AppProps): JSX.Element | null {
       <MainNav />
         <Routes>
           <Route path={ '/welcome' } element={ <WelcomePage /> } ></Route>
-          <Route path={ '/' } element={ <ChopPage /> } ></Route>
+          <Route path={ '/' } element={ <ChopperPage /> } ></Route>
           <Route path={ '*' } element={ <Navigate replace={true} to={{ pathname: '/welcome' }} /> } ></Route>
         </Routes>
     </BrowserRouter>
