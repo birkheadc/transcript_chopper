@@ -1,6 +1,7 @@
 # Todo
   - Big refactoring all over the codebase is in order
   - More / better tests
+  - Add option to upload txt file for transcript instead of copy pasting
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages

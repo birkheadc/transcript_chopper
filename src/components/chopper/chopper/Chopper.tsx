@@ -25,8 +25,9 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   const [sections, setSections] = React.useState<Blob[]>([]);
   const [pairs, setPairs] = React.useState<StubAudioPair[]>([]);
 
-  const handleUpdateOriginalFile = (file: AudioWithTranscript) => {
-    setOriginalFile(file);
+  const handleUpdateOriginalFile = (file: AudioWithTranscript | null) => {
+    if (file == null) setOriginalFile({ audioFile: undefined, transcript: ''})
+    else setOriginalFile(file);
   }
 
   const handleUpdateSections = async (sections: Range[]) => {

@@ -3,7 +3,7 @@ import './FileSelector.css'
 import AudioWithTranscript from '../../../../types/interfaces/audioWithTranscript/audioWithTranscript';
 
 interface FileSelectorProps {
-  updateOriginalFile: (newFile: AudioWithTranscript) => void,
+  updateOriginalFile: (newFile: AudioWithTranscript | null) => void,
   originalFile: AudioWithTranscript,
   handleContinue: () => void
 }
@@ -16,6 +16,10 @@ interface FileSelectorProps {
 * @returns {JSX.Element | null}
 */
 function FileSelector(props: FileSelectorProps): JSX.Element | null {
+
+  React.useEffect(function resetOnMount() {
+    props.updateOriginalFile(null);
+  }, []);
 
   const handleUpdateTranscript = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const newFile: AudioWithTranscript = {...props.originalFile};

@@ -76,7 +76,7 @@ function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
     audioElement.autoplay = props.autoplay;
   }, [ props.autoplay ]);
 
-  // Adds a listener to the window to allow clicking the button with the 'P' key if enabled in props
+  // Adds a listener to the window to allow activating the button with the 'P' key if enabled in props
   React.useEffect(function setPKeyListener() {
     if (props.hotkey === false) return;
 
@@ -84,11 +84,10 @@ function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
     if (audioElement == null) return;
 
     const listener = (event: KeyboardEvent) => {
-      if (event.key === 'p') {
-        handleClick();
-      };
+      if (event.key === 'p') handleClick();
     }
     window.addEventListener('keypress', listener);
+
     return (() => {
       window.removeEventListener('keypress', listener);
     });
@@ -109,23 +108,18 @@ function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
   // Starts playing the audio manually if it is not already
   function playAudio() {
     if (isAudioElementReady === false) return;
+
     const audioElement = getAudioElement();
     if (audioElement == null) return;
-    if (audioElement.paused && !isPlaying) {
 
+    if (audioElement.paused && !isPlaying) {
       const startTime = (props.range ? Math.min(props.range.from, props.range.to) : 0.0) * audioElement.duration;
       const endTime = (props.range ? Math.max(props.range.from, props.range.to) : 1.0) * audioElement.duration;
       
       audioElement.currentTime = startTime;
 
       if (endTime < audioElement.duration) {
-        const interval = setInterval(() => {
-          if (audioElement.currentTime >= endTime) {
-            clearInterval(interval);
-            if (!audioElement.paused) audioElement.pause();
-          }
-        }, CHECK_PLAYBACK_INTERVAL_MS)
-    
+        const interval = startEndplaybackCheckInterval(audioElement, endTime);
         playbackInterval.current = interval;
       }
 
@@ -139,32 +133,36 @@ function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
     if (audioElement == null) return;
     if (!audioElement.paused && isPlaying) {
       audioElement.pause();
-      // const startTime = ( props.range ? Math.min(props.range.from, props.range.to) : 0.0 ) * audioElement.duration;
-      // audioElement.currentTime = startTime;
     }
   }
 
-  function renderButton(): JSX.Element {
-    if (isAudioElementReady === true) return <button className='play-audio-button' onClick={handleClick}>{isPlaying ? 'Pause' : 'Play'}{props.hotkey ? ' (P)' : ''}</button>
-    return <button className='play-audio-button' disabled>Play</button>
+  if (isAudioElementReady === false) {
+    return (
+      <button className='play-audio-button' disabled>Play</button>
+    );
   }
 
   return (
-    <>
-      {renderButton()}
-    </>
+    <button className='play-audio-button' onClick={handleClick}>{isPlaying ? 'Pause' : 'Play'}{props.hotkey ? ' (P)' : ''}</button>
   );
-  
 }
 
 export default AudioPlayer;
 
-// Helper function for ensuring each part of the component correctly finds the audio element
 const AUDIO_PLAYER_ID = 'audio-player';
+/**
+ * Helper function for ensuring each part of the component correctly finds the same audio element.
+ * @returns {HTMLAudioElement | null}
+ */
 function getAudioElement(): HTMLAudioElement | null {
   return document.querySelector(`audio#${AUDIO_PLAYER_ID}`) as HTMLAudioElement;
 }
 
+/**
+ * Helper function for finding the page's audio element, pausing the audio, waiting for the audio to pause, then setting the audio element's source.
+ * @param {string} source The new source for the audio element.
+ * @returns {void}
+ */
 async function setAudioElementSource(source: string) {
   const audioElement = getAudioElement();
   if (audioElement == null) return;
@@ -172,21 +170,14 @@ async function setAudioElementSource(source: string) {
   audioElement.src = source;
 }
 
-// Helper function for creating the interval that will periodically check if the audio should end early
-// based on props.range
-// A timeout does not work because it is not possible to guaruntee the start of the timeout aligning with the
-// start of the audio playback
-// The `timeupdate` event on HTMLAudioElement is also not precise enough -- it fires as infrequently as every 200ms
-const CHECK_PLAYBACK_INTERVAL_MS = 30;
-// function startEndplaybackCheckInterval(audioElement: HTMLAudioElement, endTime: number): ReturnType<typeof setInterval> {
-  
-//   return interval;
-// }
-
-// Helper function which allows waiting for the audio element to truly be paused before continuing.
-// TODO: May have an issue with the event listener being stuck to the element if the event never fires somehow,
-// possibly by the user quickly moving away from the page or rerendering the component between pressing pause
-// and the event firing
+/**
+ * Helper function which allows waiting for the audio element to truly be paused before continuing.
+ * TODO: May have an issue with the event listener being stuck to the element if the event never fires somehow,
+ * possibly by the user quickly moving away from the page or rerendering the component between pressing pause
+ * and the event firing
+ * @param {HTMLAudioElement} audioElement The audio element to pause.
+ * @returns {Promise<void>}
+ */
 async function pauseAudioAndWait(audioElement: HTMLAudioElement): Promise<void> {
   return new Promise((resolve, reject) => {
     if (audioElement.paused === true) resolve();
@@ -197,4 +188,30 @@ async function pauseAudioAndWait(audioElement: HTMLAudioElement): Promise<void> 
     audioElement.addEventListener('pause', listener);
     audioElement.pause();
   })
+}
+
+// Helper function for creating the interval that will periodically check if the audio should end early
+// based on props.range
+// A timeout does not work because it is not possible to guaruntee the start of the timeout aligning with the
+// start of the audio playback
+// The `timeupdate` event on HTMLAudioElement is also not precise enough -- it fires as infrequently as every 200ms
+const CHECK_PLAYBACK_INTERVAL_MS = 30;
+/**
+ * Helper function for creating the interval that will periodically check if the audio should end early
+ * based on props.range.
+ * A timeout does not work because it is not possible to guarantee the start of the timeout aligning with the
+ * start of the audio playback.
+ * The `timeupdate` event on HTMLAudioElement is also not precise enough -- it fires as infrequently as every 200ms.
+ * @param {HTMLAudioElement} audioElement The audio element that is playing.
+ * @param {number} endTime The time of the audio, in seconds, to end playback.
+ * @returns {ReturnType<typeof setInterval>}
+ */
+function startEndplaybackCheckInterval(audioElement: HTMLAudioElement, endTime: number): ReturnType<typeof setInterval> {
+  const interval = setInterval(() => {
+    if (audioElement.currentTime >= endTime) {
+      clearInterval(interval);
+      if (!audioElement.paused) audioElement.pause();
+    }
+  }, CHECK_PLAYBACK_INTERVAL_MS)
+  return interval;
 }
