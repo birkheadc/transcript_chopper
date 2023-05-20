@@ -35,6 +35,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
     const slices: Blob[] | null = await chopAudio(originalFile.audioFile, sections);
     if (slices == null) return;
     setSections(slices);
+    goToStep(2);
   }
 
   const goBack = () => {
@@ -60,7 +61,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <FileSelector handleContinue={() => goToStep(1)} updateOriginalFile={handleUpdateOriginalFile} originalFile={originalFile} />
     
       case 1:
-        return <Slicer handleContinue={() => goToStep(2)} handleUpdateSections={handleUpdateSections} originalFile={originalFile} />
+        return <Slicer handleUpdateSections={handleUpdateSections} originalFile={originalFile} />
 
       case 2:
         return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />

@@ -1,58 +1,60 @@
 import { VolumeArray } from "../../types/interfaces/volumeArray/volumeArray";
 
-function determineChunkSize(channelDataLength: number): number {
-  const VOLUME_MAX_LENGTH = 50000;
-  const MIN_CHUNK_SIZE = 1;
-  return 128;
-  return Math.max(Math.ceil(channelDataLength / VOLUME_MAX_LENGTH), MIN_CHUNK_SIZE);
-}
+// Todo: Currently, this algorithm only uses the first channel of the audio data.
+// If this becomes a problem for some users, it can be fixed later.
 
-export default async function createVolumeArray(audio: File | Blob): Promise<VolumeArray> {
+// Todo: This should probably be in a config file or something.
+const CHUNK_SIZE = 128;
+
+/**
+ * Creates a VolumeArray object for an audio file, which is essentially just a profile of the audio,
+ * containing information the application needs to process it. Returns `undefined` if there is a problem processing.
+ * @param audio The audio file or blob to create the volume array for.
+ * @returns {Promise<VolumeArray | undefined>}
+ */
+export default async function createVolumeArray(audio: File | Blob): Promise<VolumeArray | undefined> {
   try {
-    const audioContext = new AudioContext();
-    const buffer = await audio.arrayBuffer();
-    const audioBuffer = await audioContext.decodeAudioData(buffer);
+    const audioBuffer = await getAudioBuffer(audio);
     const float32Array = audioBuffer.getChannelData(0);
     
-    const array: number[] = [];
-    let min: number = float32Array[0];
-    let max: number = float32Array[0];
+    const volumeArray: number[] = [];
+    let minVolume: number = float32Array[0];
+    let maxVolume: number = float32Array[0];
+
+    // volumeArray lumps each frame of audio into a chunk of CHUNK_SIZE
+    // Then records the average of the data for all frames in that chunk
+    // Meanwhile, the largest and smallest data points are recorded in maxVolume and minVolume
     let i = 0;
-    const length = float32Array.length;
-
-    const chunkSize = determineChunkSize(length);
-
-    while (i < length) {
-      const slice = float32Array.slice(i, i += chunkSize);
+    while (i < float32Array.length) {
+      const slice = float32Array.slice(i, i += CHUNK_SIZE);
 
       let sum = 0;
       for (let ii = 0; ii < slice.length; ii++) sum += slice[ii];
 
       const value = sum / slice.length;
 
-      array.push(value);
-      max = Math.max(max, value);
-      min = Math.min(min, value);
+      volumeArray.push(value);
+      maxVolume = Math.max(maxVolume, value);
+      minVolume = Math.min(minVolume, value);
     }
 
-    const output = {
-      volume: array,
-      max: max,
-      min: min,
-      chunkSize: chunkSize,
+    // Also included in the final VolumeArray, are
+    // the CHUNK_SIZE used by this algorithm, and the duration of the full original audio.
+    return {
+      volume: volumeArray,
+      max: maxVolume,
+      min: minVolume,
+      chunkSize: CHUNK_SIZE,
       duration: audioBuffer.duration
     }
-
-
-    return output;
   } catch {
     console.log('Error creating volume array.');
-    return {
-      volume: [],
-      max: 0,
-      min: 0,
-      chunkSize: 1,
-      duration: 0
-    };
+    return undefined;
   }
+}
+
+async function getAudioBuffer(audio: File | Blob): Promise<AudioBuffer> {
+  const audioContext = new AudioContext();
+  const buffer = await audio.arrayBuffer();
+  return await audioContext.decodeAudioData(buffer);
 }

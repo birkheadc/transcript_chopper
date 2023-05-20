@@ -10,7 +10,7 @@ import Range from '../../../../types/interfaces/range/range';
 import SlicerSelector from './slicerSelector/SlicerSelector';
 import SlicerImageTimeRuler from './slicerImageTimeRuler/SlicerImageTimeRuler';
 import SlicerCanvasDetails from '../../../../types/interfaces/slicerCanvasDetails/slicerCanvasDetails';
-import AudioPlayer from '../audioPlayer/AudioPlayer';
+import SlicerControls from './slicerControls/SlicerControls';
 
 const CANVAS_DETAILS: SlicerCanvasDetails = {
   height: 200,
@@ -21,43 +21,36 @@ const CANVAS_DETAILS: SlicerCanvasDetails = {
 interface SlicerProps {
   originalFile: AudioWithTranscript,
   handleUpdateSections: (sections: Range[]) => void,
-  handleContinue: () => void
 }
 
 /**
 * The component that the user interacts with to select where and how to break up the audio file.
 * @param {AudioWithTranscript} props.originalFile The audio file and transcript that is to be chopped.
-* @param {(sections: Range[]) => void} props.handleUpdateSections The function to call when done selecting, just before continuing.
-* @param {() => void} props.handleContinue The function to call when finished.
+* @param {(sections: Range[]) => void} props.handleUpdateSections The function to call when done selecting.
 * @returns {JSX.Element | null}
 */
 function Slicer(props: SlicerProps): JSX.Element | null {
 
-  const [volumeArray, setVolumeArray] = React.useState<VolumeArray>({ volume: [], max: 0, min: 0, chunkSize: 1, duration: 0});
+  const [volumeArray, setVolumeArray] = React.useState<VolumeArray | undefined>(undefined);
   const [isWorking, setWorking] = React.useState<boolean>(false);
   const [sections, setSections] = React.useState<Range[]>([]);
   const [currentSection, setCurrentSection] = React.useState<Range | undefined>(undefined);
-  const [isCurrentAdded, setCurrentAdded] = React.useState<boolean>(false);
+  const [isRemoveButtonEnabled, setRemoveButtonEnabled] = React.useState<boolean>(false);
 
   React.useEffect(function addKeyboardListener() {
+
+    const functionMap: Record<string, () => void> = {
+      'a': addCurrentSelection,
+      'r': removeCurrentSelection,
+      'f': finishSelecting
+    }
+
     const listener = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case 'a':
-          addCurrentSelection();
-          break;
-        case 'r':
-          removeCurrentSelection();
-          break;
-        case 'f':
-          finishSelecting();
-          break;
-        default:
-          break;
-      }
+      const func = functionMap[event.key];
+      if (func) func();
     }
 
     window.addEventListener('keypress', listener);
-
     return (() => {
       window.removeEventListener('keypress', listener);
     })
@@ -67,10 +60,8 @@ function Slicer(props: SlicerProps): JSX.Element | null {
     (async function caluculateAndSetVolumeArray() {
       if (props.originalFile.audioFile == null) return;
       setWorking(true);
-      
-      const volume: VolumeArray = await createVolumeArray(props.originalFile.audioFile);
+      const volume: VolumeArray | undefined = await createVolumeArray(props.originalFile.audioFile);
       setVolumeArray(volume);
-
       setWorking(false);
     })();
   }, [ props.originalFile ]);
@@ -86,56 +77,65 @@ function Slicer(props: SlicerProps): JSX.Element | null {
     if (currentSection == null) return;
     const newSections = sections.filter(section => section.to !== currentSection.to || section.from !== currentSection.from);
     setSections(newSections);
-    setCurrentAdded(false);
+    setRemoveButtonEnabled(false);
   }
 
   const finishSelecting = () => {
     if (sections.length < 1) return;
     props.handleUpdateSections(sections);
-    props.handleContinue();
   }
 
   const handleUpdateCurrentSection = (section: Range | undefined) => {
     setCurrentSection(section);
-    setCurrentAdded(false);
+    setRemoveButtonEnabled(false);
   }
 
   const selectSection = (index: number) => {
     setCurrentSection({...sections[index]});
-    setCurrentAdded(true);
+    setRemoveButtonEnabled(true);
+  }
+
+  function renderBody(): JSX.Element {
+    if (isWorking === true) return <p className='generating-message'>Generating audio image...</p>
+    if (volumeArray == null) return <p className='generating-message'>Audio failed to process.</p>
+    return (
+      <>
+        <h2>Choose which slices of the audio you would like to use.</h2>
+        <div className='slicer-canvas-wrapper'>
+          <SlicerImageTimeRuler duration={volumeArray.duration} />
+          <div className='slicer-canvas-inner-wrapper'>
+            <SlicerImage details={CANVAS_DETAILS} volumeArray={volumeArray} />
+            <SlicerSelector details={CANVAS_DETAILS} length={volumeArray.volume.length} currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
+            <SlicerSectionRecorder sections={sections} select={selectSection} />
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  function renderControls(): JSX.Element | null {
+    return (isWorking === true || volumeArray == null) ? null :
+    <SlicerControls
+      audioFile={props.originalFile.audioFile}
+      currentSection={currentSection}
+      isRemoveButtonEnabled={isRemoveButtonEnabled}
+      handleClickAdd={addCurrentSelection}
+      handleClickRemove={removeCurrentSelection}
+      isFinishButtonEnabled={sections.length > 0}
+      handleClickFinish={finishSelecting}
+    />
+  }
+
+  function renderAutomaticSlicer(): JSX.Element | null {
+    return (isWorking === true || volumeArray == null) ? null :
+    <AutomaticSlicer volumeArray={volumeArray} setSections={setSections} />
   }
 
   return (
     <div className='slicer-wrapper'>
-      <h2>Choose which slices of the audio you would like to use.</h2>
-      <div className='slicer-canvas-wrapper'>
-        
-        { isWorking ? <p className='generating-message'>Generating audio image...</p> : 
-          <>
-            <SlicerImageTimeRuler duration={volumeArray.duration} />
-            <div className='slicer-canvas-inner-wrapper'>
-              <SlicerImage details={CANVAS_DETAILS} volumeArray={volumeArray} />
-              <SlicerSelector details={CANVAS_DETAILS} length={volumeArray.volume.length} currentSection={currentSection} updateCurrentSection={handleUpdateCurrentSection} />
-              <SlicerSectionRecorder sections={sections} select={selectSection} />
-            </div>
-          </>
-        }
-      </div>
-      { isWorking ? <></> : <>
-        <p>Highlight a section, then press `Play` to listen to it, or `Add` to create a section.</p>
-
-        <div className='slicer-controls-wrapper'>
-          <div>
-            <AudioPlayer audio={props.originalFile.audioFile} range={currentSection} autoplay={false} hotkey={true} />
-            <button disabled={currentSection == null || isCurrentAdded} onClick={addCurrentSelection}>Add (A)</button>
-            <button disabled={!isCurrentAdded} onClick={removeCurrentSelection}>Remove (R)</button>
-          </div>
-          <div>
-            <button disabled={sections.length < 1} onClick={finishSelecting}>Finish (F)</button>
-          </div>
-        </div>
-        <AutomaticSlicer volumeArray={volumeArray} setSections={setSections} />
-      </>}
+      {renderBody()}
+      {renderControls()}
+      {renderAutomaticSlicer()}
     </div>
   );
 }

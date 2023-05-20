@@ -18,10 +18,6 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 
   const [canvases, setCanvases] = React.useState<{ width: number, volumeArray: number[] }[]>([]);
 
-  function getCanvasId(index: number): string {
-    return `slicer-image-canvas-${index}`;
-  }
-
   React.useEffect(function drawAudioChartToCanvases() {
     for (let i = 0; i < canvases.length; i++) {
       const canvas = document.querySelector(`canvas#${getCanvasId(i)}`) as HTMLCanvasElement;
@@ -86,3 +82,7 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 }
 
 export default SlicerImage;
+
+function getCanvasId(index: number): string {
+  return `slicer-image-canvas-${index}`;
+}
