@@ -38,7 +38,7 @@ function Finalizer(props: FinalizerProps): JSX.Element | null {
     ); 
   }
 
-  function renderSubcomponent(): JSX.Element | null {
+  function renderFileGenerator(): JSX.Element | null {
     if (format === BasicFileFormat.Null || namingScheme === FinalFileNamingScheme.Null) {
       return null;
     }
@@ -55,7 +55,7 @@ function Finalizer(props: FinalizerProps): JSX.Element | null {
         </div>
         {renderSelectors()}
       </div>
-      {renderSubcomponent()}
+      {renderFileGenerator()}
     </div>
   );
 }

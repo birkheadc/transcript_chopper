@@ -59,13 +59,11 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
   }
 
   const resetCurrentSelected = () => {
-
-    // TODO
-
-    // const newNewPairs = [...newPairs];
-    // newNewPairs[current].stub = props.pairs[current].stub;
-    // setNewPairs(newNewPairs);
-    // setFinished(false);
+    const originalText: string = props.pairs[current].stub;
+    const newCards = [...cards];
+    const newCard = newCards[current];
+    newCard.transcript = originalText;
+    setCards(newCards);
   }
 
   const updateCurrentSelectedTranscript = (newValue: string) => {
@@ -114,17 +112,15 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
   }
 
   function renderEditor(): JSX.Element | null {
-    if (cards.length < 1) return null;
-    return (
-      <>
+    return (cards.length < 1) ? null :
+    <>
       <FlashcardTextbox audioFile={cards[current].audio} updateTranscript={updateCurrentSelectedTranscript} value={cards[current].transcript} reset={resetCurrentSelected} />
       {extras.map(
         (extra, index) =>
         <FlashcardExtraTextbox key={index} index={index} fieldName={extra} value={cards[current].extras[index]} update={updateCurrentSelectedExtra} delete={deleteExtraField} />
       )}
       <FlashcardEditorControls back={handleBack} next={handleNext} current={current} total={props.pairs.length} addField={addExtraField} />
-      </>
-    );
+    </>
   }
 
   return (

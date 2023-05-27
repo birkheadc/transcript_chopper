@@ -31,10 +31,6 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
     return true;
   }
 
-  function getFileName(format: BasicFileFormat): string {
-    return 'audio_flashcard_wizard_files.zip';
-  }
-
   React.useEffect(() => {
     if (arePropsValid() === false) return;
     (async function createDownloadLink() {  
@@ -65,3 +61,9 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
 }
 
 export default FileGenerator;
+
+// Helpers
+
+function getFileName(format: BasicFileFormat): string {
+  return 'audio_flashcard_wizard_files.zip';
+}

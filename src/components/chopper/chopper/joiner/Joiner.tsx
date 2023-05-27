@@ -1,10 +1,10 @@
 import * as React from 'react';
 import './Joiner.css'
 import AudioWithTranscript from '../../../../types/interfaces/audioWithTranscript/audioWithTranscript';
-import Range from '../../../../types/interfaces/range/range';
 import StubAudioPair from '../../../../types/interfaces/stubRangePair/stubRangePair';
-import { chopAudio } from '../../../../helpers/chopAudio/chopAudio';
 import AudioPlayer from '../audioPlayer/AudioPlayer';
+import JoinerControls from './joinerControls/JoinerControls';
+import JoinerTextEditor from './joinerTextEditor/JoinerTextEditor';
 
 interface JoinerProps {
   originalFile: AudioWithTranscript,
@@ -22,8 +22,6 @@ interface JoinerProps {
 * @returns {JSX.Element | null}
 */
 function Joiner(props: JoinerProps): JSX.Element | null {
-
-  const [isWorking, setWorking] = React.useState<boolean>(false);
 
   const [currentSection, setCurrentSection] = React.useState<number>(0);
   const [pairs, setPairs] = React.useState<StubAudioPair[]>([]);
@@ -84,33 +82,19 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   }
 
   function renderBody(): JSX.Element {
-
-    if (isWorking === true || props.sections == null) {
-      return <p>Splitting audio...</p>
-    }
-
-    return (
+    return (props.sections == null) ? <p>There's nothing to join!</p> :
       <>
         <h2>Match each audio slice to its section of the text.</h2>
         <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
-        <div className='joiner-input-wrapper'>
-          <div>
-            <AudioPlayer audio={props.sections[currentSection]} range={{ from: 0.0, to: 1.0 }} autoplay={true} hotkey={false} />
-            <button onClick={handleTrim}>Trim</button>
-            <button onClick={handleReset}>Reset</button>
-          </div>
-          <div className='inline-label-input-wrapper'>
-            <label htmlFor='stub-textarea'>Text</label>
-            <textarea id='stub-textarea' onChange={handleUpdateStub} value={pairs[currentSection]?.stub}></textarea>
-          </div>
-        </div>
-        <div className='joiner-controls'>
-          <button disabled={currentSection <= 0} onClick={handleBack}>Back</button>
-          <span>{currentSection + 1} / {props.sections.length}</span>
-          <button onClick={handleNext}>{currentSection >= props.sections.length - 1 ? 'Finish' : 'Next'}</button>
-        </div>
+        <JoinerTextEditor
+          handleTrim={handleTrim}
+          handleReset={handleReset}
+          handleUpdateStub={handleUpdateStub}
+          currentAudio={props.sections[currentSection]}
+          currentText={pairs[currentSection]?.stub}
+        />
+        <JoinerControls currentSection={currentSection} numSections={props.sections.length} handleBack={handleBack} handleNext={handleNext} />
       </>
-    );
   }
 
   return (
