@@ -12,7 +12,7 @@ const MAX_WHITE_SPACE_IN_SECONDS = 1.0;
  * @returns {Range[]} A Range[] representing what the algorithm decided were sections of meaningful audio.
  */
 export default function calculateSectionsByVolume(volumeArray: VolumeArray, sensitivity: number, sectionLength: number): Range[] {
-  const thresholdVolume = calculateThreshold(volumeArray.max, volumeArray.min, sensitivity);
+  const thresholdVolume = calculateThreshold(volumeArray.max, sensitivity);
   const maxWhiteSpace = calculateMaxWhiteSpace(volumeArray, sectionLength);
 
   const sections = calculateSections(volumeArray, thresholdVolume, maxWhiteSpace);
