@@ -1,5 +1,5 @@
 # Todo
-  - Big refactoring all over the codebase is in order
+  - Look into what needs to be done to actually create a production version with webpack
   - More / better tests
   - Add option to upload txt file for transcript instead of copy pasting
   - Add mouseover to display hint functionality to FinalizeSelector
