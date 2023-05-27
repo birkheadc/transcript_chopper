@@ -3,7 +3,7 @@ import { VolumeArray } from "../../types/interfaces/volumeArray/volumeArray";
 // Todo: Currently, this algorithm only uses the first channel of the audio data.
 // If this becomes a problem for some users, it can be fixed later.
 
-// Todo: This should probably be in a config file or something.
+// Todo: This might be better off in a config file or something.
 const CHUNK_SIZE = 128;
 
 /**
