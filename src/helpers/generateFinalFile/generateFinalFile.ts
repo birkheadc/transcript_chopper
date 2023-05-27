@@ -67,7 +67,6 @@ async function addDeckDataToZip(deck: Deck, zip: JSZip) {
   let deckText = '';
   for (let i = 0; i < deck.cards.length; i++) {
     const fileName = generateFileName(deck.cards.length, i, FinalFileNamingScheme.UUID) + '.wav';
-    const audio = deck.cards[i];
     const deckLine = getDecklineFromCardAndAudioFilename(deck.cards[i], fileName);
     zip.file('audio/' + fileName, deck.cards[i].audio);
     deckText = deckText + deckLine;
@@ -109,10 +108,6 @@ async function buildData(pairs: StubAudioPair[]): Promise<FinalFileData | null> 
   return { audioBlobs: audioSections, strings: textSections };
 }
 
-async function buildAudioBlobs(originalAudioFile: File, ranges: Range[]): Promise<Blob[] | null> {
-  return await chopAudio(originalAudioFile, ranges);
-}
-
 function buildTextBlobs(stubs: string[]): Blob[] {
   const blobs: Blob[] = [];
   for (let i = 0; i < stubs.length; i++) {
@@ -134,36 +129,6 @@ function generateFileName(totalFiles: number, currentFile: number, namingScheme:
     case FinalFileNamingScheme.Null:
       throw new Error('Naming Scheme was set to Null, it was probably not selected properly.');
   }
-}
-
-async function readTextBlobsIntoStringArray(textBlobs: Blob[]): Promise<string[]> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    const strings: string[] = [];
-    let count = 0;
-
-    function readNextFile() {
-      if (count < textBlobs.length) {
-        reader.onload = () => {
-          if (reader.result) {
-            const text = reader.result.toString();
-            strings.push(text);
-            count++;
-            readNextFile();
-          } else {
-            reject('Failed to read file contents');
-          }
-        };
-        reader.onerror = () => {
-          reject(reader.error);
-        };
-        reader.readAsText(textBlobs[count]);
-      } else {
-        resolve(strings);
-      }
-    }
-    readNextFile();
-  });
 }
 
 async function addDataToZip(zip: JSZip, data: FinalFileData, format: BasicFileFormat, namingScheme: FinalFileNamingScheme): Promise<JSZip> {
