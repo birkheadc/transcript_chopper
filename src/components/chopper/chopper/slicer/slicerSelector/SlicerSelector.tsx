@@ -22,8 +22,8 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
 
   let isDragging: boolean = false;
 
-  React.useEffect(function addPointerDragEventListeners() { 
-    const container = document.querySelector('div#slicer-selector-wrapper') as HTMLDivElement;
+  React.useEffect(function addDragEventListeners() { 
+    const container = getSlicerSelectorWrapper();
     if (container == null) return;
 
     let from: number = 0;
@@ -31,22 +31,20 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
   
     const handlePointerDown = (event: PointerEvent) => {
       isDragging = true;
-      from = (event.clientX - container.getBoundingClientRect().left) / (container.getBoundingClientRect().width / container.clientWidth) / container.clientWidth;
-      to = (event.clientX - container.getBoundingClientRect().left) / (container.getBoundingClientRect().width / container.clientWidth) / container.clientWidth;
+      from = calculateCurrentMousePositionOverDiv(container, event);
+      to = calculateCurrentMousePositionOverDiv(container, event);
     }
 
     const handlePointerMove = (event: PointerEvent) => {
       if (isDragging === false) return;
-
-      to = (event.clientX - container.getBoundingClientRect().left) / (container.getBoundingClientRect().width / container.clientWidth) / container.clientWidth;
+      to = calculateCurrentMousePositionOverDiv(container, event);
       props.updateCurrentSection({ from, to });
     }
 
     const handleMouseLeave = (event: MouseEvent) => {
       if (isDragging === false) return;
-
       isDragging = false;
-      to = Math.min(1.0, Math.max(0.0, (event.clientX - container.getBoundingClientRect().left) / (container.getBoundingClientRect().width / container.clientWidth) / container.clientWidth));
+      to = Math.min(1.0, Math.max(0.0, calculateCurrentMousePositionOverDiv(container, event)));
       if (from === to) {
         props.updateCurrentSection(undefined);
         return;
@@ -56,9 +54,8 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
 
     const handlePointerUp = (event: PointerEvent) => {
       if (isDragging === false) return; 
-
       isDragging = false;
-      to = Math.min(1.0, Math.max(0.0, (event.clientX - container.getBoundingClientRect().left) / (container.getBoundingClientRect().width / container.clientWidth) / container.clientWidth));
+      to = Math.min(1.0, Math.max(0.0, calculateCurrentMousePositionOverDiv(container, event)));
       if (from === to) {
         props.updateCurrentSection(undefined);
         return;
@@ -87,6 +84,8 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
 
 export default SlicerSelector;
 
+// Helpers
+
 function getSelectorDivStyle(currentSection: Range | undefined): React.CSSProperties {
   if (currentSection == null) {
     return { opacity: 0.0 }
@@ -94,30 +93,24 @@ function getSelectorDivStyle(currentSection: Range | undefined): React.CSSProper
   const left = `${Math.min(currentSection.from, currentSection.to) * 100}%`;
   const right = `${100 - Math.max(currentSection.from, currentSection.to) * 100}%`;
   return {
-    opacity: 0.3,
+    opacity: 'var(--opac-slicer-selector)',
     left,
     right
   };
 }
 
-function getCanvasId(index: number): string {
-  return `slicer-selector-canvas-${index}`;
+function getSlicerSelectorWrapper(): HTMLDivElement | null {
+  return document.querySelector('div#slicer-selector-wrapper') as HTMLDivElement
 }
 
-function clearSlicerSelectorCanvases(numCanvases: number) {
-  for (let i = 0; i < numCanvases; i++) {
-    const canvas = document.querySelector(`canvas#${getCanvasId(i)}`) as HTMLCanvasElement;
-    if (canvas == null) continue;
-    const canvasContext = canvas.getContext('2d');
-    if (canvasContext == null) continue;
-
-    canvasContext.clearRect(0, 0, canvas.width, canvas.height);
-  }
+function getDivLeftOffsetFromEvent(div: HTMLDivElement, event: PointerEvent | MouseEvent) {
+  return event.clientX - div.getBoundingClientRect().left;
 }
 
-function highlightSelectionInSelectorCanvases(selection: Range, numCanvases: number) {
-  const container = document.querySelector('div#slicer-selector-wrapper') as HTMLDivElement;
-  if (container == null) return;
-  const width = container.clientWidth;
-  // const insetInPixels = { left: }
+function getDivWidth(div: HTMLDivElement) {
+  return div.getBoundingClientRect().width;
+}
+
+function calculateCurrentMousePositionOverDiv(div: HTMLDivElement, event: PointerEvent | MouseEvent) {
+  return (getDivLeftOffsetFromEvent(div, event)) / getDivWidth(div)
 }

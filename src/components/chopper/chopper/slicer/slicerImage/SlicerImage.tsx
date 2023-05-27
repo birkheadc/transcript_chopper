@@ -18,11 +18,35 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
 
   const [canvases, setCanvases] = React.useState<{ width: number, volumeArray: number[] }[]>([]);
 
+  React.useEffect(function determineCanvases() {
+    const volumeArray = props.volumeArray.volume;
+    if (volumeArray.length < 1) return;
+
+    const newCanvases: { width: number, volumeArray: number[] }[] = [];
+
+    let i = 0;
+    while (i * props.details.individualCanvasMaxWidth < volumeArray.length) {
+
+      const width = Math.min(props.details.individualCanvasMaxWidth, volumeArray.length - (i * props.details.individualCanvasMaxWidth));
+
+      const sliceStart = i * props.details.individualCanvasMaxWidth;
+      const sliceEnd = i * props.details.individualCanvasMaxWidth + props.details.individualCanvasMaxWidth;
+
+      const canvasWidth = width * props.details.widthMultiplier;
+      const canvasVolumeArray = volumeArray.slice(sliceStart, sliceEnd);
+
+      newCanvases.push({ width: canvasWidth, volumeArray: canvasVolumeArray });
+      i++;
+    }
+
+    setDocumentCSSVariables(props.volumeArray, props.details);
+    setCanvases(newCanvases);
+
+  }, [ props.volumeArray, props.details ]);
+
   React.useEffect(function drawAudioChartToCanvases() {
     for (let i = 0; i < canvases.length; i++) {
-      const canvas = document.querySelector(`canvas#${getCanvasId(i)}`) as HTMLCanvasElement;
-      if (canvas == null) return;
-      const canvasContext = canvas.getContext('2d');
+      const canvasContext = getCanvasContext(i);
       if (canvasContext == null) return;
 
       canvasContext.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--clr-black');
@@ -38,30 +62,6 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
       canvasContext.stroke();
     }
   }, [ canvases ]);
-
-  React.useEffect(function determineCanvases() {
-    const array = props.volumeArray.volume;
-    if (array.length < 1) return;
-
-    const newCanvases: { width: number, volumeArray: number[] }[] = [];
-
-    let i = 0;
-    while (i * props.details.individualCanvasMaxWidth < array.length) {
-
-      const width = Math.min(props.details.individualCanvasMaxWidth, array.length - (i * props.details.individualCanvasMaxWidth));
-
-      const sliceStart = i * props.details.individualCanvasMaxWidth;
-      const sliceEnd = i * props.details.individualCanvasMaxWidth + props.details.individualCanvasMaxWidth;
-      newCanvases.push({ width: width * props.details.widthMultiplier, volumeArray: array.slice(sliceStart, sliceEnd) });
-      i++;
-    }
-
-    document.documentElement.style.setProperty('--canvas-width', `${array.length * props.details.widthMultiplier}px`);
-    document.documentElement.style.setProperty('--canvas-height', `${props.details.height}px`);
-
-    setCanvases(newCanvases);
-
-  }, [ props.volumeArray, props.details ]);
 
   return (
     <div id='slicer-image-wrapper'>
@@ -85,4 +85,21 @@ export default SlicerImage;
 
 function getCanvasId(index: number): string {
   return `slicer-image-canvas-${index}`;
+}
+
+function getCanvas(canvasIndex: number): HTMLCanvasElement | null {
+  const canvas = document.querySelector(`canvas#${getCanvasId(canvasIndex)}`) as HTMLCanvasElement;
+  return canvas;
+}
+
+function getCanvasContext(canvasIndex: number): CanvasRenderingContext2D | null {
+  const canvas = getCanvas(canvasIndex);
+  if (canvas == null) return null;
+  const canvasContext = canvas.getContext('2d');
+  return canvasContext;
+}
+
+function setDocumentCSSVariables(volumeArray: VolumeArray, canvasDetails: SlicerCanvasDetails) {
+  document.documentElement.style.setProperty('--canvas-width', `${volumeArray.volume.length * canvasDetails.widthMultiplier}px`);
+  document.documentElement.style.setProperty('--canvas-height', `${canvasDetails.height}px`);
 }

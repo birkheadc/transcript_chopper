@@ -1,3 +1,7 @@
+:root {
+  --opac-slicer-selector: 0.3;
+}
+
 div#slicer-selector-wrapper {
   position: relative;
   display: flex;
@@ -17,8 +21,4 @@ div#slicer-selector-div {
   right: 0%;
   top: 0%;
   bottom: 0%;
-}
-
-canvas.slicer-selector-canvas {
-  opacity: 0.3;
 }

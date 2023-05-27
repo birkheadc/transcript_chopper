@@ -24,14 +24,15 @@ function SlicerSectionRecorder(props: SlicerSectionRecorderProps): JSX.Element |
   return (
     <div className='slicer-section-recorder-wrapper'>
       <div className='slicer-section-recorder-inner-wrapper'>
-    {props.sections.map(
-      (section, index) =>
-      <div className='slicer-section-recorder-section' key={index} style={{
-        left: 100 * Math.min(section.from, section.to) + '%', right: 100 - (100 * Math.max(section.from, section.to)) + '%'
-      }}>
-        <button aria-label='section-select' className='slicer-section-button' data-index={index} onClick={handleSelect}></button>
-      </div>
-    )}
+      {props.sections.map(
+        (section, index) =>
+        <div className='slicer-section-recorder-section' key={index} style={{
+          left: 100 * Math.min(section.from, section.to) + '%',
+          right: 100 - (100 * Math.max(section.from, section.to)) + '%'
+        }}>
+          <button aria-label='section-select' className='slicer-section-button' data-index={index} onClick={handleSelect}></button>
+        </div>
+      )}
       </div>
     </div>
   );
