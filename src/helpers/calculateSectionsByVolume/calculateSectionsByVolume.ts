@@ -1,7 +1,6 @@
 import Range from "../../types/interfaces/range/range";
 import { VolumeArray } from "../../types/interfaces/volumeArray/volumeArray";
 
-const PADDING_IN_SECONDS = 0;
 const MIN_WHITE_SPACE_IN_SECONDS = 0.1;
 const MAX_WHITE_SPACE_IN_SECONDS = 1.0;
 
@@ -67,14 +66,12 @@ function calculateSections(volumeArray: VolumeArray, thresholdVolume: number, ma
 /**
  * Calculates where the threshold between white space and meaningful audio will be determined.
  * @param {number} max The loudest volume the audio reaches.
- * @param {number} min The lowest volume the audio reaches.
  * @param {number} sensitivity The sensitivity parameter determined by the user to tweak this function's output.
  * @returns A number to be used as the threshold in further calculations.
  */
-function calculateThreshold(max: number, min: number, sensitivity: number): number {
-  const distance = (max / 2) - 0;
-  const offset = distance * (sensitivity / 100);
-  const threshold = offset + 0;
+function calculateThreshold(max: number, sensitivity: number): number {
+  const distance = (max / 2);
+  const threshold = distance * (sensitivity / 100);
   return threshold;
 }
 
