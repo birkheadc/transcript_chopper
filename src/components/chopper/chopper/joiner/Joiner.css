@@ -1,0 +1,13 @@
+div.joiner-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  width: 90%;
+  padding: 2em;
+}
+
+div.joiner-wrapper>p {
+  text-align: justify;
+}

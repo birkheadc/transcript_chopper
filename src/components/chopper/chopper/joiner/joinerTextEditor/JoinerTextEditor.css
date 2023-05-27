@@ -1,0 +1,26 @@
+div.joiner-editor-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2em;
+  width: min(90%, 40em);
+  height: 10em;
+}
+
+div.joiner-editor-wrapper>div {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+div.joiner-editor-wrapper>div.inline-label-input-wrapper {
+  height: 100%;
+  width: 100%;
+}
+
+div.joiner-editor-wrapper textarea {
+  height: 100%;
+  width: 100%;
+}

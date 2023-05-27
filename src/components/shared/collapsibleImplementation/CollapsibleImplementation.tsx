@@ -9,7 +9,8 @@ interface CollapsibleImplementationProps {
 }
 
 /**
-*
+* The component used in this app that implements `react-collapsible` to create a collapsible element with some custom styling and behavior.
+* @param {React.ReactNode} props.children The child or children to display when the collapsible is opened.
 * @returns {JSX.Element | null}
 */
 function CollapsibleImplementation(props: CollapsibleImplementationProps): JSX.Element | null {
@@ -18,7 +19,7 @@ function CollapsibleImplementation(props: CollapsibleImplementationProps): JSX.E
 
   function renderTrigger(): JSX.Element {
     return (
-      <div className={'collapsible-trigger ' + (isOpen ? 'collapsible-trigger-open' : 'collapsible-trigger')}>
+      <div className={'collapsible-trigger ' + (isOpen ? 'collapsible-trigger-open' : '')}>
         <h3 className='collapsible-trigger-title'>Automatic Slicer</h3>
         <span>{ isOpen ? <ChevronUpIcon className='icon' /> : <ChevronDownIcon className='icon' /> }</span>
       </div>

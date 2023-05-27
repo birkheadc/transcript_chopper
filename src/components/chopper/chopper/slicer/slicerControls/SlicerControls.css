@@ -1,0 +1,19 @@
+div.slicer-controls-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  justify-content: space-between;
+  align-items: center;
+}
+
+div.slicer-controls-inner-wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 5em;
+}
+
+div.slicer-controls-inner-wrapper>div {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}

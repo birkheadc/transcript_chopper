@@ -1,6 +1,7 @@
 # Todo
   - Big refactoring all over the codebase is in order
   - More / better tests
+  - Add option to upload txt file for transcript instead of copy pasting
   - Add mouseover to display hint functionality to FinalizeSelector
   - Create a demo for the app
   - Create supporting pages
@@ -9,3 +10,7 @@
   - Write more in the README
   - Add ability to say 'nevermind' while joining or while clozing (essentially mark the current pair as do-not-create and skip it)
   - When the user clicks Go Back and returns to the Joiner component, their data should not be reset
+  - Add footer content -- what do I even need in the footer?
+  - Track down `unreachable code after return statement` warning in index_bundle.js:14:2 during development
+  - Update `createVolumeArray` to process all channels of the supplied audio data.
+  - In AudioPlayer, when hotkey is true, you have to press Play manually at least once before the hotkey starts to work
