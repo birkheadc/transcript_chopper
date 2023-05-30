@@ -40,13 +40,15 @@ export default async function createVolumeArray(audio: File | Blob): Promise<Vol
 
     // Also included in the final VolumeArray, are
     // the CHUNK_SIZE used by this algorithm, and the duration of the full original audio.
-    return {
+    const returnVolumeArray = {
       volume: volumeArray,
       max: maxVolume,
       min: minVolume,
       chunkSize: CHUNK_SIZE,
       duration: audioBuffer.duration
-    }
+    };
+    console.log('Volume array: ', returnVolumeArray);
+    return returnVolumeArray;
   } catch {
     console.log('Error creating volume array.');
     return undefined;

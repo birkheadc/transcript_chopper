@@ -2,8 +2,19 @@ import * as React from 'react';
 import Chopper from './Chopper'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import exampleAudioFile from '../../../assets/test/kokoro/kokoro01.wav';
-const fs = require('fs');
+import createVolumeArray from '../../../__mocks__/helpers/createVolumeArray/createVolumeArray';
+// const fs = require('fs');
+
+// const mockVolumeArray = createVolumeArray();
+// jest.mock('../../../helpers/createVolumeArray/createVolumeArray', () => {
+//   return {
+//   __esModule: true,
+//   default: jest
+//     .fn()
+//     .mockReturnValueOnce(Promise.resolve(undefined))
+//     .mockReturnValue(Promise.resolve(mockVolumeArray))
+//   }
+// });
 
 describe('Chopper', () => {
   it('renders without crashing', () => {
@@ -12,7 +23,7 @@ describe('Chopper', () => {
 
   it('fails gracefully when given a bad audio file', async () => {
     renderChopper();
-    selectAudioFile(badAudioBlob);
+    selectAudioFile();
     const continueButton = screen.getByRole('button', { name: /continue/i });
     await waitFor(() => {
       expect(continueButton).not.toBeDisabled();
@@ -23,11 +34,20 @@ describe('Chopper', () => {
     });
   });
 
-  it('generates a zip file with trimmed audio and text files in basic format', () => {
+  it('generates zip files with trimmed audio and text files in requested format', async () => {
     // From start to finish, select basic zip format
     // Somehow check the output file to make sure it contains the right number of audio and text files
     // The audio files will be difficult or impossible to fully verify, but the text files can be
     // Then, write an integration test for other formats (all? or just important ones?)
+    renderChopper();
+    selectAudioFile();
+    inputTranscript(exampleText);
+    const continueButton = screen.getByRole('button', { name: /continue/i });
+    await waitFor(() => {
+      expect(continueButton).not.toBeDisabled();
+    });
+    fireEvent.click(continueButton);
+    await automaticSlice();
   });
 });
 
@@ -37,23 +57,24 @@ function renderChopper() {
   render(<Chopper />);
 }
 
-async function getExampleAudioFileAsBlob() {
-  const path = 'src/assets/test/kokoro/kokoro01.wav';
-  return new Promise((resolve, reject) => {
-    fs.readFile(path, (error, data) => {
-      if (error) {
-        console.log(error);
-        reject();
-        return;
-      }
+// async function getExampleAudioFileAsBlob() {
+//   const path = 'src/assets/test/kokoro/kokoro01.wav';
+//   return new Promise((resolve, reject) => {
+//     fs.readFile(path, (error, data) => {
+//       if (error) {
+//         console.log('Error in fs: ', error);
+//         reject();
+//         return;
+//       }
 
-      const blob = new Blob([data], { type: 'audio/wav' });
-      resolve(blob);
-    });
-  });
-}
+//       const blob = new Blob([data], { type: 'audio/wav' });
+//       resolve(blob);
+//     });
+//   });
+// }
 
-async function selectAudioFile(file) {
+async function selectAudioFile() {
+  const file = new File([""], "audio.wav", { type: 'audio/wav' });
   const input = screen.getByLabelText(/audio file/i);
   expect(input).toBeInTheDocument();
   userEvent.upload(input, file);
@@ -73,4 +94,14 @@ function inputTranscript(text) {
   expect(input.value).toBe(text);
 }
 
-const badAudioBlob = new Blob(["bad data"], { type: 'audio/wav' });
+const badAudioBlob = new Blob([""], { type: 'audio/wav' });
+
+async function automaticSlice() {
+  // Todo: Audio slicing does not work in the jest environment, probably something to do with audio api not existing
+  // Need to uh... make it work
+  let automaticSlicer;
+  await waitFor(() => {
+    automaticSlicer = screen.getByTestId('automatic-slicer');
+  });
+  fireEvent.click(automaticSlicer);
+}
