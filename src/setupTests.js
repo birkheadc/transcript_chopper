@@ -14,11 +14,16 @@ export default class PointerEventFake extends Event {
   }
 }
 
-// URL.createObjectURL does not exist in the test environment, so it is mocked.
+// URL.createObjectURL does not exist in the test environment, so it is mocked
 global.URL.createObjectURL = jest.fn(() => '#');
 global.PointerEvent = PointerEventFake;
 
+// Audio.pause is not implemented in JSDom, so it is mocked
+HTMLAudioElement.prototype.pause = jest.fn(() => {});
+
 // Mock the function of createVolumeArray, since AudioContext is not available in the test environment
+// The first call will return a bad volume array so that failing may be tested
+// Further calls return a volume array for the example kokoro snippet
 const mockVolumeArray = createVolumeArray();
 jest.mock('./helpers/createVolumeArray/createVolumeArray', () => {
   return {
