@@ -1,8 +1,10 @@
 import * as React from 'react';
 import Slicer from './Slicer'
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 
-// Play button is ignored because it is part of the AudioPlayer component, which is not tested
+// Play button is ignored because it is part of the AudioPlayer component,
+// which is not tested here
+// (It's currently not tested at all, unless I've forgotten to remove this line. Please kindly remove this line if that is the case.)
 const BUTTONS = [
   'add',
   'remove',
@@ -63,7 +65,7 @@ describe('Slicer', () => {
     await renderSlicerAsync(props);
     const buttons = await getButtonsAsync();
 
-    emulateSelectSection({ from: 0.1, to: 0.2 });
+    emulateSelectSection();
 
     expectButtonsEnabled(buttons, {
       add: true,
@@ -73,31 +75,131 @@ describe('Slicer', () => {
   });
 
   it('enables finish button when a selection is added', async () => {
-    // Todo
+    const props = getPropsWithAudioFile();
+    await renderSlicerAsync(props);
+    const buttons = await getButtonsAsync();
+
+    emulateSelectSection();
+    fireEvent.click(buttons.add);
+
+    expectButtonsEnabled(buttons, {
+      add: false,
+      remove: false,
+      finish: true
+    });
   });
 
   it('enables remove button when a previously added section is selected', async () => {
-    // Todo
+    const props = getPropsWithAudioFile();
+    await renderSlicerAsync(props);
+    const buttons = await getButtonsAsync();
+
+    emulateSelectSection();
+    fireEvent.click(buttons.add);
+
+    const sectionButtons = findAllSectionButtons();
+    fireEvent.click(sectionButtons[0]);
+
+    expectButtonsEnabled(buttons, {
+      add: false,
+      remove: true,
+      finish: true
+    });
   });
 
   it('removes the section when the section button is selected and remove is clicked', async () => {
-    // Todo
+    const props = getPropsWithAudioFile();
+    await renderSlicerAsync(props);
+    const buttons = await getButtonsAsync();
+
+    emulateSelectSection();
+    fireEvent.click(buttons.add);
+
+    let sectionButtons = findAllSectionButtons();
+    expect(sectionButtons).toHaveLength(1);
+    fireEvent.click(sectionButtons[0]);
+
+    fireEvent.click(buttons.remove);
+
+    sectionButtons = findAllSectionButtons();
+
+    expect(sectionButtons).toHaveLength(0);
   });
 
   it('disables finish button when all sections are removed', async () => {
-    // Todo
+    const props = getPropsWithAudioFile();
+    await renderSlicerAsync(props);
+    const buttons = await getButtonsAsync();
+
+    emulateSelectSection();
+    fireEvent.click(buttons.add);
+
+    expectButtonsEnabled(buttons, {
+      add: false,
+      remove: false,
+      finish: true
+    });
+
+    let sectionButtons = findAllSectionButtons();
+    fireEvent.click(sectionButtons[0]);
+
+    fireEvent.click(buttons.remove);
+
+    expectButtonsEnabled(buttons, {
+      add: true,
+      remove: false,
+      finish: false
+    });
   });
 
-  it('expands the collapsible automatic slicer when the trigger is pressed', async () => {
-    // Todo
-  });
+  it('toggles the automatic slicer when the trigger is pressed', async () => {
+    const props = getPropsWithAudioFile();
+    await renderSlicerAsync(props);
 
-  it('collapses the automatic slicer when the trigger is pressed again', async () => {
-    // Todo
+    const automaticSlicerTrigger = getAutomaticSlicerTrigger();
+
+    expect(automaticSlicerTrigger).toHaveClass('is-closed');
+    expect(automaticSlicerTrigger).not.toHaveClass('is-open');
+
+    fireEvent.click(automaticSlicerTrigger);
+
+    await waitFor(() => {
+      expect(automaticSlicerTrigger).toHaveClass('is-open');
+      expect(automaticSlicerTrigger).not.toHaveClass('is-closed');
+    });
+
+    fireEvent.click(automaticSlicerTrigger);
+
+    await waitFor(() => {
+      expect(automaticSlicerTrigger).toHaveClass('is-closed');
+      expect(automaticSlicerTrigger).not.toHaveClass('is-open');
+    });
   });
 
   it('automatically generates sections when the automatic slicer slice button is pressed', async () => {
-    // Todo
+    const props = getPropsWithAudioFile();
+    await renderSlicerAsync(props);
+
+    let sectionButtons = findAllSectionButtons();
+    expect(sectionButtons).toHaveLength(0);
+
+    const automaticSlicerTrigger = getAutomaticSlicerTrigger();
+
+    expect(automaticSlicerTrigger).toHaveClass('is-closed');
+    expect(automaticSlicerTrigger).not.toHaveClass('is-open');
+
+    fireEvent.click(automaticSlicerTrigger);
+
+    await waitFor(() => {
+      expect(automaticSlicerTrigger).toHaveClass('is-open');
+      expect(automaticSlicerTrigger).not.toHaveClass('is-closed');
+    });
+
+    const sliceButton = getAutomaticSliceButton();
+    fireEvent.click(sliceButton);
+
+    sectionButtons = findAllSectionButtons();
+    expect(sectionButtons).not.toHaveLength(0);
   });
 });
 
@@ -157,8 +259,25 @@ async function getCanvasesAsync() {
   
 }
 
-function emulateSelectSection(range) {
-  // Todo
+function emulateSelectSection() {
+  const container = document.querySelector('div#slicer-selector-wrapper');
+  expect(container).toBeInTheDocument();
+  fireEvent.pointerDown(container, { clientX: 10, clientY: 10 });
+  fireEvent.pointerMove(container, { clientX: 20, clientY: 20 });
+  fireEvent.pointerUp(container, { clientX: 20, clientY: 20 });
+container
+}
+
+function findAllSectionButtons() {
+  return screen.queryAllByRole('button', { name: 'section-select' });
+}
+
+function getAutomaticSlicerTrigger() {
+  return screen.getByRole('button', { name: /automatic slicer/i });
+}
+
+function getAutomaticSliceButton() {
+  return screen.queryByTestId('automatic-slice-button');
 }
 
 // function getProps() {

@@ -57,7 +57,7 @@ function AutomaticSlicer(props: AutomaticSlicerProps): JSX.Element | null {
               <label htmlFor='sectionLengthInput'>Section Length</label>
               <input min={0} max={100} id='sectionLengthInput' onChange={handleSectionLengthChange} type='range' value={sectionLength}></input>
             </div>
-            <button onClick={handleSlice}>Slice</button>
+            <button data-testid={'automatic-slice-button'} onClick={handleSlice}>Slice</button>
           </div>
         </div>
         </CollapsibleImplementation>

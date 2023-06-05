@@ -22,7 +22,7 @@ function CollapsibleImplementation(props: CollapsibleImplementationProps): JSX.E
 
   function renderTrigger(): JSX.Element {
     return (
-      <div aria-label='Toggle Automatic Slicer' data-testid={props.testId} className={'collapsible-trigger ' + (isOpen ? 'collapsible-trigger-open' : '')}>
+      <div aria-label='Toggle Automatic Slicer' className={'collapsible-trigger ' + (isOpen ? 'collapsible-trigger-open' : '')}>
         <h3 className='collapsible-trigger-title'>{props.triggerTitle}</h3>
         <span>{ isOpen ? <ChevronUpIcon className='icon' /> : <ChevronDownIcon className='icon' /> }</span>
       </div>
