@@ -13,11 +13,13 @@ const BUTTONS = [
 
 describe('Slicer', () => {
   it('renders without crashing', async () => {
-    await renderSlicerAsync(defaultProps);
+    const props = getPropsWithoutAudioFile();
+    await renderSlicerAsync(props);
   });
 
   it('fails to process audio if audiofile undefined', async () => {
-    await renderSlicerAsync(defaultProps);
+    const props = getPropsWithoutAudioFile();
+    await renderSlicerAsync(props);
     screen.getByText(/audio failed to process/i);
   });
 
@@ -201,25 +203,48 @@ describe('Slicer', () => {
     sectionButtons = findAllSectionButtons();
     expect(sectionButtons).not.toHaveLength(0);
   });
+
+  it('calls handleUpdateSections when finished', async () => {
+    const props = getPropsWithAudioFile();
+    await renderSlicerAsync(props);
+    const buttons = await getButtonsAsync();
+
+    emulateSelectSection();
+    fireEvent.click(buttons.add);
+
+    expectButtonsEnabled(buttons, {
+      add: false,
+      remove: false,
+      finish: true
+    });
+
+    expect(props.handleUpdateSections).not.toHaveBeenCalled();
+    fireEvent.click(buttons.finish);
+    expect(props.handleUpdateSections).toHaveBeenCalled();
+  });
+
 });
 
 // Helpers
 
-const defaultProps = {
-  originalFile: {
-    audioFile: undefined,
-    transcript: ''
-  },
-  handleUpdateSections: () => {}
-};
+function getPropsWithoutAudioFile() {
+  return {
+    originalFile: {
+      audioFile: undefined,
+      transcript: ''
+    },
+    handleUpdateSections: jest.fn(() => {})
+  };
+}
 
 function getPropsWithAudioFile() {
-  const props = {...defaultProps};
-  props.originalFile = {
-    audioFile: new File([""], "audio.wav", { type: 'audio/wav' }),
-    transcript: ''
-  }
-  return props;
+  return {
+    originalFile: {
+      audioFile: new File([""], "audio.wav", { type: 'audio/wav' }),
+      transcript: ''
+    },
+    handleUpdateSections: jest.fn(() => {})
+  };
 }
 
 // Rendering the slicer must be waited for because the component runs some calculations that update its own state after mounting,
