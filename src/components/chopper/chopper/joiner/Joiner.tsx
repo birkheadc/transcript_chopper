@@ -10,15 +10,13 @@ interface JoinerProps {
   originalFile: AudioWithTranscript,
   sections: Blob[],
   handleSetPairs: (pairs: StubAudioPair[]) => void,
-  handleContinue: () => void
 }
 
 /**
 * The combiner that the user interacts with to join transcript stubs to their respective audio snippets.
-* @param {number} props.audioDuration The duration of the audio file.
 * @param {AudioWithTranscript} props.originalFile The original audio file and transcript.
-* @param {Range[]} props.sections The sections of the audio to split.
-* @param {() => void} props.handleContinue The function to call when the user is finished.
+* @param {Blob[]} props.sections The sections of the audio to split.
+* @param {(pairs: StubAudioPair[]) => void} props.handleSetPairs The function to call to set pairs when finished.
 * @returns {JSX.Element | null}
 */
 function Joiner(props: JoinerProps): JSX.Element | null {
@@ -52,7 +50,6 @@ function Joiner(props: JoinerProps): JSX.Element | null {
 
   function finish() {
     props.handleSetPairs(pairs);
-    props.handleContinue();
   }
 
   const handleTrim = () => {

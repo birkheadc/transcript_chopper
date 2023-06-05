@@ -156,6 +156,22 @@ describe('Joiner', () => {
     expect(textarea).toHaveTextContent(newValue);
   });
 
+  it('calls handleSetPairs when pressing finish button', () => {
+    const numSections = 3;
+    const props = getPropsWithAudioFileAndTranscript();
+    props.sections = getNSections(numSections);
+    renderJoiner(props);
+
+    expect(props.handleSetPairs).not.toHaveBeenCalled();
+
+    const buttons = getButtons();
+    for (let i = 0; i < numSections; i++) {
+      fireEvent.click(buttons.next);
+    }
+    
+    expect(props.handleSetPairs).toHaveBeenCalled();
+  });
+
 });
 
 // Helpers
@@ -172,8 +188,7 @@ const defaultProps = {
     transcript: ''
   },
   sections: [],
-  handleSetPairs: (pairs) => {},
-  handleContinue: () => {}
+  handleSetPairs: jest.fn((pairs) => {}),
 };
 
 function getPropsWithAudioFileAndTranscript() {
