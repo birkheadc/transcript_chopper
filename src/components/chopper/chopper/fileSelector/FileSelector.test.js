@@ -51,13 +51,7 @@ function getPropsWithoutAudioFile() {
 }
 
 function renderFileSelector(props) {
-  render(
-    <FileSelector
-      updateOriginalFile={props.updateOriginalFile}
-      originalFile={props.originalFile}
-      handleContinue={props.handleContinue}
-    />
-  );
+  render(<FileSelector {...props} />);
 }
 
 function getContinueButton() {

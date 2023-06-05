@@ -225,14 +225,7 @@ function getPropsWithAudioFile() {
 // Rendering the slicer must be waited for because the component runs some calculations that update its own state after mounting,
 // (and react-testing-library hates it if you don't wait for that to happen)
 async function renderSlicerAsync(props) {
-  await waitFor(() => {
-    render(
-      <Slicer
-        originalFile={props.originalFile}
-        handleUpdateSections={props.handleUpdateSections}
-      />
-    );
-  });
+  await waitFor(() => { render(<Slicer {...props} />) });
 }
 
 async function getButtonsAsync() {
