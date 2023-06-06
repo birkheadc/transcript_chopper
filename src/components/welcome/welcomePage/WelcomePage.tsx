@@ -17,7 +17,7 @@ function WelcomePage(props: WelcomePageProps): JSX.Element | null {
       <WelcomeBanner />
       <div className='welcome-page-wrapper'>
         <main>
-          <section className='welcome-page-section' id='welcome-page-about'>
+          <section className='welcome-page-section' id='about'>
             <h2>What is this?</h2>
             <div className='welcome-page-section-body'>
               <div className='welcome-page-section-text'>
@@ -45,7 +45,7 @@ function WelcomePage(props: WelcomePageProps): JSX.Element | null {
             </div>
           </section>
           {/* Todo: One day when I have any questions at all let alone 'frequently asked' ones
-          <section className='welcome-page-section' id='welcome-page-faq'>
+          <section className='welcome-page-section' id='faq'>
             <h2>FAQ</h2>
             <div className='welcome-page-section-body'>
               <div className='welcome-page-section-text'>
@@ -54,7 +54,7 @@ function WelcomePage(props: WelcomePageProps): JSX.Element | null {
             </div>
           </section>
           */}
-          <section className='welcome-page-section' id='welcome-page-contribute'>
+          <section className='welcome-page-section' id='contribute'>
             <h2>Contribute</h2>
             <div className='welcome-page-section-body'>
               <div className='welcome-page-section-text'>

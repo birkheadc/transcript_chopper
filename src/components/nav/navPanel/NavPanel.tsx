@@ -24,18 +24,18 @@ function NavPanel(props: NavPanelProps): JSX.Element | null {
       <div className='nav-panel-inner-wrapper'>
         <ul className='nav-panel-list'>
           <li>
-            <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-banner'>Home</HashLink>
+            <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#banner'>Home</HashLink>
           </li>
           <li>
-            <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-about' >About</HashLink>
+            <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#about' >About</HashLink>
           </li>
           {/* Todo: One day when I have any questions at all let alone 'frequently asked' ones
           <li>
-            <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-faq' >FAQ</HashLink>
+            <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#faq' >FAQ</HashLink>
           </li>
           */}
           <li>
-            <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#welcome-page-contribute' >Contribute</HashLink>
+            <HashLink className='nav-panel-click-box' onClick={handleClick} smooth tabIndex={props.isOpen ? 0 : -1} to='/welcome#contribute' >Contribute</HashLink>
           </li>
         </ul>
         <ul className='nav-panel-list'>

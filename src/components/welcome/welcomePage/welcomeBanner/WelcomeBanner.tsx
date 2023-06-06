@@ -14,7 +14,7 @@ interface WelcomeBannerProps {
 */
 function WelcomeBanner(props: WelcomeBannerProps): JSX.Element | null {
   return (
-    <div className='welcome-banner-wrapper' id='welcome-banner'>
+    <div className='welcome-banner-wrapper' id='banner'>
       <h1>Audio Flashcard Wizard</h1>
       <img className='welcome-banner-image' src={audioImage}></img>
       <div className='welcome-banner-call-to-action-wrapper'>

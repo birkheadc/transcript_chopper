@@ -7,9 +7,8 @@ const PUBLIC_PATH = process.env.PUBLIC_PATH || '/';
 
 module.exports = {
   entry: './index.tsx',
-  mode: 'development',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '../dist'),
     filename: 'index_bundle.js',
     publicPath: PUBLIC_PATH
   },
@@ -24,7 +23,7 @@ module.exports = {
     },
     allowedHosts: ['all'],
     static: {
-      directory: path.join(__dirname, 'public'),
+      directory: path.join(__dirname, '../public'),
     },
     open: false,
     hot: true,
@@ -63,7 +62,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'public', 'index.html'),
+      template: path.join(__dirname, '../public', 'index.html'),
       favicon: './src/assets/favicon.ico'
     }),
     new NodePolyfillPlugin(),
