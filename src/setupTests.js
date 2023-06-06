@@ -18,6 +18,7 @@ class PointerEventFake extends Event {
 global.PointerEvent = PointerEventFake;
 global.URL.createObjectURL = jest.fn(() => '#');
 global.window.prompt = jest.fn(() => Math.random().toString());
+global.window.alert = jest.fn(() => {});
 HTMLAudioElement.prototype.pause = jest.fn(() => {});
 
 // Mock the function of createVolumeArray, since it relies on AudioContext, which is not available in the test environment

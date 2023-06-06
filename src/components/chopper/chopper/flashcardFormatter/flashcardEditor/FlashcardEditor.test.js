@@ -6,6 +6,7 @@ const BUTTONS = [
   'cloze',
   'reset',
   'back',
+  'delete',
   'add extra field'
 ]
 
@@ -291,6 +292,50 @@ describe('FlashcardEditor', () => {
     expect(extraTextbox).toHaveTextContent(editedText);
   });
 
+  it('deletes current card when press delete', () => {
+    const numPairs = 3;
+    const props = getPropsWithAudioFileAndNPairs(numPairs);
+    renderFlashcardEditor(props);
+
+    const buttons = getButtons();
+    getCurrentTotalSectionsDisplay(1, numPairs);
+
+    fireEvent.click(buttons.delete);
+    getCurrentTotalSectionsDisplay(1, numPairs - 1);
+  });
+
+  it('updates current section number when delete card at final index of array (i.e. deleting card 3/3 updates current card to card 2/2)', () => {
+    const numPairs = 3;
+    const props = getPropsWithAudioFileAndNPairs(numPairs);
+    renderFlashcardEditor(props);
+
+    const buttons = getButtons();
+    getCurrentTotalSectionsDisplay(1, numPairs);
+
+    for (let i = 1; i < numPairs; i++) {
+      fireEvent.click(buttons.next);
+    }
+
+    fireEvent.click(buttons.delete);
+    getCurrentTotalSectionsDisplay(numPairs - 1, numPairs - 1);
+  });
+
+  it('does not delete card when press delete if there is only one card left, instead alerts the user', () => {
+    const numPairs = 1;
+    const props = getPropsWithAudioFileAndNPairs(numPairs);
+    renderFlashcardEditor(props);
+
+    const buttons = getButtons();
+    
+    expect(global.window.alert).not.toHaveBeenCalled();
+    getCurrentTotalSectionsDisplay(1, 1);
+
+    fireEvent.click(buttons.delete);
+    
+    expect(global.window.alert).toHaveBeenCalled();
+    getCurrentTotalSectionsDisplay(1, 1);
+  });
+
   it('calls updateCards([]) when mount', () => {
     const numPairs = 3;
     const props = getPropsWithAudioFileAndNPairs(numPairs);
@@ -328,6 +373,22 @@ describe('FlashcardEditor', () => {
     }
 
     fireEvent.click(buttons.back);
+
+    expect(props.updateCards).toHaveBeenCalledTimes(3);
+    expect(props.updateCards).toHaveBeenLastCalledWith([]);
+  });
+
+  it('calls updateCards([]) when press delete after press finish', () => {
+    const numPairs = 3;
+    const props = getPropsWithAudioFileAndNPairs(numPairs);
+    renderFlashcardEditor(props);
+
+    const buttons = getButtons();
+    for (let i = 0; i < numPairs; i++) {
+      fireEvent.click(buttons.next);
+    }
+
+    fireEvent.click(buttons.delete);
 
     expect(props.updateCards).toHaveBeenCalledTimes(3);
     expect(props.updateCards).toHaveBeenLastCalledWith([]);
@@ -399,4 +460,10 @@ function getExtraTextboxContainer() {
 
 function getExtraTextboxes() {
   return screen.getAllByTestId('flashcard-extra-textbox');
+}
+
+async function queryDownloadLink() {
+  await waitFor(() => {
+    return screen.getByRole('link', { name: /download/i });
+  })
 }

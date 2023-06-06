@@ -40,7 +40,7 @@ function FlashcardFormatter(props: FlashcardFormatterProps): JSX.Element | null 
 
   function renderBody(): JSX.Element | null {
     if (format === FlashcardFileFormat.Null) {
-      return <FinalizeSelector label={'Deck Style'} options={options.FORMATS} current={format} change={(n: number) => setFormat(n)}/>
+      return <FinalizeSelector label={'Deck Style'} options ={options.FORMATS} current={format} change={(n: number) => setFormat(n)}/>
     }
     if (format === FlashcardFileFormat.StandardZip) return null;
     return <FlashcardEditor originalAudioFile={props.originalAudioFile} pairs={props.pairs} updateCards={handleUpdateCards} />

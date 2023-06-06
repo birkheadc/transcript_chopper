@@ -41,7 +41,7 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   }
 
   const handleNext = () => {
-    if (currentSection >= props.sections.length - 1) {
+    if (currentSection >= pairs.length - 1) {
       finish();
       return;
     }
@@ -72,6 +72,19 @@ function Joiner(props: JoinerProps): JSX.Element | null {
     setPairs(newPairs);
   }
 
+  const handleDelete = () => {
+    if (pairs.length < 2) {
+      alert("You can't delete the last section!");
+      return;
+    }
+    const newPairs = [...pairs];
+    newPairs.splice(currentSection, 1);
+    setPairs(newPairs);
+    if (currentSection >= newPairs.length) {
+      setCurrentSection(newPairs.length - 1);
+    }
+  }
+
   const handleUpdateStub = (event: React.FormEvent<HTMLTextAreaElement>) => {
     const newStubs = [...pairs];
     newStubs[currentSection].stub = event.currentTarget.value;
@@ -79,18 +92,19 @@ function Joiner(props: JoinerProps): JSX.Element | null {
   }
 
   function renderBody(): JSX.Element {
-    return (props.sections == null) ? <p>There's nothing to join!</p> :
+    return (pairs == null || pairs.length < 1) ? <p>There's nothing to join!</p> :
       <>
         <h2>Match each audio slice to its section of the text.</h2>
         <p>Select the correct text for this audio snippet and press `Trim` to remove everything else. Press `Reset` to reset. You may also simply edit as you see fit.</p>
         <JoinerTextEditor
           handleTrim={handleTrim}
           handleReset={handleReset}
+          handleDelete={handleDelete}
           handleUpdateStub={handleUpdateStub}
-          currentAudio={props.sections[currentSection]}
-          currentText={pairs[currentSection]?.stub}
+          currentAudio={pairs[currentSection].audio}
+          currentText={pairs[currentSection].stub}
         />
-        <JoinerControls currentSection={currentSection} numSections={props.sections.length} handleBack={handleBack} handleNext={handleNext} />
+        <JoinerControls currentSection={currentSection} numSections={pairs.length} handleBack={handleBack} handleNext={handleNext} />
       </>
   }
 
