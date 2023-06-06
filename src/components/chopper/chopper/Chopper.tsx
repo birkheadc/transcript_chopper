@@ -5,7 +5,7 @@ import FileSelector from './fileSelector/FileSelector';
 import Slicer from './slicer/Slicer';
 import Joiner from './joiner/Joiner';
 import Range from '../../../types/interfaces/range/range';
-import StubAudioPair from '../../../types/interfaces/stubRangePair/stubRangePair';
+import StubAudioPair from '../../../types/interfaces/stubRangePair/stubAudioPair';
 import Finalizer from './finalizer/Finalizer';
 import FlashcardFormatter from './flashcardFormatter/FlashcardFormatter';
 import { chopAudio } from '../../../helpers/chopAudio/chopAudio';
@@ -73,7 +73,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <Joiner handleSetPairs={handleSetPairs} originalFile={originalFile} sections={sections} />
 
       case 3:
-        return <Finalizer handleFlashcardFormat={() => goToStep(4)} pairs={pairs} />
+        return <Finalizer handleSelectFlashcardFormat={() => goToStep(4)} pairs={pairs} />
 
       case 4:
         return <FlashcardFormatter originalAudioFile={originalFile.audioFile} pairs={pairs} />

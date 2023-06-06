@@ -1,11 +1,9 @@
 import JSZip from "jszip";
 import { BasicFileFormat, FlashcardFileFormat } from "../../types/enums/formats/finalFileFormat";
 import { FinalFileNamingScheme } from "../../types/enums/formats/finalFileNamingScheme";
-import StubAudioPair from "../../types/interfaces/stubRangePair/stubRangePair";
-import Range from "../../types/interfaces/range/range";
+import StubAudioPair from "../../types/interfaces/stubRangePair/stubAudioPair";
 import { v4 as uuidv4 } from 'uuid';
 import ankiReadme from '../../assets/anki/anki_readme.txt';
-import { chopAudio } from "../chopAudio/chopAudio";
 import Deck from "../../types/interfaces/deck/deck";
 import Card from "../../types/interfaces/deck/card";
 

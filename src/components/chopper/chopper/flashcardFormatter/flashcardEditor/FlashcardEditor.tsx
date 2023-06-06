@@ -1,17 +1,15 @@
 import * as React from 'react';
 import './FlashcardEditor.css'
-import StubAudioPair from '../../../../../types/interfaces/stubRangePair/stubRangePair';
+import StubAudioPair from '../../../../../types/interfaces/stubRangePair/stubAudioPair';
 import Card from '../../../../../types/interfaces/deck/card';
 import FlashcardTextbox from './flashcardTextbox/FlashcardTextbox';
 import FlashcardExtraTextbox from './flashcardExtraTextbox/FlashcardExtraTextbox';
 import FlashcardEditorControls from './flashcardEditorControls/FlashcardEditorControls';
-import DeckGenerator from '../deckGenerator/DeckGenerator';
 import { FlashcardFileFormat } from '../../../../../types/enums/formats/finalFileFormat';
 
 interface FlashcardEditorProps {
   originalAudioFile: File | undefined,
   pairs: StubAudioPair[],
-  format: FlashcardFileFormat,
   updateCards: (cards: Card[]) => void
 }
 
@@ -19,7 +17,6 @@ interface FlashcardEditorProps {
 * The editor the user interacts with to create custom flashcards from their data.
 * @param {File} props.originalAudioFile The original audio file to chop.
 * @param {Range[]} props.pairs The sections of the audio to split, and their respective strings.
-* @param {FlashcardFileFormat} props.format The format to eventually generate the deck in.
 * @param {(cards: Card[]) => void} props.updateCards The function to call when finished editing.
 * @returns {JSX.Element | null}
 */
@@ -115,10 +112,12 @@ function FlashcardEditor(props: FlashcardEditorProps): JSX.Element | null {
     return (cards.length < 1) ? null :
     <>
       <FlashcardTextbox audioFile={cards[current].audio} updateTranscript={updateCurrentSelectedTranscript} value={cards[current].transcript} reset={resetCurrentSelected} />
+      <div id='flashcard-extra-textbox-container' data-testid='flashcard-extra-textbox-container'>
       {extras.map(
         (extra, index) =>
         <FlashcardExtraTextbox key={index} index={index} fieldName={extra} value={cards[current].extras[index]} update={updateCurrentSelectedExtra} delete={deleteExtraField} />
       )}
+      </div>
       <FlashcardEditorControls back={handleBack} next={handleNext} current={current} total={props.pairs.length} addField={addExtraField} />
     </>
   }

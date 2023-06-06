@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './FlashcardFormatter.css'
-import StubAudioPair from '../../../../types/interfaces/stubRangePair/stubRangePair';
+import StubAudioPair from '../../../../types/interfaces/stubRangePair/stubAudioPair';
 import Deck from '../../../../types/interfaces/deck/deck';
 import options from './options/options';
 import FinalizeSelector from '../finalizer/finalizeSelector/FinalizeSelector';
@@ -26,7 +26,6 @@ function FlashcardFormatter(props: FlashcardFormatterProps): JSX.Element | null 
   const [deck, setDeck] = React.useState<Deck | undefined>(undefined);
 
   React.useEffect(function buildBasicDeckFromDataIfStandardFormatSelected() {
-    if (props.originalAudioFile == null) return;
     if (format !== FlashcardFileFormat.StandardZip) return;
 
     const cards: Card[] = Array.from(props.pairs, pair => ({ transcript: pair.stub, audio: pair.audio, extras: [] }));
@@ -44,7 +43,7 @@ function FlashcardFormatter(props: FlashcardFormatterProps): JSX.Element | null 
       return <FinalizeSelector label={'Deck Style'} options={options.FORMATS} current={format} change={(n: number) => setFormat(n)}/>
     }
     if (format === FlashcardFileFormat.StandardZip) return null;
-    return <FlashcardEditor originalAudioFile={props.originalAudioFile} format={format} pairs={props.pairs} updateCards={handleUpdateCards} />
+    return <FlashcardEditor originalAudioFile={props.originalAudioFile} pairs={props.pairs} updateCards={handleUpdateCards} />
   }
 
   function renderDownloadLink(): JSX.Element | null {

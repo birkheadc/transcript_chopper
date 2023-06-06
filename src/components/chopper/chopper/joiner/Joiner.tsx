@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './Joiner.css'
 import AudioWithTranscript from '../../../../types/interfaces/audioWithTranscript/audioWithTranscript';
-import StubAudioPair from '../../../../types/interfaces/stubRangePair/stubRangePair';
+import StubAudioPair from '../../../../types/interfaces/stubRangePair/stubAudioPair';
 import AudioPlayer from '../audioPlayer/AudioPlayer';
 import JoinerControls from './joinerControls/JoinerControls';
 import JoinerTextEditor from './joinerTextEditor/JoinerTextEditor';
