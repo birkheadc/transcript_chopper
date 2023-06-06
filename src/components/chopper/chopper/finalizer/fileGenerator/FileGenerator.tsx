@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './FileGenerator.css'
-import StubAudioPair from '../../../../../types/interfaces/stubRangePair/stubRangePair';
+import StubAudioPair from '../../../../../types/interfaces/stubRangePair/stubAudioPair';
 import generateFinalFile from '../../../../../helpers/generateFinalFile/generateFinalFile';
 import { BasicFileFormat } from '../../../../../types/enums/formats/finalFileFormat';
 import { FinalFileNamingScheme } from '../../../../../types/enums/formats/finalFileNamingScheme';
@@ -37,7 +37,7 @@ function FileGenerator(props: FileGeneratorProps): JSX.Element | null {
       setWorking(true);
       try {
         const blob: Blob | null = await generateFinalFile.generateBasicZipFile(props.pairs, props.format, props.namingScheme);
-        if (blob == null) return;
+        if (blob == null) throw new Error('Final file generated null');
         setDownloadUrl(URL.createObjectURL(blob));
       } catch {
         console.log('Error creating final file.');

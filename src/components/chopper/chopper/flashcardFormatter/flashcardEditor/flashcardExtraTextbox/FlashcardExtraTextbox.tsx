@@ -33,7 +33,7 @@ function FlashcardExtraTextbox(props: FlashcardExtraTextboxProps): JSX.Element |
       <button onClick={handleDelete}>X</button>
       <div className='inline-label-input-wrapper'>
         <label htmlFor={getTextareaId(props.index)}>{props.fieldName}</label>
-        <textarea id={getTextareaId(props.index)} onChange={handleUpdate} value={props.value}></textarea>
+        <textarea id={getTextareaId(props.index)} onChange={handleUpdate} data-testid='flashcard-extra-textbox' value={props.value}></textarea>
       </div>
     </div>
   );

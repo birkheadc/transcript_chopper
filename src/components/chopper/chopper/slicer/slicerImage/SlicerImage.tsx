@@ -68,6 +68,7 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
       {canvases.map(
         (canvas, index) =>
         <canvas
+          data-testid='slicer-image-canvas'
           className='slicer-image-canvas'
           id={`${getCanvasId(index)}`}
           key={`slicer-image-key-${index}`}

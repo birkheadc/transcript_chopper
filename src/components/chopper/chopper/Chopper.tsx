@@ -5,7 +5,7 @@ import FileSelector from './fileSelector/FileSelector';
 import Slicer from './slicer/Slicer';
 import Joiner from './joiner/Joiner';
 import Range from '../../../types/interfaces/range/range';
-import StubAudioPair from '../../../types/interfaces/stubRangePair/stubRangePair';
+import StubAudioPair from '../../../types/interfaces/stubRangePair/stubAudioPair';
 import Finalizer from './finalizer/Finalizer';
 import FlashcardFormatter from './flashcardFormatter/FlashcardFormatter';
 import { chopAudio } from '../../../helpers/chopAudio/chopAudio';
@@ -38,6 +38,12 @@ function Chopper(props: ChopperProps): JSX.Element | null {
     goToStep(2);
   }
 
+  const handleSetPairs = (pairs: StubAudioPair[]) => {
+    // Todo: There is probably a funny race condition happening here.
+    setPairs(pairs);
+    goToStep(3);
+  }
+
   const goBack = () => {
     if (currentStep < 1) return;
     goToStep(currentStep - 1);
@@ -64,10 +70,10 @@ function Chopper(props: ChopperProps): JSX.Element | null {
         return <Slicer handleUpdateSections={handleUpdateSections} originalFile={originalFile} />
 
       case 2:
-        return <Joiner handleContinue={() => goToStep(3)} handleSetPairs={setPairs} originalFile={originalFile} sections={sections} />
+        return <Joiner handleSetPairs={handleSetPairs} originalFile={originalFile} sections={sections} />
 
       case 3:
-        return <Finalizer handleFlashcardFormat={() => goToStep(4)} pairs={pairs} />
+        return <Finalizer handleSelectFlashcardFormat={() => goToStep(4)} pairs={pairs} />
 
       case 4:
         return <FlashcardFormatter originalAudioFile={originalFile.audioFile} pairs={pairs} />

@@ -23,12 +23,15 @@ function DeckGenerator(props: DeckGeneratorProps): JSX.Element | null {
   const FILE_NAME = 'audio_flashcard_wizard_files.zip';
 
   React.useEffect(function generateDownloadUrl() {
-    if (props.deck.cards.length < 1) return;
     (async function createDownloadLink() {
+      if (props.deck.originalAudioFile == null || props.deck.cards.length < 1) {
+        setDownloadUrl(null);
+        return;
+      }
       setWorking(true);
       try {
         const blob: Blob | null = await generateFinalFile.generateFilesFromDeck(props.deck, props.format);
-        if (blob == null) return;
+        if (blob == null) throw new Error('Final file generated null');
         setDownloadUrl(URL.createObjectURL(blob));
       } catch {
         console.log('Error creating file.');
@@ -39,6 +42,7 @@ function DeckGenerator(props: DeckGeneratorProps): JSX.Element | null {
   }, [ props.deck, props.format ]);
 
   function renderBody(): JSX.Element | null {
+    if (props.deck == null) return null;
     if (isWorking) return <p>Generating download link...</p>
     if (downloadUrl == null) return <p>Error: Could not generate files.</p>;
     return <a download={FILE_NAME} href={downloadUrl}>Download</a>
