@@ -24,10 +24,20 @@ describe('FileSelector', () => {
     expect(props.updateOriginalFile).toHaveBeenCalledTimes(1);
   });
 
-  it('calls props.updateOriginalFile when file input changes', () => {
+  it('calls props.updateOriginalFile when audio file input changes', () => {
     const props = getPropsWithoutAudioFile();
     renderFileSelector(props);
-    const input = getFileInput();
+    const input = getAudioFileInput();
+
+    expect(props.updateOriginalFile).toHaveBeenCalledTimes(1);
+    fireEvent.change(input, new File(['contents'], 'file.wav', { type: 'audio/wav' }));
+    expect(props.updateOriginalFile).toHaveBeenCalledTimes(2);
+  });
+
+  it('calls props.updateOriginalFile when upload text input changes', () => {
+    const props = getPropsWithoutAudioFile();
+    renderFileSelector(props);
+    const input = getTextFileInput();
 
     expect(props.updateOriginalFile).toHaveBeenCalledTimes(1);
     fireEvent.change(input, new File(['contents'], 'file.wav', { type: 'audio/wav' }));
@@ -46,15 +56,6 @@ describe('FileSelector', () => {
 });
 
 // Helpers
-
-const defaultProps = {
-  updateOriginalFile: jest.fn(() => {}),
-  originalFile: {
-    audioFile: undefined,
-    transcript: ''
-  },
-  handleContinue: jest.fn(() => {})
-}
 
 function getPropsWithAudioFile() {
   return {
@@ -86,6 +87,10 @@ function getContinueButton() {
   return screen.getByRole('button', { name: /continue/i });
 }
 
-function getFileInput() {
+function getAudioFileInput() {
   return screen.getByLabelText(/audio file/i);
+}
+
+function getTextFileInput() {
+  return screen.getByLabelText(/upload text/i);
 }
