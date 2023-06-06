@@ -13,23 +13,6 @@ module.exports = {
     publicPath: PUBLIC_PATH
   },
   target: 'web',
-  devServer: {
-    host: '0.0.0.0',
-    port: '3000',
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-    },
-    allowedHosts: ['all'],
-    static: {
-      directory: path.join(__dirname, '../public'),
-    },
-    open: false,
-    hot: true,
-    liveReload: true,
-    historyApiFallback: true,
-  },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     fallback: {
