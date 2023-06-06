@@ -6,7 +6,8 @@ interface FlashcardTextboxProps {
   audioFile: Blob,
   updateTranscript: (newText: string) => void,
   value: string,
-  reset: () => void
+  reset: () => void,
+  handleDeleteSection: () => void
 }
 
 /**
@@ -15,6 +16,7 @@ interface FlashcardTextboxProps {
 * @param {(string) => void} props.updateTranscript The function to call when updating the text.
 * @param {string} props.value The current value of the text.
 * @param {() => void} props.reset The function to call when pressing the reset button.
+* @param {() => void} props.handleDeleteSection The function to call to delete this section entirely.
 * @returns {JSX.Element | null}
 */
 function FlashcardTextbox(props: FlashcardTextboxProps): JSX.Element | null {
@@ -29,18 +31,23 @@ function FlashcardTextbox(props: FlashcardTextboxProps): JSX.Element | null {
     props.reset();
   }
 
+  const handleDelete = () => {
+    props.handleDeleteSection();
+  }
+
   const handleUpdateText = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     props.updateTranscript(event.currentTarget.value);
   }
 
   return (
     <div className='flashcard-textbox-wrapper'>
-      <div>
+      <div className='flashcard-textbox-controls'>
         <AudioPlayer autoplay={true} hotkey={false} audio={props.audioFile} range={{ from: 0.0, to: 1.0 }} />
         <button onClick={handleCloze}>Cloze</button>
         <button onClick={handleReset}>Reset</button>
+        <button onClick={handleDelete}>Delete</button>
       </div>
-      <div className='inline-label-input-wrapper'>
+      <div className='inline-label-input-wrapper flashcard-textbox-textarea-wrapper'>
         <label htmlFor='transcript-textarea'>Text</label>
         <textarea id='transcript-textarea' onChange={handleUpdateText} value={props.value}></textarea>
       </div>

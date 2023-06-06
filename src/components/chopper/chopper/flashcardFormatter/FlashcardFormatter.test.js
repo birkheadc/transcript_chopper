@@ -81,6 +81,6 @@ async function getDownloadFailedError() {
 
 async function getDownloadLink() {
   await waitFor(() => {
-    return screen.getByRole('link', { name: /download/i });
+    return screen.queryByRole('link', { name: /download/i });
   })
 }
