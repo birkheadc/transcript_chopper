@@ -43,6 +43,7 @@ function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
 
     return (() => {
       audioElement.removeEventListener('canplaythrough', canplaythroughListener);
+      audioElement.pause();
     })
   }, []);
 
