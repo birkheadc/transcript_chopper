@@ -92,7 +92,7 @@ function AudioPlayer(props: AudioPlayerProps): JSX.Element | null {
     return (() => {
       window.removeEventListener('keypress', listener);
     });
-  }, [ props.hotkey, isPlaying ]);
+  }, [ props.hotkey, isPlaying, props.range ]);
 
   // Changes the audio element's src when the respective prop is changed
   React.useEffect(function setAudioSource() {

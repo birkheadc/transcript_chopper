@@ -12,4 +12,3 @@
     - Then, do some magic when moving to the next section, where the textarea is scrolled to the previous selection
   - Fix final export to remove bad characters; new-lines / semi-colons at least
   - Slicer needs a lot of quality of life features, easier navigation, a way to modify highlight by dragging the sides
-  - Fix bug in Slicer where the keyboard listener for 'play' does not seem to have access to current state values, plays a previously highlighted section instead of the current one
