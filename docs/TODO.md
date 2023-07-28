@@ -10,5 +10,4 @@
   - In AudioPlayer, when hotkey is true, you have to press Play manually at least once before the hotkey starts to work
   - Fix order of pairs when moving to Joiner, edit in order by start of section
     - Then, do some magic when moving to the next section, where the textarea is scrolled to the previous selection
-  - Fix final export to remove bad characters; new-lines / semi-colons at least
   - Slicer needs a lot of quality of life features, easier navigation, a way to modify highlight by dragging the sides

@@ -51,10 +51,6 @@ async function createAPKGFileFromDeck(deck: Deck): Promise<Blob | null> {
   throw new Error('Not yet implemented.');
 }
 
-
-
-//////////////////////
-
 function addAnkiReadmeToZip(zip: JSZip): JSZip {
   const readmeBlob = new Blob([ankiReadme], { type: 'text/plain' });
   zip.file('README.txt', readmeBlob);
@@ -78,10 +74,10 @@ function getDecklineFromCardAndAudioFilename(card: Card, fileName: string): stri
 
   let line: string = '';
 
-  line += `${card.transcript}`;
+  line += removeBadCharsFromString(card.transcript);
   line += `${SEPARATOR}[sound:${fileName}]`;
   for (let i = 0; i < card.extras.length; i++) {
-    line += `${SEPARATOR}${card.extras[i]}`;
+    line += `${SEPARATOR}${removeBadCharsFromString(card.extras[i])}`;
   }
   
   return line + '\n';
@@ -162,6 +158,10 @@ async function addDataToZipSimpleFileFormat(zip: JSZip, data: FinalFileData, for
   }
 
   return zip;
+}
+
+function removeBadCharsFromString(s: string): string {
+  return s.replace(/[;\n\r]/g, '');
 }
 
 interface FinalFileData {
