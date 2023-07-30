@@ -68,6 +68,7 @@ function SlicerImage(props: SlicerImageProps): JSX.Element | null {
       {canvases.map(
         (canvas, index) =>
         <canvas
+          draggable='false'
           data-testid='slicer-image-canvas'
           className='slicer-image-canvas'
           id={`${getCanvasId(index)}`}

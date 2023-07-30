@@ -30,7 +30,7 @@ function SlicerSectionRecorder(props: SlicerSectionRecorderProps): JSX.Element |
           left: 100 * Math.min(section.from, section.to) + '%',
           right: 100 - (100 * Math.max(section.from, section.to)) + '%'
         }}>
-          <button aria-label='section-select' className='slicer-section-button' data-index={index} onClick={handleSelect}></button>
+          <button aria-label='section-select' className='slicer-section-button' data-index={index} onClick={handleSelect} onFocus={handleSelect}></button>
         </div>
       )}
       </div>

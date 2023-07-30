@@ -7,18 +7,33 @@ div#slicer-selector-wrapper {
   display: flex;
   flex-direction: row;
   width: var(--canvas-width);
-  cursor: text;
+  cursor:ew-resize;
   z-index: 2;
   height: 100%;
 }
 
-div#slicer-selector-div {
-  opacity: 0.3;
-  background-color: var(--clr-accent-b);
-
+div.slicer-selection-marker-wrapper {
   position:absolute;
   left: 0%;
   right: 0%;
   top: 0%;
   bottom: 0%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
 }
+
+div#slicer-selection-marker-body {
+  background-color: var(--clr-accent-b);
+  flex-grow: 1;
+}
+
+div#slicer-selection-marker-left, div#slicer-selection-marker-right {
+  width: 5px;
+  height: 100%;
+  background-color: var(--clr-accent-b-dark);
+  cursor:col-resize;
+}
+

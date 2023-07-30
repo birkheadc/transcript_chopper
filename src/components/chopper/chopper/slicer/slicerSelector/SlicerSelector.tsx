@@ -3,6 +3,12 @@ import './SlicerSelector.css';
 import Range from '../../../../../types/interfaces/range/range';
 import SlicerCanvasDetails from '../../../../../types/interfaces/slicerCanvasDetails/slicerCanvasDetails';
 
+enum DragState {
+  NONE,
+  LEFT,
+  RIGHT
+}
+
 interface SlicerSelectorProps {
   length: number,
   details: SlicerCanvasDetails,
@@ -20,64 +26,77 @@ interface SlicerSelectorProps {
 */
 function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
 
-  let isDragging: boolean = false;
+  const [dragState, setDragState] = React.useState<DragState>(DragState.NONE);
 
-  React.useEffect(function addDragEventListeners() { 
-    const container = getSlicerSelectorWrapper();
-    if (container == null) return;
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const leftBorderRef = React.useRef<HTMLDivElement>(null);
+  const rightBorderRef = React.useRef<HTMLDivElement>(null);
 
-    let from: number = 0;
-    let to: number = 0;
-  
-    const handlePointerDown = (event: PointerEvent) => {
-      isDragging = true;
-      from = calculateCurrentMousePositionOverDiv(container, event);
-      to = calculateCurrentMousePositionOverDiv(container, event);
-    }
-
-    const handlePointerMove = (event: PointerEvent) => {
-      if (isDragging === false) return;
-      to = calculateCurrentMousePositionOverDiv(container, event);
-      props.updateCurrentSection({ from, to });
-    }
-
-    const handleMouseLeave = (event: MouseEvent) => {
-      if (isDragging === false) return;
-      isDragging = false;
-      to = Math.min(1.0, Math.max(0.0, calculateCurrentMousePositionOverDiv(container, event)));
-      if (from === to) {
-        props.updateCurrentSection(undefined);
-        return;
+  React.useEffect(function addDragStartListener() {
+    const listener = (event: PointerEvent) => {   
+      // Prevent Default prevents the browser from trying to drag the element. Chrome is especially annoying in this regard.
+      event.preventDefault();
+      const mousePosition = calculateCurrentMousePositionOverDiv(containerRef.current!, event);
+      if (event.target === leftBorderRef.current) {
+        setDragState(DragState.LEFT);
+      } else if (event.target === rightBorderRef.current) {
+        setDragState(DragState.RIGHT);
       }
-      props.updateCurrentSection({ from, to });
-    }
-
-    const handlePointerUp = (event: PointerEvent) => {
-      if (isDragging === false) return; 
-      isDragging = false;
-      to = Math.min(1.0, Math.max(0.0, calculateCurrentMousePositionOverDiv(container, event)));
-      if (from === to) {
-        props.updateCurrentSection(undefined);
-        return;
+      else {
+        props.updateCurrentSection({ from: mousePosition, to: mousePosition });
+        setDragState(DragState.RIGHT);
       }
-      props.updateCurrentSection({ from, to });
     }
+    containerRef.current?.addEventListener('pointerdown', listener);
+    return (() => {
+      containerRef.current?.removeEventListener('pointerdown', listener);
+    })
+  }, []);
 
-    container.addEventListener('pointerdown', handlePointerDown);
-    container.addEventListener('pointermove', handlePointerMove);
-    container.addEventListener('pointerup', handlePointerUp);
-    container.addEventListener('mouseleave', handleMouseLeave);
-    return () => {
-      container.removeEventListener('pointerdown', handlePointerDown);
-      container.removeEventListener('pointermove', handlePointerMove);
-      container.removeEventListener('pointerup', handlePointerUp);
-      container.addEventListener('mouseleave', handleMouseLeave);
+  React.useEffect(function addDragEventListener() {
+    const listener = (event: PointerEvent) => {
+      if (dragState === DragState.NONE) return;
+      const mousePosition = calculateCurrentMousePositionOverDiv(containerRef.current!, event);
+      if (dragState === DragState.LEFT) {
+        props.updateCurrentSection({ from: mousePosition, to: Math.max(props.currentSection?.from ?? 0, props.currentSection?.to ?? 0) });
+      }
+      if (dragState === DragState.RIGHT) {
+        props.updateCurrentSection({ from: Math.min(props.currentSection?.from ?? 0, props.currentSection?.to ?? 0), to: mousePosition });
+      }
     }
+    containerRef.current?.addEventListener('pointermove', listener);
+    return (() => {
+      containerRef.current?.removeEventListener('pointermove', listener);
+    })
+  }, [ dragState ])
+
+  React.useEffect(function addLeaveListener() {
+    const listener = () => {
+      setDragState(DragState.NONE);
+    }
+    containerRef.current?.addEventListener('mouseleave', listener);
+    return (() => {
+      containerRef.current?.removeEventListener('mouseleave', listener);
+    })
+  }, []);
+
+  React.useEffect(function addDragStopListener() {
+    const listener = () => {
+      setDragState(DragState.NONE);
+    }
+    containerRef.current?.addEventListener('pointerup', listener);
+    return (() => {
+      containerRef.current?.removeEventListener('pointerup', listener);
+    })
   }, []);
 
   return (
-    <div id='slicer-selector-wrapper'>
-      <div id='slicer-selector-div' style={getSelectorDivStyle(props.currentSection)}></div>
+    <div ref={containerRef} id='slicer-selector-wrapper'>
+      <div className='slicer-selection-marker-wrapper' style={getSelectorDivStyle(props.currentSection)}>
+        <div ref={leftBorderRef} id='slicer-selection-marker-left'></div>
+        <div id='slicer-selection-marker-body'></div>
+        <div ref={rightBorderRef} id='slicer-selection-marker-right'></div>
+      </div>
     </div>
   );
 }
@@ -85,6 +104,18 @@ function SlicerSelector(props: SlicerSelectorProps): JSX.Element | null {
 export default SlicerSelector;
 
 // Helpers
+
+function getDivLeftOffsetFromEvent(div: HTMLDivElement, event: PointerEvent | MouseEvent) {
+  return event.clientX - div.getBoundingClientRect().left;
+}
+
+function getDivWidth(div: HTMLDivElement) {
+  return div.getBoundingClientRect().width;
+}
+
+function calculateCurrentMousePositionOverDiv(div: HTMLDivElement, event: PointerEvent | MouseEvent) {
+  return (getDivLeftOffsetFromEvent(div, event)) / getDivWidth(div)
+}
 
 function getSelectorDivStyle(currentSection: Range | undefined): React.CSSProperties {
   if (currentSection == null) {
@@ -97,20 +128,4 @@ function getSelectorDivStyle(currentSection: Range | undefined): React.CSSProper
     left,
     right
   };
-}
-
-function getSlicerSelectorWrapper(): HTMLDivElement | null {
-  return document.querySelector('div#slicer-selector-wrapper') as HTMLDivElement
-}
-
-function getDivLeftOffsetFromEvent(div: HTMLDivElement, event: PointerEvent | MouseEvent) {
-  return event.clientX - div.getBoundingClientRect().left;
-}
-
-function getDivWidth(div: HTMLDivElement) {
-  return div.getBoundingClientRect().width;
-}
-
-function calculateCurrentMousePositionOverDiv(div: HTMLDivElement, event: PointerEvent | MouseEvent) {
-  return (getDivLeftOffsetFromEvent(div, event)) / getDivWidth(div)
 }
