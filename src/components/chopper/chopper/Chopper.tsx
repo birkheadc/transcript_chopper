@@ -32,6 +32,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
 
   const handleUpdateSections = async (sections: Range[]) => {
     if (originalFile.audioFile == null) return;
+    sections.sort((a, b) => a.from - b.from);
     const slices: Blob[] | null = await chopAudio(originalFile.audioFile, sections);
     if (slices == null) return;
     setSections(slices);
@@ -39,7 +40,6 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   }
 
   const handleSetPairs = (pairs: StubAudioPair[]) => {
-    // Todo: There is probably a funny race condition happening here.
     setPairs(pairs);
     goToStep(3);
   }
