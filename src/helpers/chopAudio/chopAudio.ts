@@ -7,11 +7,11 @@ import { encode } from 'wav-encoder';
  * @param sections 
  * @returns {Promise<Blob[] | Blob | null>}
  */
-export async function chopAudio(originalAudioFile: File, sections: Range) : Promise<Blob | null>
-export async function chopAudio(originalAudioFile: File, sections: Range[]) : Promise<Blob[] | null>
-export async function chopAudio(originalAudioFile: File, sections: Range[] | Range): Promise<Blob[] | Blob |  null> {
+export async function chopAudio(originalAudioFile: File, sections: Range) : Promise<{audio: Blob, range: Range} | null>
+export async function chopAudio(originalAudioFile: File, sections: Range[]) : Promise<{audio: Blob, range: Range}[] | null>
+export async function chopAudio(originalAudioFile: File, sections: Range[] | Range): Promise<{audio: Blob, range: Range}[] | {audio: Blob, range: Range} |  null> {
   try {
-    const blobs: Blob[] = [];
+    const blobs: {audio: Blob, range: Range}[] = [];
     const audioContext = new AudioContext();
 
     // const url = URL.createObjectURL(originalAudioFile);
@@ -48,7 +48,7 @@ export async function chopAudio(originalAudioFile: File, sections: Range[] | Ran
       });
 
       const blob = new Blob([wavFile], { type: 'audio/wav' });
-      blobs.push(blob);
+      blobs.push({audio: blob, range: section});
     }
     
     return Array.isArray(sections) ? blobs : blobs[0];

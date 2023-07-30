@@ -2,13 +2,13 @@ import * as React from 'react';
 import './Joiner.css'
 import AudioWithTranscript from '../../../../types/interfaces/audioWithTranscript/audioWithTranscript';
 import StubAudioPair from '../../../../types/interfaces/stubRangePair/stubAudioPair';
-import AudioPlayer from '../audioPlayer/AudioPlayer';
 import JoinerControls from './joinerControls/JoinerControls';
 import JoinerTextEditor from './joinerTextEditor/JoinerTextEditor';
+import Range from '../../../../types/interfaces/range/range';
 
 interface JoinerProps {
   originalFile: AudioWithTranscript,
-  sections: Blob[],
+  sections: {audio: Blob, range: Range}[],
   handleSetPairs: (pairs: StubAudioPair[]) => void,
 }
 
@@ -29,7 +29,8 @@ function Joiner(props: JoinerProps): JSX.Element | null {
       for (let i = 0; i < props.sections.length; i++) {
         newPairs.push({
           stub: props.originalFile.transcript,
-          audio: props.sections[i]
+          audio: props.sections[i].audio,
+          range: props.sections[i].range
         });
       }
       setPairs(newPairs);
@@ -45,6 +46,8 @@ function Joiner(props: JoinerProps): JSX.Element | null {
       finish();
       return;
     }
+    const newStubs = trimNextStubToRemoveUpToCurrentStubText(pairs, currentSection);
+    setPairs(newStubs);
     setCurrentSection(c => c + 1);
   }
 
@@ -116,3 +119,25 @@ function Joiner(props: JoinerProps): JSX.Element | null {
 }
 
 export default Joiner;
+
+function trimNextStubToRemoveUpToCurrentStubText(pairs: StubAudioPair[], currentSection: number): StubAudioPair[] {
+  const newStubs = [...pairs];
+  newStubs[currentSection + 1].stub = trimTextToRemoveAllBeforeOrAfterSelection(
+    newStubs[currentSection + 1].stub,
+    pairs[currentSection].stub,
+    doPairsOverlap(pairs[currentSection], pairs[currentSection + 1]));
+  return newStubs;
+}
+
+function trimTextToRemoveAllBeforeOrAfterSelection(text: string, selection: string, cutBefore: boolean): string {
+  const index = text.indexOf(selection);
+  if (index < 0) return text;
+  if (cutBefore) return text.substring(index);
+  return text.substring(index + selection.length);
+}
+
+function doPairsOverlap(a: StubAudioPair, b: StubAudioPair): boolean {
+  // If range data is not included assume overlap since no (easy) way to check
+  if (a.range == null || b.range == null) return false;
+  return a.range.from <= b.range.to && a.range.to >= b.range.from
+}

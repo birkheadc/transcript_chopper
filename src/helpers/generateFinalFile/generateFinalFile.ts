@@ -161,7 +161,7 @@ async function addDataToZipSimpleFileFormat(zip: JSZip, data: FinalFileData, for
 
 function removeBadCharsFromString(s: string, separator: string): string {
   const pattern = new RegExp(`[${separator}\n\r]`, 'g');
-  return s.replace(pattern, '');
+  return s.replace(pattern, ' ').trim();
 }
 
 interface FinalFileData {

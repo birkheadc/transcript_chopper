@@ -22,7 +22,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
 
   const [currentStep, setCurrentStep] = React.useState<number>(0);
   const [originalFile, setOriginalFile] = React.useState<AudioWithTranscript>({ audioFile: undefined, transcript: '' });
-  const [sections, setSections] = React.useState<Blob[]>([]);
+  const [sections, setSections] = React.useState<{audio: Blob, range: Range}[]>([]);
   const [pairs, setPairs] = React.useState<StubAudioPair[]>([]);
 
   const handleUpdateOriginalFile = (file: AudioWithTranscript | null) => {
@@ -33,7 +33,7 @@ function Chopper(props: ChopperProps): JSX.Element | null {
   const handleUpdateSections = async (sections: Range[]) => {
     if (originalFile.audioFile == null) return;
     sections.sort((a, b) => a.from - b.from);
-    const slices: Blob[] | null = await chopAudio(originalFile.audioFile, sections);
+    const slices: {audio: Blob, range: Range}[] | null = await chopAudio(originalFile.audioFile, sections);
     if (slices == null) return;
     setSections(slices);
     goToStep(2);
