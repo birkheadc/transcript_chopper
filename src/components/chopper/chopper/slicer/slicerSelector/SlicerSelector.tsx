@@ -119,12 +119,11 @@ function calculateCurrentMousePositionOverDiv(div: HTMLDivElement, event: Pointe
 
 function getSelectorDivStyle(currentSection: Range | undefined): React.CSSProperties {
   if (currentSection == null) {
-    return { opacity: 0.0 }
+    return { opacity: 0 }
   }
   const left = `${Math.min(currentSection.from, currentSection.to) * 100}%`;
   const right = `${100 - Math.max(currentSection.from, currentSection.to) * 100}%`;
   return {
-    opacity: 'var(--opac-slicer-selector)',
     left,
     right
   };

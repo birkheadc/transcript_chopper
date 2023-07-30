@@ -1,13 +1,9 @@
-:root {
-  --opac-slicer-selector: 0.3;
-}
-
 div#slicer-selector-wrapper {
   position: relative;
   display: flex;
   flex-direction: row;
   width: var(--canvas-width);
-  cursor:ew-resize;
+  cursor:text;
   z-index: 2;
   height: 100%;
 }
@@ -27,13 +23,21 @@ div.slicer-selection-marker-wrapper {
 
 div#slicer-selection-marker-body {
   background-color: var(--clr-accent-b);
+  opacity: 0.3;
   flex-grow: 1;
 }
 
 div#slicer-selection-marker-left, div#slicer-selection-marker-right {
   width: 5px;
   height: 100%;
-  background-color: var(--clr-accent-b-dark);
-  cursor:col-resize;
+  background-color: var(--clr-accent-b);
+  opacity: 0.8;
 }
 
+div#slicer-selection-marker-left {
+  cursor: w-resize;
+}
+
+div#slicer-selection-marker-right {
+  cursor: e-resize;
+}
