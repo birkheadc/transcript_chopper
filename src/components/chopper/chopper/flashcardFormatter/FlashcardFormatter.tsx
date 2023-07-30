@@ -11,7 +11,7 @@ import Card from '../../../../types/interfaces/deck/card';
 
 interface FlashcardFormatterProps {
   originalAudioFile: File | undefined,
-  pairs: StubAudioPair[],
+  pairs: StubAudioPair[]
 }
 
 /**

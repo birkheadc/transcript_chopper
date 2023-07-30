@@ -5,7 +5,7 @@ import generateFinalFile from '../../../../../helpers/generateFinalFile/generate
 import { FlashcardFileFormat } from '../../../../../types/enums/formats/finalFileFormat';
 
 interface DeckGeneratorProps {
-  deck: Deck
+  deck: Deck,
   format: FlashcardFileFormat
 }
 
@@ -30,10 +30,17 @@ function DeckGenerator(props: DeckGeneratorProps): JSX.Element | null {
       }
       setWorking(true);
       try {
-        const blob: Blob | null = await generateFinalFile.generateFilesFromDeck(props.deck, props.format);
+        let separator: string | null = ';';
+        let error: string | null = checkDeckForErrors(props.deck, separator);
+        while (error !== null) {
+          separator = prompt(error);
+          error = checkDeckForErrors(props.deck, separator);
+        }
+        const blob: Blob | null = await generateFinalFile.generateFilesFromDeck(props.deck, props.format, separator!);
         if (blob == null) throw new Error('Final file generated null');
         setDownloadUrl(URL.createObjectURL(blob));
-      } catch {
+      } catch (error) {
+        console.log(error);
         console.log('Error creating file.');
       }
 
@@ -56,3 +63,19 @@ function DeckGenerator(props: DeckGeneratorProps): JSX.Element | null {
 }
 
 export default DeckGenerator;
+
+function checkDeckForErrors(deck: Deck, separator: string | null): string | null {
+  if (separator === null || separator.length === 0) return "Please supply a single character to separate fields in deck.txt. Default value: ';'";
+  if (separator.length > 1) return "Please supply a single character.";
+  if (doesDeckHaveChar(deck, separator)) return `Your deck makes use of the character (${separator}). Please choose a different single character to separate fields in deck.txt.`;
+  return null;
+}
+
+function doesDeckHaveChar(deck: Deck, char: string): boolean {
+  return deck.cards.some(card => card.transcript.includes(char));
+  // for (let i = 0; i < deck.cards.length; i++) {
+  //   const card = deck.cards[i];
+  //   if (card.transcript.includes(char)) return true;
+  // }
+  // return false;
+}

@@ -19,7 +19,8 @@ async function generateBasicZipFile(pairs: StubAudioPair[], format: BasicFileFor
   return await zip.generateAsync({ type: 'blob'});
 }
 
-async function generateFilesFromDeck(deck: Deck, format: FlashcardFileFormat): Promise<Blob | null> {
+async function generateFilesFromDeck(deck: Deck, format: FlashcardFileFormat, separator: string): Promise<Blob | null> {
+  if (separator.length !== 1) return null;
   switch (format) {
 
     case FlashcardFileFormat.Null:
@@ -27,7 +28,7 @@ async function generateFilesFromDeck(deck: Deck, format: FlashcardFileFormat): P
 
     case FlashcardFileFormat.StandardZip:
     case FlashcardFileFormat.CustomZip:
-      return await createZipfileFromDeck(deck);
+      return await createZipfileFromDeck(deck, separator);
 
     case FlashcardFileFormat.APKG:
       return await createAPKGFileFromDeck(deck);
@@ -39,10 +40,10 @@ export default {
   generateFilesFromDeck
 }
 
-async function createZipfileFromDeck(deck: Deck): Promise<Blob | null> {
+async function createZipfileFromDeck(deck: Deck, separator: string): Promise<Blob | null> {
   let zip = new JSZip();
   addAnkiReadmeToZip(zip);
-  await addDeckDataToZip(deck, zip);
+  await addDeckDataToZip(deck, separator, zip);
   return await zip.generateAsync({ type: 'blob' });
 }
 
@@ -57,11 +58,11 @@ function addAnkiReadmeToZip(zip: JSZip): JSZip {
   return zip;
 }
 
-async function addDeckDataToZip(deck: Deck, zip: JSZip) {
+async function addDeckDataToZip(deck: Deck, separator: string, zip: JSZip) {
   let deckText = '';
   for (let i = 0; i < deck.cards.length; i++) {
     const fileName = generateFileName(deck.cards.length, i, FinalFileNamingScheme.UUID) + '.wav';
-    const deckLine = getDecklineFromCardAndAudioFilename(deck.cards[i], fileName);
+    const deckLine = getDecklineFromCardAndAudioFilename(deck.cards[i], fileName, separator);
     zip.file('audio/' + fileName, deck.cards[i].audio);
     deckText = deckText + deckLine;
   }
@@ -69,15 +70,13 @@ async function addDeckDataToZip(deck: Deck, zip: JSZip) {
   zip.file('deck.txt', deckText)
 }
 
-function getDecklineFromCardAndAudioFilename(card: Card, fileName: string): string {
-  const SEPARATOR = ';'
-
+function getDecklineFromCardAndAudioFilename(card: Card, fileName: string, separator: string): string {
   let line: string = '';
 
-  line += removeBadCharsFromString(card.transcript);
-  line += `${SEPARATOR}[sound:${fileName}]`;
+  line += removeBadCharsFromString(card.transcript, separator);
+  line += `${separator}[sound:${fileName}]`;
   for (let i = 0; i < card.extras.length; i++) {
-    line += `${SEPARATOR}${removeBadCharsFromString(card.extras[i])}`;
+    line += `${separator}${removeBadCharsFromString(card.extras[i], separator)}`;
   }
   
   return line + '\n';
@@ -160,8 +159,9 @@ async function addDataToZipSimpleFileFormat(zip: JSZip, data: FinalFileData, for
   return zip;
 }
 
-function removeBadCharsFromString(s: string): string {
-  return s.replace(/[;\n\r]/g, '');
+function removeBadCharsFromString(s: string, separator: string): string {
+  const pattern = new RegExp(`[${separator}\n\r]`, 'g');
+  return s.replace(pattern, '');
 }
 
 interface FinalFileData {
