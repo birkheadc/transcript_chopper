@@ -68,3 +68,9 @@ If the user selects exporting to a flashcard format in the `Finalizer`, this com
 At the moment, exporting as an anki deck (`.apkg`) file is not implemented. Instead, choosing Anki Deck as the format option will create a `deck.txt` file which is in a semicolon-separated-value format, and a folder with the audio snippets. The user can add the cards to their deck by going to File -> Import in Anki and selecting the `deck.txt`, then moving the audio files into Anki's `collection.media` folder.
 
 I am open to any help in directly creating an Anki `.apkg` file with the data, if anyone with more knowledge in Anki's code base is interested.
+
+## Repo-Parser
+This repository is parse-able by my custom repo-parser. The contents of the `repo-parser-target` directory are meant to be consumed by an API using this package.
+### GithubRepoParser
+- source code: https://github.com/birkheadc/github-repo-parser
+- npm package: (not yet published)

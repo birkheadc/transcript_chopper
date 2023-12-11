@@ -1,0 +1,39 @@
+{
+  "id": "48bdad35-30aa-48be-8745-e9ff3d0a4499",
+  "title": "Audio Flashcard Wizard",
+  "site": "https://flashcard-wizard.birkheadc.me",
+  "source": "https://github.com/birkheadc/PriceTagPrinter",
+  "favoriteLevel": 200,
+  "descriptions": {
+    "shortDescriptions": [
+      {
+        "language": "en",
+        "content": "An application that assists the user in breaking audio down and formatting it for use in language-learning software."
+      },
+      {
+        "language": "jp",
+        "content": "言語習得に便利なウェブアプリケーション。音声ファイルとそれにあたる文書を速やかに分離し、勉強しやすい形に変更する。"
+      }
+    ],
+    "longDescriptions": [
+      {
+        "language": "en",
+        "content": "Built with React, the application is entirely front end. All audio processing is done in the user's browser, and no signup, login, uploading, or downloading (beyond accessing the site in your browser) is needed.\nThe user first provides an audio file (in mp3 or wav format) and the text transcript of that audio. The application then guides the user through selecting which parts of the audio are to be used, which parts of the transcript apply to those audio snippets, then provides a zip file of everything the user needs to import the data into a flashcard application, such as Anki.\nThis project is tested, and open to contribution on github."
+      },
+      {
+        "language": "en",
+        "content": "Reactで作られたフロントエンドのみアプリケーション。音声の分析などはすべてユーザーのブラウザー内で行われ、アカウント登録・ログイン・アップロードやダウンロードなどは、一切必要ない。\n使い方としては、まず音声ファイルや、それに当てはまる文書を提供してもらう。アプリケーションの指示に従い、順番にその音声の勉強したいところを決めてもらい、その部分に当てはまるテキストを選ぶ。最後に、情報をどの形で受けとるか選択しダウンロードする。\n自動テストもあり、GitHubで貢献歓迎"
+      }
+    ],
+    "bulletPoints": []
+  },
+  "technologies": [
+    "Docker",
+    "CSS",
+    "React Testing Library",
+    "HTML",
+    "Jest",
+    "React",
+    "TypeScript"
+  ]
+}
