@@ -29,21 +29,19 @@ div.nav-panel-inner-wrapper {
 
   border-style:ridge;
   border-color: var(--clr-accent-a);
-  border-width: 2px;
-
-  transition: border-style 0ms 200ms linear;
 }
 
 div.nav-panel.shown>div.nav-panel-inner-wrapper {
   height: 500px;
-  transition: height 500ms cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: height 500ms cubic-bezier(0.075, 0.82, 0.165, 1), border-width 0ms linear;
+  border-width: 2px;
 }
 
 div.nav-panel.hidden>div.nav-panel-inner-wrapper {
   height: 0px;
   pointer-events: none;
-  transition: height 200ms cubic-bezier(0.075, 0.82, 0.165, 1);
-  border-style: none;
+  transition: height 200ms cubic-bezier(0.075, 0.82, 0.165, 1), border-width 0ms 200ms linear;
+  border-width: 0px;
 }
 
 div.nav-panel.shown>div.nav-panel-inner-wrapper>* {
@@ -53,6 +51,7 @@ div.nav-panel.shown>div.nav-panel-inner-wrapper>* {
 
 div.nav-panel.hidden>div.nav-panel-inner-wrapper>* {
   opacity: 0.0;
+
 }
 
 ul.nav-panel-list {
