@@ -73,4 +73,4 @@ I am open to any help in directly creating an Anki `.apkg` file with the data, i
 This repository is parse-able by my custom repo-parser. The contents of the `repo-parser-target` directory are meant to be consumed by an API using this package.
 ### GithubRepoParser
 - source code: https://github.com/birkheadc/github-repo-parser
-- npm package: (not yet published)
+- npm package: https://www.npmjs.com/package/@birkheadc/github-repo-parser
