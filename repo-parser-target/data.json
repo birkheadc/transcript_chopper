@@ -13,7 +13,7 @@
       },
       {
         "language": "jp",
-        "content": "言語習得に便利なウェブアプリケーション。音声ファイルとそれにあたる文書を速やかに分離し、勉強しやすい形に変更する。"
+        "content": "言語習得に便利なウェブアプリケーション。音声ファイルとそれにあたる文書を速やかに分離し、勉強しやすい形に変更します。"
       }
     ],
     "longDescriptions": [
@@ -23,24 +23,22 @@
       },
       {
         "language": "jp",
-        "content": "Reactで作られたフロントエンドのみアプリケーション。音声の分析などはすべてユーザーのブラウザー内で行われ、アカウント登録・ログイン・アップロードやダウンロードなどは、一切必要ない。\n\n使い方としては、まず音声ファイルや、それに当てはまる文書を提供してもらう。アプリケーションの指示に従い、順番にその音声の勉強したいところを決めてもらい、その部分に当てはまるテキストを選ぶ。最後に、情報をどの形で受けとるか選択しダウンロードする。\n\n自動テストもあり、GitHubで貢献歓迎"
+        "content": "Reactで作られたフロントエンドのみアプリケーション。音声の分析などはすべてユーザーのブラウザー内で行われ、アカウント登録・ログイン・アップロードやダウンロードなどは、一切必要ありません。\n\n使い方としては、まず音声ファイルや、それに当てはまる文書を提供してもらいます。アプリケーションの指示に従い、順番にその音声の勉強したいところを決めてもらい、その部分に当てはまるテキストを選びます。最後に、情報をどの形で受けとるか選択しダウンロードします。\n\n自動テストもあり、GitHubで貢献歓迎"
       }
     ],
     "bulletPoints": [
       {
         "language": "en",
         "content": [
-          "1",
-          "2",
-          "3"
+          "React-based application facilitating efficient breakdown and formatting of audio for language-learning software",
+          "Enables users to effortlessly process audio files and transcripts directly within their browsers, eliminating the need for sign-ups, logins, or external uploads/downloads"
         ]
       },
       {
         "language": "jp",
         "content": [
-          "一",
-          "二",
-          "三"
+        "音声ファイルを分析して、言語習得により使いやすい形にしてくれるアプリ",
+        "すべてブラウザー内で行われ、アカウント登録・ログイン・アップロード・ダウンロードなど一切必要なく、気軽に利用してもらえる"
         ]
       }
     ]
