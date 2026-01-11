@@ -40,7 +40,7 @@ function WelcomePage(props: WelcomePageProps): JSX.Element | null {
                   <li>Tell the application what parts of the text cover those cuts</li>
                   <li>Choose how to download your files</li>
                 </ol>
-                <p>There is also a demo <a href="https://www.youtube.com/watch?v=lmHeTSOt4XI" target="blank" rel="noopener noreferrer"></a>.</p>
+                <p>There is also a demo <a href="https://www.youtube.com/watch?v=lmHeTSOt4XI" target="blank" rel="noopener noreferrer">here</a>.</p>
               </div>
             </div>
           </section>
